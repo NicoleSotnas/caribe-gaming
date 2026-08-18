@@ -1,0 +1,176 @@
+.container-produtos {
+  padding: 24px;
+  background-color: #0b0f19;
+  min-height: 100vh;
+}
+
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card-produto {
+  background: rgba(18, 26, 43, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card-produto:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 136, 255, 0.4);
+}
+
+.card-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.badge-desconto {
+  background: #0088ff;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-plataforma {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  color: #ccc;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.card-imagem {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #1a2234;
+}
+
+.card-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-conteudo {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.produto-nome {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.produto-genero {
+  color: #00d2ff;
+  font-size: 0.75rem;
+  margin-bottom: 12px;
+}
+
+.produto-precos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.preco-original {
+  color: #718096;
+  text-decoration: line-through;
+  font-size: 0.8rem;
+}
+
+.preco-promocional {
+  color: #00d2ff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Estrutura de botões do Card */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto;
+}
+
+.btn-carrinho {
+  flex: 1;
+  background: #0088ff;
+  color: #ffffff;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-carrinho:hover {
+  background: #0066cc;
+}
+
+.btn-favorito {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #a0aec0;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.icon-heart {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.btn-favorito:hover {
+  border-color: #ff4757;
+  color: #ff4757;
+  background: rgba(255, 71, 87, 0.1);
+}
+
+.btn-favorito:hover .icon-heart {
+  transform: scale(1.1);
+}
+
+.btn-favorito.favoritado {
+  color: #ff4757;
+  border-color: #ff4757;
+  background: rgba(255, 71, 87, 0.15);
+}
