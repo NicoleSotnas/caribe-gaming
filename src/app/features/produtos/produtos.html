@@ -1,1 +1,54 @@
-<p>produtos works!</p>
+<div class="container-produtos">
+  <div class="grid-produtos">
+    <div *ngFor="let produto of produtos" class="card-produto">
+      
+      <!-- Badges Superiores -->
+      <div class="card-badges">
+        <span class="badge-desconto" *ngIf="produto.desconto > 0">-{{ produto.desconto }}%</span>
+        <span class="badge-plataforma">{{ produto.plataforma }}</span>
+      </div>
+
+      <!-- Imagem do Jogo (Box-Art 3:4) -->
+      <div class="card-imagem">
+        <img [src]="produto.imagem" [alt]="produto.nome" />
+      </div>
+
+      <!-- Conteúdo e Informações -->
+      <div class="card-conteudo">
+        <h3 class="produto-nome">{{ produto.nome }}</h3>
+        <span class="produto-genero">{{ produto.genero }}</span>
+
+        <div class="produto-precos">
+          <span class="preco-original" *ngIf="produto.desconto > 0">{{ produto.precoOriginal }}</span>
+          <span class="preco-promocional">{{ produto.precoPromocional }}</span>
+        </div>
+
+        <!-- Ações: Botão Carrinho + Botão Coração Favorito -->
+        <div class="card-actions">
+          <button class="btn-carrinho" (click)="adicionarAoCarrinho(produto)">
+            <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+          </button>
+
+          <button 
+            class="btn-favorito" 
+            [class.favoritado]="produto.favorito" 
+            (click)="toggleFavorito(produto)"
+            title="Favoritar">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 24 24" 
+              [attr.fill]="produto.favorito ? '#ff4757' : 'none'" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              class="icon-heart">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
