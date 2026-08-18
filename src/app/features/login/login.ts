@@ -11,7 +11,7 @@ import { AuthService } from '../../core/services/auth';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class LoginComponent {
+export class Login {
   loginForm: FormGroup;
   mensagemErro: string = '';
   carregando: boolean = false;
