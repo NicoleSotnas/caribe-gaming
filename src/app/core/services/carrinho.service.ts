@@ -1,10 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, signal, computed, effect, inject, PLATFORM_ID } from '@angular/core';
-
-export type ItemCarrinho = {
-  nome: string;
-  preco: number;
-};
+import { ItemCarrinho } from '../../models/item-carrinho';
 
 @Injectable({
   providedIn: 'root',
@@ -14,20 +10,21 @@ export class CarrinhoService {
   private readonly chaveStorage = 'caribe-gaming-carrinho';
   private carrinho = signal<ItemCarrinho[]>(this.carregarCarrinhoSalvo());
 
-  // SELECTORS
   itens = computed(() => this.carrinho());
-  quantidade = computed(() => this.carrinho().length);
-  total = computed(() => this.carrinho().reduce((total, item) => total + item.preco, 0));
+  quantidade = computed(() =>
+    this.carrinho().reduce((acc, item) => acc + (item.quantidade || 1), 0),
+  );
+  total = computed(() =>
+    this.carrinho().reduce((total, item) => total + item.preco * (item.quantidade || 1), 0),
+  );
   carrinhoVazio = computed(() => this.carrinho().length === 0);
 
   constructor() {
-    // Sempre que o carrinho mudar, a lista atualizada será persistida.
     effect(() => {
       this.salvarCarrinho(this.carrinho());
     });
   }
 
-  // ACTIONS
   adicionar(produto: ItemCarrinho) {
     this.carrinho.update((lista) => [...lista, produto]);
   }
@@ -45,13 +42,9 @@ export class CarrinhoService {
   }
 
   private carregarCarrinhoSalvo(): ItemCarrinho[] {
-    if (!this.estaNoNavegador()) {
-      return [];
-    }
+    if (!this.estaNoNavegador()) return [];
     const dadosSalvos = localStorage.getItem(this.chaveStorage);
-    if (!dadosSalvos) {
-      return [];
-    }
+    if (!dadosSalvos) return [];
     try {
       return JSON.parse(dadosSalvos) as ItemCarrinho[];
     } catch {
@@ -60,9 +53,7 @@ export class CarrinhoService {
   }
 
   private salvarCarrinho(itens: ItemCarrinho[]) {
-    if (!this.estaNoNavegador()) {
-      return;
-    }
+    if (!this.estaNoNavegador()) return;
     localStorage.setItem(this.chaveStorage, JSON.stringify(itens));
   }
 }

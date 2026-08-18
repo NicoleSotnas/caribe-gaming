@@ -1,10 +1,8 @@
-<!-- A página /carrinho passa a ser a tela oficial de revisão do pedido. -->
 <section class="pagina-carrinho">
   <h1>Carrinho</h1>
 
   @if (carrinhoFacade.carrinhoVazio()) {
     <p>Seu carrinho está vazio.</p>
-
     <button mat-raised-button color="primary" routerLink="/produtos">Ver produtos</button>
   } @else {
     <section class="lista-carrinho">
@@ -31,7 +29,6 @@
 
     <section class="acoes-carrinho">
       <button mat-button type="button" (click)="limparCarrinho()">Limpar carrinho</button>
-
       <button mat-stroked-button color="primary" routerLink="/produtos">Continuar comprando</button>
     </section>
   }
