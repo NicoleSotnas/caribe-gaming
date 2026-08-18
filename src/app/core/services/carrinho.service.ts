@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, signal, computed, effect, inject, PLATFORM_ID } from '@angular/core';
 
 import { ItemCarrinho } from '../models/item-carrinho';
 
@@ -6,13 +7,22 @@ import { ItemCarrinho } from '../models/item-carrinho';
   providedIn: 'root',
 })
 export class CarrinhoService {
-  private carrinho = signal<ItemCarrinho[]>([]);
+  private platformId = inject(PLATFORM_ID);
+  private readonly chaveStorage = 'caribe-gaming-carrinho';
+  private carrinho = signal<ItemCarrinho[]>(this.carregarCarrinhoSalvo());
 
   // SELECTORS
   itens = computed(() => this.carrinho());
   quantidade = computed(() => this.carrinho().length);
   total = computed(() => this.carrinho().reduce((total, item) => total + item.preco, 0));
   carrinhoVazio = computed(() => this.carrinho().length === 0);
+
+  constructor() {
+    // Sempre que o carrinho mudar, a lista atualizada será persistida.
+    effect(() => {
+      this.salvarCarrinho(this.carrinho());
+    });
+  }
 
   // ACTIONS
   adicionar(produto: ItemCarrinho) {
@@ -25,5 +35,31 @@ export class CarrinhoService {
 
   limpar() {
     this.carrinho.set([]);
+  }
+
+  private estaNoNavegador(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+
+  private carregarCarrinhoSalvo(): ItemCarrinho[] {
+    if (!this.estaNoNavegador()) {
+      return [];
+    }
+    const dadosSalvos = localStorage.getItem(this.chaveStorage);
+    if (!dadosSalvos) {
+      return [];
+    }
+    try {
+      return JSON.parse(dadosSalvos) as ItemCarrinho[];
+    } catch {
+      return [];
+    }
+  }
+
+  private salvarCarrinho(itens: ItemCarrinho[]) {
+    if (!this.estaNoNavegador()) {
+      return;
+    }
+    localStorage.setItem(this.chaveStorage, JSON.stringify(itens));
   }
 }
