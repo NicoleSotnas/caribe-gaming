@@ -1,47 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-
-interface LoginResponse {
-  token: string;
-  user: {
-    id: number;
-    nome: string;
-    email: string;
-  };
-}
+import {
+  Auth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  user,
+} from '@angular/fire/auth';
+import { from, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // troque pela URL real da API do grupo
-  private apiUrl = 'https://sua-api.com/api';
+  constructor(private auth: Auth) {}
 
-  constructor(private http: HttpClient) {}
-
-  login(email: string, senha: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, senha }).pipe(
-      tap((resposta) => {
-        localStorage.setItem('token', resposta.token);
-        localStorage.setItem('usuario', JSON.stringify(resposta.user));
-      }),
-    );
+  login(email: string, senha: string): Observable<any> {
+    return from(signInWithEmailAndPassword(this.auth, email, senha));
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
+  registrar(email: string, senha: string): Observable<any> {
+    return from(createUserWithEmailAndPassword(this.auth, email, senha));
   }
 
-  estaLogado(): boolean {
-    return !!localStorage.getItem('token');
+  logout(): Observable<void> {
+    return from(signOut(this.auth));
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
-
-  getUsuario(): any {
-    const dados = localStorage.getItem('usuario');
-    return dados ? JSON.parse(dados) : null;
+  get usuarioAtual$() {
+    return user(this.auth);
   }
 }
