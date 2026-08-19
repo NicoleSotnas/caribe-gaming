@@ -14,7 +14,7 @@ export interface ProdutoComFavorito extends Produto {
   templateUrl: './produtos.html',
   styleUrls: ['./produtos.css']
 })
-export class ProdutosComponent implements OnInit {
+export class Produtos implements OnInit {
   private produtosService = inject(ProdutosService);
   produtos: ProdutoComFavorito[] = [];
 
