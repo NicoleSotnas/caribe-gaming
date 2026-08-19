@@ -15,8 +15,13 @@ export const routes: Routes = [
     component: Produtos,
   },
   {
+    path: 'registro',
+    loadComponent: () => import('./features/login/registro').then((m) => m.Registro),
+  },
+  {
     path: 'carrinho',
-    component: Carrinho,
+    loadComponent: () => import('./features/carrinho/carrinho').then((m) => m.Carrinho),
+    canActivate: [authGuard],
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
