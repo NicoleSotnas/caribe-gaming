@@ -39,7 +39,6 @@ import { ChevronRight } from '@primeicons/angular/chevron-right';
         </p-gallery>
     `,
     standalone: true,
-    imports: [GalleryModule, ChevronLeft, ChevronRight]
 })
 
 
