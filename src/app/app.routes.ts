@@ -4,6 +4,7 @@ import { Home } from './features/home/home';
 import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { authGuard } from './core/guards/auth-guard';
+import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
 
 export const routes: Routes = [
   {
@@ -11,8 +12,13 @@ export const routes: Routes = [
     component: Home,
   },
   {
-    path: 'catalogo',
+    path: 'jogos',
     component: Produtos,
+  },
+  {
+    path: 'jogos/the-witcher-3',
+    component: Thewitcher,
+   
   },
   {
     path: 'registro',
