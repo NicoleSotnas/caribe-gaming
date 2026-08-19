@@ -1,9 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
 
 @Component({
   selector: 'app-carrinho',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './carrinho.html',
   styleUrl: './carrinho.css',
 })
-export class Carrinho {}
+export class Carrinho {
+  readonly carrinhoFacade = inject(CarrinhoFacade);
+
+  removerItem(indice: number): void {
+    this.carrinhoFacade.removerItem(indice);
+  }
+
+  limparCarrinho(): void {
+    this.carrinhoFacade.limparCarrinho();
+  }
+}
