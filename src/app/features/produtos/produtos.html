@@ -8,14 +8,16 @@
         <span class="badge-plataforma">{{ produto.plataforma }}</span>
       </div>
 
-      <!-- Imagem do Jogo (Box-Art 3:4) -->
-      <div class="card-imagem">
+      <!-- Clicar na imagem redireciona para a página do jogo se for The Witcher 3 -->
+      <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
         <img [src]="produto.imagem" [alt]="produto.nome" />
       </div>
 
       <!-- Conteúdo e Informações -->
       <div class="card-conteudo">
-        <h3 class="produto-nome">{{ produto.nome }}</h3>
+        <h3 class="produto-nome" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
+          {{ produto.nome }}
+        </h3>
         <span class="produto-genero">{{ produto.genero }}</span>
 
         <div class="produto-precos">
@@ -23,7 +25,7 @@
           <span class="preco-promocional">{{ produto.precoPromocional }}</span>
         </div>
 
-        <!-- Ações: Botão Carrinho + Botão Coração Favorito -->
+        <!-- Ações -->
         <div class="card-actions">
           <button class="btn-carrinho" (click)="adicionarAoCarrinho(produto)">
             <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
