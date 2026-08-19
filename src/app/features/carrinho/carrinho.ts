@@ -12,6 +12,8 @@ import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
 export class Carrinho {
   carrinhoFacade = inject(CarrinhoFacade);
 
+
+  
   removerItem(indice: number) {
     this.carrinhoFacade.removerItem(indice);
   }

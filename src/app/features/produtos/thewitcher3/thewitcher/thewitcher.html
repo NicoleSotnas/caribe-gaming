@@ -1,21 +1,128 @@
-<nav>
-    <ul>
-        <li>Inicio</li>
-        <li>Jogos</li>
-        <li>Carrinho</li>
-        <li>Login</li>
+<div class="pagina-detalhes" *ngIf="jogo; else estadoAlternativo">
 
-    </ul>
-</nav>
-<section class="the-witcher-3">
+  <!-- Breadcrumb Superior -->
+  <div class="breadcrumb">
+    <span>HOME</span> &gt; <span>JOGOS</span> &gt; <span>RPG</span> &gt; <strong>{{ jogo.nome }}</strong>
+  </div>
 
-<div class="imgJogo">
-    <h2>The Witcher 3: Wild Hunt</h2>
- 
-   <h4>Inglês</h4>
-   <h4>19 de maio de 2015</h4>
-   <h4>The Witcher 3: Wild Hunt foi desenvolvido pelo estúdio polonês CD Projekt Red</h4>
-   <h4></h4>
+  <!-- GRID PRINCIPAL (Mídia + Informações de Compra) -->
+  <div class="grid-principal">
+
+    <!-- Mídia e Galeria de Fotos -->
+    <div class="secao-midia">
+      <div class="container-imagem-destaque">
+        <span class="badge-desconto">-75%</span>
+        <img [src]="imagemPrincipal" [alt]="jogo.nome" class="img-destaque" />
+        <span class="badge-classificacao">{{ jogo.classificacaoEtaria }}</span>
+      </div>
+
+      <!-- Miniaturas / Thumbnails -->
+      <div class="grid-miniaturas">
+        <button
+          *ngFor="let img of galeriaImagens"
+          class="thumb-btn"
+          [class.ativo]="img === imagemPrincipal"
+          (click)="selecionarImagem(img)">
+          <img [src]="img" alt="Thumbnail" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Painel Lateral de Informações -->
+    <div class="secao-info">
+      <h1 class="titulo-jogo">{{ jogo.nome }}</h1>
+
+      <div class="subtitulos">
+        <span>{{ jogo.desenvolvedoras }}</span> •
+        <span>{{ jogo.plataformas }}</span> •
+        <span class="categoria-tag">RPG, Mundo Aberto</span>
+      </div>
+
+      <!-- Avaliação por Estrelas -->
+      <div class="avaliacao-container">
+        <div class="estrelas">★★★★★</div>
+        <span class="nota-numero">4.9</span>
+        <span class="total-avaliacoes">(2.450 avaliações)</span>
+      </div>
+
+      <!-- Destaques Rápido -->
+      <ul class="destaques-lista">
+        <li><i class="fas fa-magic"></i> <strong>Caçador de Monstros Mutante:</strong> Jogue como Geralt de Rívia.</li>
+        <li><i class="fas fa-globe"></i> <strong>Mundo Aberto Gigantesco:</strong> Explore as Ilhas Skellige e Novigrad.</li>
+        <li><i class="fas fa-scroll"></i> <strong>Narrativa Rica:</strong> Escolhas que alteram o destino do mundo.</li>
+      </ul>
+
+      <!-- Card de Preço e Compra -->
+      <div class="card-compra">
+        <div class="precos-linha">
+          <span class="badge-desconto-card">-75%</span>
+          <span class="preco-promo">R$ 32,49</span>
+          <span class="preco-orig">R$ 129,99</span>
+        </div>
+
+        <div class="acoes-botoes">
+          <button class="btn-adicionar"><i class="fas fa-shopping-cart"></i> Adicionar ao carrinho</button>
+          <button class="btn-favorito-detalhes" (click)="toggleFavorito()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" [attr.fill]="favorito ? '#ff4757' : 'none'" stroke="currentColor" stroke-width="2" class="icon-heart">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <button class="btn-comprar">Comprar agora</button>
+        <div class="compra-segura"><i class="fas fa-lock"></i> Compra 100% segura</div>
+      </div>
+
+      <!-- Fatos do Jogo (Tabela Técnica da RAWG) -->
+      <div class="tabela-fatos">
+        <div class="fato-linha"><span>Plataforma:</span> <strong>{{ jogo.plataformas }}</strong></div>
+        <div class="fato-linha"><span>Gênero:</span> <strong>RPG, Ação, Mundo Aberto</strong></div>
+        <div class="fato-linha"><span>Lançamento:</span> <strong>{{ jogo.dataLancamento }}</strong></div>
+        <div class="fato-linha"><span>Desenvolvedor:</span> <strong>{{ jogo.desenvolvedoras }}</strong></div>
+        <div class="fato-linha"><span>Distribuidora:</span> <strong>{{ jogo.distribuidoras }}</strong></div>
+        <div class="fato-linha"><span>Idioma:</span> <strong>Português (Brasil) e mais</strong></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SEÇÃO SOBRE O JOGO -->
+  <div class="secao-detalhada">
+    <h2>SOBRE O JOGO</h2>
+    <p class="descricao-paragrafo">{{ jogo.descricao }}</p>
+  </div>
+
+  <!-- SEÇÃO AVALIAÇÕES DOS JOGADORES -->
+  <div class="secao-avaliacoes">
+    <h2>AVALIAÇÕES DOS JOGADORES</h2>
+    <div class="box-avaliacoes">
+      <div class="resumo-nota">
+        <span class="grande-nota">4.9</span>
+        <div class="estrelas">★★★★★</div>
+        <span class="total-votos">2.450 avaliações</span>
+      </div>
+
+      <div class="lista-comentarios">
+        <div class="comentario-card">
+          <div class="autor-info">
+            <strong>GeraltDeRivia_BR</strong>
+            <span class="data">18/05/2026</span>
+          </div>
+          <div class="estrelas-mini">★★★★★</div>
+          <p>Um dos melhores RPGs já feitos na história. A riqueza de detalhes do mundo e das missões secundárias é impressionante!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-</section>
+<!-- Estado de carregando ou erro -->
+<ng-template #estadoAlternativo>
+  <div class="estado-alternativo">
+    <p *ngIf="carregando">Carregando informações do jogo...</p>
+    <p *ngIf="!carregando && erro">
+      Não foi possível carregar os dados do jogo agora. Tente novamente em instantes.
+    </p>
+  </div>
+</ng-template>
