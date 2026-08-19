@@ -1,3 +1,12 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-checkout',
+  imports: [],
+  templateUrl: './checkout.html',
+  styleUrl: './checkout.css',
+})
+export class Checkout {}
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
