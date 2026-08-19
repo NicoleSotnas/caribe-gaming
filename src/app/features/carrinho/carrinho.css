@@ -1,0 +1,74 @@
+.pagina-carrinho {
+  background-color: #080c14;
+  color: #f1f5f9;
+  min-height: 100vh;
+  padding: 32px 24px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.pagina-carrinho h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #ffffff;
+}
+
+.lista-carrinho {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.item-carrinho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #1e293b;
+}
+
+.item-carrinho:last-child {
+  border-bottom: none;
+}
+
+.item-carrinho h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+.item-carrinho p {
+  margin: 4px 0 0 0;
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.resumo-carrinho {
+  margin-top: 24px;
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.resumo-carrinho h3 {
+  color: #94a3b8;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.resumo-carrinho h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.acoes-carrinho {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
