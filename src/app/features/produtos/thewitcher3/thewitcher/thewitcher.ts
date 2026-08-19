@@ -1,56 +1,53 @@
-import { Component } from '@angular/core';
-import { GalleryModule } from 'primeng/gallery';
-import { ChevronLeft } from '@primeicons/angular/chevron-left';
-import { ChevronRight } from '@primeicons/angular/chevron-right';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RawgService, DetalhesJogo } from '../../../../core/services/rawg.service';
 
 @Component({
   selector: 'app-thewitcher',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './thewitcher.html',
-  styleUrl: './thewitcher.css',
-
-   template: `
-        <p-gallery class="h-150!">
-            <p-gallery-backdrop></p-gallery-backdrop>
-            <button pGalleryPrev>
-                <svg data-p-icon="chevron-left"></svg>
-            </button>
-            <button pGalleryNext>
-                <svg data-p-icon="chevron-right"></svg>
-            </button>
-            <p-gallery-content>
-                @for (image of images; track image) {
-                    <p-gallery-item>
-                        <img [src]="image" alt="image" />
-                    </p-gallery-item>
-                }
-            </p-gallery-content>
-            <p-gallery-footer>
-                <p-gallery-thumbnail>
-                    <p-gallery-thumbnail-content>
-                        @for (image of images; track image; let i = $index) {
-                            <p-gallery-thumbnail-item [index]="i">
-                                <img [attr.draggable]="false" [src]="image" class="h-full w-full object-cover" />
-                            </p-gallery-thumbnail-item>
-                        }
-                    </p-gallery-thumbnail-content>
-                </p-gallery-thumbnail>
-            </p-gallery-footer>
-        </p-gallery>
-    `,
-    standalone: true,
+  styleUrl: './thewitcher.css'
 })
+export class Thewitcher implements OnInit {
+  jogo: DetalhesJogo | null = null;
+  carregando: boolean = true;
+  erro: boolean = false;
 
+  galeriaImagens: string[] = [
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/ss_107be6d788f43716514b136bad78e8d0b2bcf232.1920x1080.jpg',
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/ss_f8f018448108a9f626a57529d10e5414e08216c5.1920x1080.jpg',
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/ss_692e8289f712f5847b231d2e1c94d03d3c8c27a2.1920x1080.jpg',
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/292030/ss_84074213da8f8303e6727ed24816be50c7ea519f.1920x1080.jpg',
+  ];
 
-export class Thewitcher {
+  imagemPrincipal: string = this.galeriaImagens[0];
+  favorito: boolean = false;
 
-    photos: [number, number, number][] = [
-        [10, 1200, 800],
-        [11, 800, 1200],
-        [15, 1400, 700],
-        [16, 700, 1050],
-        [17, 1000, 1000]
-    ];
-    images = this.photos.map(([id, w, h]) => `https://picsum.photos/id/${id}/${w}/${h}`);
-  
+  constructor(private rawgService: RawgService) {}
+
+ ngOnInit(): void {
+  console.log('1. ngOnInit disparou');
+  this.rawgService.obterDetalhesTheWitcher3().subscribe({
+    next: (dados) => {
+      console.log('2. Dados recebidos:', dados);
+      this.jogo = dados;
+      this.carregando = false;
+    },
+    error: (err) => {
+      console.log('3. Deu erro:', err);
+      console.error('Erro ao carregar detalhes:', err);
+      this.carregando = false;
+      this.erro = true;
+    }
+  });
+}
+
+  selecionarImagem(img: string): void {
+    this.imagemPrincipal = img;
+  }
+
+  toggleFavorito(): void {
+    this.favorito = !this.favorito;
+  }
 }
