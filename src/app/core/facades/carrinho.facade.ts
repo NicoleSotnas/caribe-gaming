@@ -1,5 +1,4 @@
 import { Injectable, inject } from '@angular/core';
-
 import { CarrinhoService } from '../services/carrinho.service';
 
 type ItemCarrinho = {
