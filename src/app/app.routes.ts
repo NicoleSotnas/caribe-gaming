@@ -5,6 +5,7 @@ import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
+import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,11 @@ export const routes: Routes = [
   {
     path: 'checkout',
     component: Checkout,
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./features/admin/admin').then((m) => m.Admin),
+    canActivate: [adminGuard],
   },
   { path: '**', redirectTo: '' },
 ];

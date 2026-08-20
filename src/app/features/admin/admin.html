@@ -1,0 +1,49 @@
+<div class="admin-container">
+  <h1>Área Administrativa</h1>
+  <p>Esta página representa uma área restrita da aplicação.</p>
+  <p>Somente usuários com perfil de administrador conseguem acessar esta rota.</p>
+
+  <hr />
+
+  <h2>Usuário autenticado</h2>
+  <p><strong>E-mail:</strong> {{ authFacade.usuarioAtual()?.email }}</p>
+  <p><strong>Perfil:</strong> {{ authFacade.usuarioAtual()?.perfil }}</p>
+  <p>Usuário autenticado como {{ authFacade.usuarioAtual()?.perfil }}.</p>
+
+  <hr />
+
+  <div class="cards-row">
+    <div class="card">
+      <h3>Produtos cadastrados</h3>
+      <span class="numero">{{ produtosCadastrados }}</span>
+    </div>
+    <div class="card">
+      <h3>Pedidos pendentes</h3>
+      <span class="numero">{{ pedidosPendentes }}</span>
+    </div>
+    <div class="card">
+      <h3>Usuários cadastrados</h3>
+      <span class="numero">{{ usuariosCadastrados }}</span>
+    </div>
+  </div>
+
+  <hr />
+
+  <h2>Ações administrativas simuladas</h2>
+  <p>
+    Nesta etapa do curso, estas ações ainda são apenas representativas. Nas próximas evoluções,
+    poderiam ser conectadas a APIs reais.
+  </p>
+
+  <div class="acoes-row">
+    <button pButton variant="outlined">Cadastrar produto</button>
+    <button pButton variant="outlined">Gerenciar pedidos</button>
+    <button pButton variant="outlined">Gerenciar usuários</button>
+  </div>
+
+  <hr />
+
+  <button pButton variant="outlined" severity="secondary" (click)="sair()">
+    Sair da conta administrativa
+  </button>
+</div>
