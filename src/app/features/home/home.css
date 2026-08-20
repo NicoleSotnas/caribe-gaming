@@ -1,19 +1,26 @@
-header{
+header {
     position: fixed;
     top: 0;
     left: 0;
 
-
     width: 100%;
     height: 80px;
 
-    background-color: #19162b;
-    color:  #f8f4f4;
+     background: linear-gradient(
+    180deg,
+    #476A9B 0%,
+    #3BAFD4 50%,
+    #3BAFD4 100%
+  );
+
+
+    color: #f8f4f4;
 
     display: flex;
     align-items: center;
     opacity: 95%;
-    border-bottom: 2px solid #332a5e;
+    
+    border-bottom: 2px solid #346498;
 
 }
 
@@ -35,18 +42,19 @@ button{
 }
 
 .botao:hover {
-    background-color: #0f1855;
+    background-color: #7eb8c5;
     
 }
 
 .botao{
-    display: inline-block;
+    display: flex;
     padding: 30px 60px;
     background-color:#1c247b;
     color: #ffffff;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
+    gap: 8px;
 
     text-decoration: none;
     font-weight: 200;
@@ -56,21 +64,28 @@ button{
 }
 
 .ativo{
-    background-color: rgba(60, 66, 229, 0.1);
+    
     color: white;
-    border-bottom: 4px solid #5a39fb;
+    border-bottom: 4px solid #d3c199;
      background: radial-gradient(
         ellipse at bottom ,
-        #1683ff 0%,
-        rgba(22, 131, 255, 0.7) 25%,
-        rgba(22, 131, 255, 0.2) 55%,
+        #aea186 0%,
+        #f3d493(22, 131, 255, 0.7) 25%,
+        #988968(22, 131, 255, 0.2) 55%,
         transparent 90%
     );
 }
 
 
 body{
-   background-color: #19162b;
+  background: linear-gradient(
+    180deg,
+    #3BAFD4 0%,
+    #328EAF 35%,
+    #265F80 65%,
+    #191F3A 100%
+  );
+
 }
 
 html,
@@ -82,7 +97,7 @@ body {
 main {
     width: 100%;
     margin: 0;
-    padding-top: 5.3%;
+    padding-top: 80px;
 }
 
 .banner {

@@ -13,10 +13,10 @@
 
     <div class="campo">
       <label for="senha">Senha</label>
-      <input id="senha" type="password" formControlName="senha" placeholder="Mínimo 6 caracteres" />
+      <input id="senha" type="password" formControlName="senha" placeholder="••••••••" />
 
       <span class="erro" *ngIf="loginForm.get('senha')?.touched && loginForm.get('senha')?.invalid">
-        A senha precisa ter no mínimo 6 caracteres
+        A senha deve ter no mínimo 6 caracteres
       </span>
     </div>
 
@@ -25,5 +25,9 @@
     <button type="submit" [disabled]="carregando">
       {{ carregando ? 'Entrando...' : 'Entrar' }}
     </button>
+
+    <p class="link-registro">Não tem uma conta? <a routerLink="/registro">Criar conta</a></p>
+
+    <a routerLink="/" class="link-voltar">← Voltar para a Home</a>
   </form>
 </div>
