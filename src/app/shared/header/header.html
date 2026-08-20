@@ -1,9 +1,30 @@
-<header class="header-container">
-  <div class="button-row">
-    <button pButton variant="outlined">Home</button>
-    <button pButton variant="outlined" severity="secondary">Jogos</button>
-    <button pButton variant="outlined" severity="success">Login</button>
-    <button pButton variant="outlined" severity="info">Carrinho</button>
+<link rel="stylesheet" href="header.css" />
 
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
+<header class="header-container">
+    <div class="logo">
+      <img src="/img/logo.png" width="240px" height="210px" >
+    </div>
+    <nav>
+      <div class="button-row">
+      <button class="botao ativo" pButton variant="outlined"><i class="fa-solid fa-house"></i>HOME</button>
+      <button class="botao" pButton variant="outlined" severity="secondary"><i class="fa-solid fa-gamepad"></i>PRODUTOS</button>
+      <button class="botao" pButton variant="outlined" severity="info"><i class="fa-solid fa-cart-shopping"></i>CARRINHO</button>
+
+      <div class="user-info" *ngIf="authFacade.estaLogado()">
+    <span class="email">{{ authFacade.usuarioAtual()?.email }}</span>
+    <button pButton variant="text" severity="secondary" class="btn-sair" (click)="sair()">SAIR</button>
   </div>
-</header>
+      <ng-template #botaoLogin>
+        <button class="botao" routerLink="/login" pButton variant="outlined" severity="success"><i class="fa-solid fa-anchor"></i>LOGIN</button>
+      </ng-template>
+      </div>
+    </nav>
+  </header>
+
+
+  
