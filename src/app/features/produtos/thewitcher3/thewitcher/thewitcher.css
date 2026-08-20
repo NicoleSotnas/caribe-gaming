@@ -1,0 +1,249 @@
+.pagina-detalhes {
+  background-color: #0b0f19;
+  color: #e2e8f0;
+  padding: 24px 40px;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.breadcrumb {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+.grid-principal {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 32px;
+}
+
+/* Mídia */
+.container-imagem-destaque {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111827;
+  aspect-ratio: 16 / 9;
+}
+
+.img-destaque {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge-desconto {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #0088ff;
+  color: #fff;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.badge-classificacao {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: #d97706;
+  color: white;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.grid-miniaturas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.thumb-btn {
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.thumb-btn.ativo {
+  border-color: #0088ff;
+}
+
+.thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lado Direito */
+.titulo-jogo {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+.subtitulos {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.categoria-tag {
+  color: #00d2ff;
+}
+
+.avaliacao-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.estrelas {
+  color: #f59e0b;
+}
+
+.destaques-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.destaques-lista li {
+  margin-bottom: 8px;
+}
+
+/* Card de Compra */
+.card-compra {
+  background: #121a2b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.precos-linha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.badge-desconto-card {
+  background: #0088ff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.preco-promo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #00d2ff;
+}
+
+.preco-orig {
+  text-decoration: line-through;
+  color: #64748b;
+}
+
+.acoes-botoes {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.btn-adicionar {
+  flex: 1;
+  background: #0088ff;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-favorito-detalhes {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 44px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-heart {
+  width: 20px;
+  height: 20px;
+  color: #ff4757;
+}
+
+.btn-comprar {
+  width: 100%;
+  background: transparent;
+  border: 1px solid #0088ff;
+  color: #0088ff;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.compra-segura {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 10px;
+}
+
+/* Tabela Fatos */
+.tabela-fatos {
+  background: #121a2b;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.fato-linha {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fato-linha span {
+  color: #64748b;
+}
+
+/* Seções de Texto e Comentários */
+.secao-detalhada, .secao-avaliacoes {
+  background: #121a2b;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 32px;
+}
+
+.secao-detalhada h2, .secao-avaliacoes h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.descricao-paragrafo {
+  color: #94a3b8;
+  line-height: 1.6;
+}

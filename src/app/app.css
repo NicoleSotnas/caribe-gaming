@@ -1,0 +1,4 @@
+.main-content {
+  padding: 1rem;
+  min-height: calc(100vh - 80px); /* Ajuste a altura conforme o tamanho do seu header */
+}
