@@ -1,13 +1,33 @@
 <header class="header-container">
-  <div class="button-row">
-    <button pButton variant="outlined">Home</button>
-    <button pButton variant="outlined" severity="secondary">Jogos</button>
-    <button pButton variant="outlined" severity="success">Login</button>
-    <button pButton variant="outlined" severity="info">Carrinho</button>
+  <div class="logo">
+    <img src="/img/logo.png" alt="Logo" width="240" height="210" />
   </div>
+  <nav>
+    <div class="button-row">
+      <button class="botao ativo" pButton variant="outlined">
+        <i class="fa-solid fa-house"></i>HOME
+      </button>
+      <button class="botao" pButton variant="outlined" severity="secondary">
+        <i class="fa-solid fa-gamepad"></i>PRODUTOS
+      </button>
+      <button class="botao" pButton variant="outlined" severity="info">
+        <i class="fa-solid fa-cart-shopping"></i>CARRINHO
+      </button>
 
-  <div class="user-info" *ngIf="authFacade.estaLogado()">
-    <span class="email">{{ authFacade.usuarioAtual()?.email }}</span>
-    <button pButton variant="text" severity="secondary" class="btn-sair" (click)="sair()">SAIR</button>
-  </div>
+      <ng-container *ngIf="authFacade.estaLogado(); else botaoLogin">
+        <div class="user-info">
+          <span class="email">{{ authFacade.usuarioAtual()?.email }}</span>
+          <button pButton variant="text" severity="secondary" class="btn-sair" (click)="sair()">
+            SAIR
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #botaoLogin>
+        <button class="botao" routerLink="/login" pButton variant="outlined" severity="success">
+          <i class="fa-solid fa-anchor"></i>LOGIN
+        </button>
+      </ng-template>
+    </div>
+  </nav>
 </header>
