@@ -1,6 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ==========================================================================
+   PALETA DE CORES GLOBAL E BACKGROUND
+   ========================================================================== */
+
+/* 1. Reset básico e comportamento de rolagem */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+}
+
+/* 2. Background Global (Gradiente em 4 etapas) */
+body {
+  background: linear-gradient(180deg, #3bafd4 0%, #328eaf 35%, #265f80 65%, #191f3a 100%);
+  background-attachment: fixed;
+  color: #ffffff;
+}
+
+/* 3. Variáveis de Cores (Opcional, para reuso limpo no CSS dos componentes) */
+:root {
+  --nav-bg-gradient: linear-gradient(180deg, #476a9b 0%, #3bafd4 50%, #3bafd4 100%);
+  --catalog-bar-color: #346498;
+  --bg-top: #3bafd4;
+  --bg-mid-1: #328eaf;
+  --bg-mid-2: #265f80;
+  --bg-bottom: #191f3a;
 }
