@@ -72,22 +72,22 @@ button:disabled {
   background: #999;
   cursor: not-allowed;
 }
-.link-registro {
+
+.link-login {
   text-align: center;
   margin-top: 1rem;
   font-size: 0.9rem;
 }
 
-.link-registro a {
+.link-login a {
   color: #4361ee;
   text-decoration: none;
   font-weight: bold;
 }
 
-.link-registro a:hover {
+.link-login a:hover {
   text-decoration: underline;
 }
-
 .link-voltar {
   display: block;
   text-align: center;
