@@ -5,6 +5,8 @@ import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
 import { authGuard } from './core/guards/auth-guard';
+
+
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
 
 export const routes: Routes = [
