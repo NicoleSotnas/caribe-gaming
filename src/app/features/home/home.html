@@ -1,18 +1,24 @@
-<link rel="stylesheet" href="home.css">
+<header>
+    <div class="logo">
+        <h1>logo</h1>
+    </div>
+    <nav>
+        <button class="botao ativo">HOME</button>
+        <button class="botao">PRODUTOS</button>
+        <button class="botao">CARRINHO</button>
 
+        <ng-container *ngIf="usuarioAtual$ | async as usuario; else botaoLogin">
+            <span class="usuario-logado">{{ usuario.email }}</span>
+            <button class="botao" (click)="sair()">SAIR</button>
+        </ng-container>
 
-<body>
+        <ng-template #botaoLogin>
+            <button class="botao" routerLink="/login">LOGIN</button>
+        </ng-template>
+    </nav>
+</header>
 
-    <header>
-        <div class="logo">
-            <h1>logo</h1>
-        </div>
-        <nav>
-            <button class="botao ativo">HOME</button> <button class="botao">PRODUTOS</button> <button class="botao">CARRINHO</button> <button class="botao">LOGIN</button>
-        </nav>
-    </header>
-
-    <main>
+<main>
     <div class="banner">
         <img src="/img/hellokitty.jpg" alt="Hello Kitty">
     </div>
