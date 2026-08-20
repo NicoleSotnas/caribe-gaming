@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { Login } from './features/login/login';
-import { Home } from './features/home/home';
+import { Home } from './home/home/home';
 import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
 import { authGuard } from './core/guards/auth-guard';
+
+
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
 
 export const routes: Routes = [
@@ -19,7 +21,10 @@ export const routes: Routes = [
   {
     path: 'jogos/the-witcher-3',
     component: Thewitcher,
-   
+  },
+  {
+    path: 'login',
+    component: Login,
   },
   {
     path: 'registro',
@@ -31,12 +36,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-  path: 'checkout',
-  component: Checkout,
-  canActivate: [authGuard],
-},
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: Login },
-  { path: 'home', component: Home, canActivate: [authGuard] },
-  { path: '**', redirectTo: 'login' },
+    path: 'checkout',
+    component: Checkout,
+    canActivate: [authGuard],
+  },
+  { path: '**', redirectTo: '' },
 ];

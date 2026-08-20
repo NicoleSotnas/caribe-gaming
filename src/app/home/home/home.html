@@ -1,0 +1,57 @@
+<!-- Primeiro Carrossel -->
+<div class="carousel-wrapper">
+  <p-carousel class="carousel-container" align="center">
+    <p-carousel-content class="carousel-content">
+      @for (item of items; track item.id) {
+        <p-carousel-item>
+          <div class="carousel-card">
+            <img [src]="item.image" [alt]="item.title" class="carousel-img" />
+            <span class="carousel-title">{{ item.title }}</span>
+          </div>
+        </p-carousel-item>
+      }
+    </p-carousel-content>
+
+    <div class="carousel-controls">
+      <p-carousel-indicators></p-carousel-indicators>
+
+      <div class="carousel-navigation">
+        <button pCarouselPrev class="carousel-nav-btn">
+          <svg data-p-icon="chevron-left"></svg>
+        </button>
+        <button pCarouselNext class="carousel-nav-btn">
+          <svg data-p-icon="chevron-right"></svg>
+        </button>
+      </div>
+    </div>
+  </p-carousel>
+</div>
+
+<!-- Segundo Carrossel (Loop e Imagens) -->
+<div class="carousel-wrapper">
+  <p-carousel class="carousel-container" align="center" [loop]="true" [slidesPerPage]="1.75">
+    <p-carousel-content class="carousel-content-secondary">
+      @for (item of loopItems; track item.id) {
+        <p-carousel-item>
+          <div class="carousel-card-secondary">
+            <img [src]="item.image" [alt]="item.title" class="carousel-img" />
+            <span class="carousel-title">{{ item.title }}</span>
+          </div>
+        </p-carousel-item>
+      }
+    </p-carousel-content>
+
+    <div class="carousel-controls">
+      <p-carousel-indicators></p-carousel-indicators>
+
+      <div class="carousel-navigation">
+        <button pCarouselPrev class="carousel-nav-btn">
+          <svg data-p-icon="chevron-left"></svg>
+        </button>
+        <button pCarouselNext class="carousel-nav-btn">
+          <svg data-p-icon="chevron-right"></svg>
+        </button>
+      </div>
+    </div>
+  </p-carousel>
+</div>
