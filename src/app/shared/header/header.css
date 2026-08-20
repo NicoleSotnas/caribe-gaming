@@ -12,3 +12,31 @@
   gap: 100px;
   justify-content: center;
 }
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info .email {
+  font-size: 0.9rem;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.user-info .btn-sair {
+  font-size: 0.85rem;
+  padding: 6px 16px;
+  border: 1px solid #e2e2e2;
+  border-radius: 6px;
+  background: transparent;
+  color: #4a4a4a;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.user-info .btn-sair:hover {
+  background: #fef2f2;
+  color: #ef4444;
+  border-color: #fecaca;
+}
