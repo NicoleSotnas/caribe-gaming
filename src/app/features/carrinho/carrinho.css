@@ -1,6 +1,9 @@
+body {
+  background: linear-gradient(180deg, #3bafd4 0%, #328eaf 35%, #265f80 65%, #191f3a 100%);
+}
+
 .pagina-carrinho {
-  background-color: #080c14;
-  color: #f1f5f9;
+  background: linear-gradient(180deg, #3bafd4 0%, #328eaf 35%, #265f80 65%, #191f3a 100%);
   min-height: 100vh;
   padding: 32px 24px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
