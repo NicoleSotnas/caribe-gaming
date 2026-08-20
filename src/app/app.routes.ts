@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Login } from './features/login/login';
-import { Home } from './features/home/home';
+import { Home } from './home/home/home';
 import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
