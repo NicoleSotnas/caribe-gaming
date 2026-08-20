@@ -41,7 +41,7 @@ export class Login {
     this.authService.login(email, senha).subscribe({
       next: () => {
         this.carregando = false;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       },
       error: (erro) => {
         this.carregando = false;
