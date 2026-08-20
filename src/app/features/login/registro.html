@@ -6,7 +6,10 @@
       <label for="email">Email</label>
       <input id="email" type="email" formControlName="email" placeholder="seu@email.com" />
 
-      <span class="erro" *ngIf="registroForm.get('email')?.touched && registroForm.get('email')?.invalid">
+      <span
+        class="erro"
+        *ngIf="registroForm.get('email')?.touched && registroForm.get('email')?.invalid"
+      >
         Digite um email válido
       </span>
     </div>
@@ -15,16 +18,29 @@
       <label for="senha">Senha</label>
       <input id="senha" type="password" formControlName="senha" placeholder="Mínimo 6 caracteres" />
 
-      <span class="erro" *ngIf="registroForm.get('senha')?.touched && registroForm.get('senha')?.invalid">
+      <span
+        class="erro"
+        *ngIf="registroForm.get('senha')?.touched && registroForm.get('senha')?.invalid"
+      >
         A senha precisa ter no mínimo 6 caracteres
       </span>
     </div>
 
     <div class="campo">
       <label for="confirmarSenha">Confirmar senha</label>
-      <input id="confirmarSenha" type="password" formControlName="confirmarSenha" placeholder="Repita a senha" />
+      <input
+        id="confirmarSenha"
+        type="password"
+        formControlName="confirmarSenha"
+        placeholder="Repita a senha"
+      />
 
-      <span class="erro" *ngIf="registroForm.get('confirmarSenha')?.touched && registroForm.errors?.['senhasDiferentes']">
+      <span
+        class="erro"
+        *ngIf="
+          registroForm.get('confirmarSenha')?.touched && registroForm.errors?.['senhasDiferentes']
+        "
+      >
         As senhas não coincidem
       </span>
     </div>
@@ -34,5 +50,9 @@
     <button type="submit" [disabled]="carregando">
       {{ carregando ? 'Criando conta...' : 'Criar conta' }}
     </button>
+
+    <p class="link-login">Já tem uma conta? <a routerLink="/login">Entrar</a></p>
+
+    <a routerLink="/" class="link-voltar">← Voltar para a Home</a>
   </form>
 </div>
