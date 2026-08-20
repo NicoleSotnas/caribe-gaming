@@ -1,33 +1,44 @@
 import { Routes } from '@angular/router';
-<<<<<<< HEAD
-import { Home } from './features/home/home';
-=======
 import { Login } from './features/login/login';
 import { Home } from './features/home/home';
 import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
+import { Checkout } from './features/checkout/checkout/checkout';
 import { authGuard } from './core/guards/auth-guard';
->>>>>>> ddcb2f384f03494cdb89a5af53e479ff241b80b2
+
+
+import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
 
 export const routes: Routes = [
   {
     path: '',
     component: Home,
   },
-<<<<<<< HEAD
-];
-=======
   {
-    path: 'catalogo',
+    path: 'jogos',
     component: Produtos,
   },
   {
-    path: 'carrinho',
-    component: Carrinho,
+    path: 'jogos/the-witcher-3',
+    component: Thewitcher,
   },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: Login },
-  { path: 'home', component: Home, canActivate: [authGuard] },
-  { path: '**', redirectTo: 'login' },
+  {
+    path: 'login',
+    component: Login,
+  },
+  {
+    path: 'registro',
+    loadComponent: () => import('./features/login/registro').then((m) => m.Registro),
+  },
+  {
+    path: 'carrinho',
+    loadComponent: () => import('./features/carrinho/carrinho').then((m) => m.Carrinho),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'checkout',
+    component: Checkout,
+    canActivate: [authGuard],
+  },
+  { path: '**', redirectTo: '' },
 ];
->>>>>>> ddcb2f384f03494cdb89a5af53e479ff241b80b2
