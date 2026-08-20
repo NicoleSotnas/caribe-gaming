@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ChevronLeft } from '@primeicons/angular/chevron-left';
 import { ChevronRight } from '@primeicons/angular/chevron-right';
+import { Header } from '../../shared/header/header';
 
 interface CarouselItem {
   id: number;
@@ -12,7 +14,7 @@ interface CarouselItem {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CarouselModule, ChevronLeft, ChevronRight],
+  imports: [CommonModule, CarouselModule, ChevronLeft, ChevronRight, Header],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
