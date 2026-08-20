@@ -1,0 +1,115 @@
+/* --- Estrutura Geral e Containers --- */
+.carousel-wrapper {
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+.carousel-container {
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Primeiro Carrossel (Único Item por Vez) --- */
+.carousel-content {
+  height: 350px;
+}
+
+.carousel-card {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid var(--surface-border, #e5e7eb);
+  background-color: var(--surface-50, #f9fafb);
+  color: var(--surface-950, #030712);
+}
+
+/* --- Segundo Carrossel (Loop e Múltiplos Itens) --- */
+.carousel-content-secondary {
+  height: 15rem; /* ~240px */
+}
+
+.carousel-card-secondary {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid var(--surface-border, #e5e7eb);
+  background-color: var(--surface-50, #f9fafb);
+  color: var(--surface-950, #030712);
+  margin: 0 0.25rem; /* Pequeno espaçamento lateral entre itens no modo múltiplos */
+}
+
+/* --- Imagens e Títulos Comuns aos Carrosséis --- */
+.carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-title {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+}
+
+/* --- Modos Escuro (Dark Mode) --- */
+:host-context(.dark) .carousel-card,
+:host-context(.dark) .carousel-card-secondary {
+  background-color: var(--surface-950, #030712);
+  color: var(--surface-0, #ffffff);
+}
+
+:host-context(.dark) .carousel-nav-btn {
+  background-color: var(--surface-800, #1f2937);
+  color: var(--surface-400, #9ca3af);
+}
+
+/* --- Controles e Navegação --- */
+.carousel-controls {
+  display: flex;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.carousel-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex: 1 1 0%;
+}
+
+.carousel-nav-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid var(--surface-border, #e5e7eb);
+  background-color: var(--surface-0, #ffffff);
+  color: var(--surface-500, #6b7280);
+  cursor: pointer;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.carousel-nav-btn:hover {
+  opacity: 0.75;
+}
