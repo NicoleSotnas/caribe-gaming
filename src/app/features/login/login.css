@@ -3,7 +3,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #eef1f6;
+  background: linear-gradient(
+    180deg,
+    #3BAFD4 0%,
+    #328EAF 35%,
+    #265F80 65%,
+    #191F3A 100%
+  );
+
   font-family: Arial, sans-serif;
 }
 
