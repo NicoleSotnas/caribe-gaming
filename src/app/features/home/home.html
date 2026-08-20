@@ -1,21 +1,32 @@
-<link rel="stylesheet" href="home.css">
-
-
+<link rel="stylesheet" href="home.css" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
 <body>
-
-    <header>
-        <div class="logo">
-            <h1>logo</h1>
-        </div>
-        <nav>
-            <button class="botao ativo">HOME</button> <button class="botao">PRODUTOS</button> <button class="botao">CARRINHO</button> <button class="botao">LOGIN</button>
-        </nav>
-    </header>
-
-    <main>
-    <div class="banner">
-        <img src="/img/hellokitty.jpg" alt="Hello Kitty">
+  <header>
+    <div class="logo">
+      <h1>logo</h1>
     </div>
-</main>
+    <nav>
+      <button class="botao ativo"><i class="fa-solid fa-house"></i>HOME</button>
+      <button class="botao"><i class="fa-solid fa-gamepad"></i>PRODUTOS</button>
+      <button class="botao"><i class="fa-solid fa-cart-shopping"></i>CARRINHO</button>
 
-<!-- fazer uma linha depois do banner -->
+      <ng-container *ngIf="usuarioAtual$ | async as usuario; else botaoLogin">
+        <span class="usuario-logado">{{ usuario.email }}</span>
+        <button class="botao" (click)="sair()">SAIR</button>
+      </ng-container>
+
+      <ng-template #botaoLogin>
+        <button class="botao" routerLink="/login">LOGIN</button>
+      </ng-template>
+    </nav>
+  </header>
+
+  <main>
+    <div class="banner"></div>
+  </main>
+
+  <!-- fazer uma linha depois do banner -->
+</body>
