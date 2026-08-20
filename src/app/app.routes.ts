@@ -19,7 +19,10 @@ export const routes: Routes = [
   {
     path: 'jogos/the-witcher-3',
     component: Thewitcher,
-   
+  },
+  {
+    path: 'login',
+    component: Login,
   },
   {
     path: 'registro',
@@ -31,12 +34,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-  path: 'checkout',
-  component: Checkout,
-  canActivate: [authGuard],
-},
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: Login },
-  { path: 'home', component: Home, canActivate: [authGuard] },
-  { path: '**', redirectTo: 'login' },
+    path: 'checkout',
+    component: Checkout,
+    canActivate: [authGuard],
+  },
+  { path: '**', redirectTo: '' },
 ];

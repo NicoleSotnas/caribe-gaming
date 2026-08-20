@@ -8,13 +8,13 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],  
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
@@ -58,7 +58,7 @@ export class Registro {
     this.authService.registrar(email, senha).subscribe({
       next: () => {
         this.carregando = false;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       },
       error: (erro) => {
         this.carregando = false;
