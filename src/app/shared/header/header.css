@@ -1,17 +1,87 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  background: linear-gradient(180deg, #476a9b 0%, #3bafd4 50%, #3bafd4 100%);
+  color: #f8f4f4;
+  display: flex;
+  align-items: center;
+  opacity: 0.95;
+  border-bottom: 2px solid #346498;
+  z-index: 1000;
+}
+
 .header-container {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   flex-direction: row-reverse;
   padding: 1rem;
   padding-right: 60px;
+  width: 100%;
+}
+
+nav {
+  display: flex;
+  margin-left: auto;
+  margin-right: 5%;
+  font-size: 13px;
 }
 
 .button-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 100px;
+  gap: 20px;
+  align-items: center;
   justify-content: center;
 }
+
+.logo {
+  margin-left: 1%;
+  position: relative;
+  top: 28px;
+}
+
+.botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+  height: 110px;
+  box-sizing: border-box;
+  background-color: transparent;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 200;
+  font-size: 13px;
+  gap: 8px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.botao:hover {
+  background-color: #7eb8c5;
+}
+
+.ativo {
+  color: white;
+  border-bottom: 4px solid #d3c199;
+  background: radial-gradient(
+    ellipse at bottom,
+    #aea186 0%,
+    rgba(22, 131, 255, 0.7) 25%,
+    rgba(22, 131, 255, 0.2) 55%,
+    transparent 90%
+  );
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -20,7 +90,7 @@
 
 .user-info .email {
   font-size: 0.9rem;
-  color: #4a4a4a;
+  color: #ffffff;
   font-weight: 500;
 }
 
@@ -30,7 +100,7 @@
   border: 1px solid #e2e2e2;
   border-radius: 6px;
   background: transparent;
-  color: #4a4a4a;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.2s;
 }

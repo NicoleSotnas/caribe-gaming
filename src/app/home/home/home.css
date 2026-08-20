@@ -1,4 +1,30 @@
-/* --- Estrutura Geral e Containers --- */
+:host {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #3bafd4 0%, #328eaf 35%, #265f80 65%, #191f3a 100%);
+}
+
+.main-container {
+  width: 100%;
+  margin: 0;
+  padding-top: 140px; /* Garante o espaço suficiente para o header fixo de 110px de altura */
+}
+
+.banner {
+  width: 50%;
+  height: 300px;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Estrutura Geral dos Carrosséis --- */
 .carousel-wrapper {
   margin-top: 2rem;
   margin-bottom: 4rem;
@@ -10,7 +36,7 @@
   margin-right: auto;
 }
 
-/* --- Primeiro Carrossel (Único Item por Vez) --- */
+/* --- Primeiro Carrossel --- */
 .carousel-content {
   height: 350px;
 }
@@ -29,9 +55,9 @@
   color: var(--surface-950, #030712);
 }
 
-/* --- Segundo Carrossel (Loop e Múltiplos Itens) --- */
+/* --- Segundo Carrossel --- */
 .carousel-content-secondary {
-  height: 15rem; /* ~240px */
+  height: 15rem;
 }
 
 .carousel-card-secondary {
@@ -46,10 +72,10 @@
   border: 1px solid var(--surface-border, #e5e7eb);
   background-color: var(--surface-50, #f9fafb);
   color: var(--surface-950, #030712);
-  margin: 0 0.25rem; /* Pequeno espaçamento lateral entre itens no modo múltiplos */
+  margin: 0 0.25rem;
 }
 
-/* --- Imagens e Títulos Comuns aos Carrosséis --- */
+/* --- Imagens e Títulos --- */
 .carousel-img {
   width: 100%;
   height: 100%;
