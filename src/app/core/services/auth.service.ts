@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 type PerfilUsuario = 'usuario' | 'admin';
 type Usuario = {
@@ -13,8 +14,13 @@ const CHAVE_TOKEN = 'caribe-gaming:token';
   providedIn: 'root',
 })
 export class AuthService {
+  private plataformaId = inject(PLATFORM_ID);
+  private ehNavegador = isPlatformBrowser(this.plataformaId);
+
   private usuario = signal<Usuario | null>(this.carregarUsuarioSalvo());
-  private tokenJwt = signal<string | null>(localStorage.getItem(CHAVE_TOKEN));
+  private tokenJwt = signal<string | null>(
+    this.ehNavegador ? localStorage.getItem(CHAVE_TOKEN) : null,
+  );
 
   usuarioAtual = computed(() => this.usuario());
   estaLogado = computed(() => this.usuario() !== null);
@@ -22,6 +28,9 @@ export class AuthService {
   token = computed(() => this.tokenJwt());
 
   private carregarUsuarioSalvo(): Usuario | null {
+    if (!this.ehNavegador) {
+      return null;
+    }
     const dados = localStorage.getItem(CHAVE_USUARIO);
     return dados ? JSON.parse(dados) : null;
   }
@@ -43,8 +52,10 @@ export class AuthService {
     this.usuario.set(usuario);
     this.tokenJwt.set(tokenSimulado);
 
-    localStorage.setItem(CHAVE_USUARIO, JSON.stringify(usuario));
-    localStorage.setItem(CHAVE_TOKEN, tokenSimulado);
+    if (this.ehNavegador) {
+      localStorage.setItem(CHAVE_USUARIO, JSON.stringify(usuario));
+      localStorage.setItem(CHAVE_TOKEN, tokenSimulado);
+    }
 
     return true;
   }
@@ -53,8 +64,10 @@ export class AuthService {
     this.usuario.set(null);
     this.tokenJwt.set(null);
 
-    localStorage.removeItem(CHAVE_USUARIO);
-    localStorage.removeItem(CHAVE_TOKEN);
+    if (this.ehNavegador) {
+      localStorage.removeItem(CHAVE_USUARIO);
+      localStorage.removeItem(CHAVE_TOKEN);
+    }
   }
 
   obterToken(): string | null {
