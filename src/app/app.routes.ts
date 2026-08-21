@@ -5,10 +5,11 @@ import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
+import { Admin } from './features/admin/admin';
 import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
- {
+  {
     path: '',
     loadComponent: () => import('./home/home/home').then((m) => m.Home),
   },
@@ -38,7 +39,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    loadComponent: () => import('./features/admin/admin').then((m) => m.Admin),
+    component: Admin,
     canActivate: [adminGuard],
   },
   { path: '**', redirectTo: '' },
