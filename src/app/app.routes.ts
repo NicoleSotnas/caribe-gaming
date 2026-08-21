@@ -5,10 +5,11 @@ import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
-import { authGuard } from './core/guards/auth-guard';
+import { Admin } from './features/admin/admin';
+import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
- {
+  {
     path: '',
     loadComponent: () => import('./home/home/home').then((m) => m.Home),
   },
@@ -32,10 +33,14 @@ export const routes: Routes = [
     path: 'carrinho',
     loadComponent: () => import('./features/carrinho/carrinho').then((m) => m.Carrinho),
   },
- {
-  path: 'checkout',
-  component: Checkout,
-  canActivate: [authGuard],
-},
+  {
+    path: 'checkout',
+    component: Checkout,
+  },
+  {
+    path: 'admin',
+    component: Admin,
+    canActivate: [adminGuard],
+  },
   { path: '**', redirectTo: '' },
 ];
