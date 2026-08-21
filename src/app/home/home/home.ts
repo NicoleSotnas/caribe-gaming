@@ -105,9 +105,6 @@ export class Home implements OnInit, OnDestroy {
       image: 'https://i.pinimg.com/736x/67/89/fb/6789fb1dbf2c2e641e0f81f56ce8ccc6.jpg',
     },
   ];
-<<<<<<< HEAD
-}
-=======
 
   ngOnInit() {
     this.startAutoSlide();
@@ -151,4 +148,3 @@ export class Home implements OnInit, OnDestroy {
     container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
 }
->>>>>>> d04ad2c0fc0cf4c359316c5bb2346c2bebd6373f
