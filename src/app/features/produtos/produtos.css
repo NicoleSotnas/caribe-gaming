@@ -1,177 +1,349 @@
-.container-produtos {
-  padding: 24px;
-  background-color: #0b0f19;
+/* ==========================================================================
+   ESTRUTURA GERAL DA PÁGINA E LAYOUT
+   ========================================================================== */
+.pagina-produtos {
+  display: flex;
+  gap: 28px;
+  background-color: #080e1a;
+  color: #e2e8f0;
+  padding: 100px;
+  padding-top: 170px;
   min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/* ==========================================================================
+   SIDEBAR DE FILTROS (ESTILO NAVEGAÇÃO PIRATA)
+   ========================================================================== */
+.sidebar-filtros {
+  width: 260px;
+  flex-shrink: 0;
+  background: #0f192d;
+  border: 1px solid rgba(0, 210, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px;
+  height: fit-content;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
 
+.filtros-titulo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #00d2ff;
+  letter-spacing: 1px;
+  margin-top: 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+}
+
+.filtro-grupo {
+  margin-bottom: 24px;
+}
+
+.filtro-grupo h4 {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filtro-grupo label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.filtro-grupo label:hover {
+  color: #00d2ff;
+}
+
+.filtro-grupo input[type="radio"],
+.filtro-grupo input[type="checkbox"] {
+  accent-color: #0088ff;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   BARRA DE CATEGORIAS & TOPO
+   ========================================================================== */
+.conteudo-produtos {
+  flex: 1;
+}
+
+.barra-categorias {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.pill-categoria {
+  background: #0f192d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.pill-categoria:hover {
+  border-color: #00d2ff;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.pill-categoria.ativa {
+  background: linear-gradient(135deg, #0088ff 0%, #00d2ff 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(0, 136, 255, 0.4);
+}
+
+.produtos-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.produtos-topo h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0;
+  color: #fff;
+}
+
+.produtos-subtitulo {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.produtos-contador {
+  font-size: 0.85rem;
+  color: #00d2ff;
+  font-weight: 600;
+  background: rgba(0, 210, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* ==========================================================================
+   GRID DE PRODUTOS
+   ========================================================================== */
 .grid-produtos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  gap: 22px;
 }
 
 .card-produto {
-  background: rgba(18, 26, 43, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  overflow: hidden;
   position: relative;
+  background: #0f192d;
+  border-radius: 18px;
+  padding: 12px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid rgba(0, 210, 255, 0.1);
+  z-index: 1;
 }
 
 .card-produto:hover {
-  transform: translateY(-4px);
-  border-color: rgba(0, 136, 255, 0.4);
+  transform: translateY(-8px);
+  border-color: #00d2ff;
+  box-shadow: 0 12px 28px rgba(0, 210, 255, 0.25);
 }
 
-.card-badges {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
+.card-badges,
+.card-imagem,
+.card-conteudo {
+  position: relative;
   z-index: 2;
 }
 
-.badge-desconto {
-  background: #0088ff;
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.75rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.badge-plataforma {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  color: #ccc;
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
+/* ==========================================================================
+   MOLDURA ENVOLVENDO A FOTO DO JOGO
+   ========================================================================== */
 .card-imagem {
   width: 100%;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  background: #1a2234;
+  border-radius: 12px;
+  background: #080e1a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
 .card-imagem img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
+/* Badges sobre a foto */
+.card-badges {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.badge-desconto {
+  background: #0088ff;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.badge-plataforma {
+  background: rgba(15, 25, 45, 0.85);
+  backdrop-filter: blur(4px);
+  color: #cbd5e1;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   CONTEÚDO DO CARD & BOTÕES
+   ========================================================================== */
 .card-conteudo {
-  padding: 14px;
+  padding: 12px 4px 4px 4px;
   display: flex;
   flex-direction: column;
   flex: 1;
+  background: transparent;
 }
 
 .produto-nome {
+  font-size: 0.98rem;
+  font-weight: 700;
   color: #fff;
-  font-size: 0.95rem;
-  font-weight: 600;
   margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s;
+}
+
+.produto-nome:hover {
+  color: #00d2ff;
 }
 
 .produto-genero {
-  color: #00d2ff;
   font-size: 0.75rem;
+  color: #64748b;
   margin-bottom: 12px;
+  display: block;
 }
 
 .produto-precos {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: auto;
   margin-bottom: 12px;
 }
 
 .preco-original {
-  color: #718096;
-  text-decoration: line-through;
   font-size: 0.8rem;
+  color: #64748b;
+  text-decoration: line-through;
 }
 
 .preco-promocional {
+  font-size: 1.1rem;
+  font-weight: 800;
   color: #00d2ff;
-  font-weight: 700;
-  font-size: 1rem;
 }
 
-/* Estrutura de botões do Card */
 .card-actions {
   display: flex;
-  gap: 8px;
   align-items: center;
-  margin-top: auto;
+  gap: 8px;
 }
 
 .btn-carrinho {
   flex: 1;
   background: #0088ff;
-  color: #ffffff;
+  color: #fff;
   border: none;
-  padding: 8px 10px;
-  border-radius: 6px;
+  padding: 10px;
+  border-radius: 8px;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  transition: background 0.2s;
 }
 
 .btn-carrinho:hover {
-  background: #0066cc;
+  background: #00d2ff;
+  color: #080e1a;
 }
 
+/* ==========================================================================
+   BOTÃO FAVORITO (SOMENTE CORAÇÃO)
+   ========================================================================== */
 .btn-favorito {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  border: none;
   color: #a0aec0;
-  width: 34px;
-  height: 34px;
-  border-radius: 6px;
+  width: auto;
+  height: auto;
+  padding: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
 }
 
 .icon-heart {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   transition: transform 0.2s ease;
 }
 
 .btn-favorito:hover {
-  border-color: #ff4757;
+  background: transparent;
   color: #ff4757;
-  background: rgba(255, 71, 87, 0.1);
 }
 
 .btn-favorito:hover .icon-heart {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .btn-favorito.favoritado {
+  background: transparent;
   color: #ff4757;
-  border-color: #ff4757;
-  background: rgba(255, 71, 87, 0.15);
 }

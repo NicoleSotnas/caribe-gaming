@@ -1,103 +1,419 @@
+/* --- CONTAINER GERAL DA PÁGINA --- */
 .pagina-detalhes {
-  background-color: #0b0f19;
-  color: #e2e8f0;
-  padding: 24px 40px;
+  margin-top: 80px;
+  background: transparent; 
+  color: #ffffff;
+  padding: 40px 40px 24px 40px;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
 }
 
+/* Breadcrumb Superior */
+
 .breadcrumb {
-  font-size: 0.75rem;
-  color: #64748b;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 20px;
 }
 
+/* ADICIONADO — deixa HOME e JOGOS clicáveis visualmente */
+.breadcrumb-link {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.breadcrumb-link:hover {
+  color: #72ecff; /* mesmo azul-claro usado no resto da página (categoria-tag, preço, etc.) */
+  text-decoration: underline;
+}
+
+/* Grid Principal (2 Colunas) */
 .grid-principal {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 32px;
+  align-items: start;
 }
 
-/* Mídia */
+/* --- MÍDIA E CARROSSEL NATIVO --- */
+.secao-midia {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+
+/* --- SEÇÃO SOBRE O JOGO --- */
+.secao-detalhada {
+  padding: 28px;
+  margin-top: 32px;
+}
+
+.secao-detalhada h2 {
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+  color: #ffffff;
+}
+
+.descricao-paragrafo {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.banner-sobre-jogo {
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.banner-sobre-jogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- SEÇÃO AVALIAÇÕES (GRID 2 COLUNAS) --- */
+.secao-avaliacoes {
+  padding: 28px;
+  margin-top: 32px;
+  margin-bottom: 40px;
+}
+
+.secao-avaliacoes h2 {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.grid-avaliacoes {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Cartão Esquerdo de Resumo */
+.resumo-avaliacoes-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.nota-gigante {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.total-votos {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+/* Gráfico de Barras de Avaliação */
+.barras-avaliacao {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  text-align: left;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.linha-barra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.linha-barra span:first-child {
+  width: 55px;
+}
+
+.barra-fundo {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.barra-progresso {
+  height: 100%;
+  background: #0088ff;
+  border-radius: 3px;
+}
+
+.votos-num {
+  width: 35px;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-escrever-avaliacao {
+  width: 100%;
+  background: transparent;
+  border: 1px solid #0088ff;
+  color: #72ecff;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-escrever-avaliacao:hover {
+  background: rgba(0, 136, 255, 0.15);
+}
+
+/* Lado Direito: Lista de Comentários */
+.lista-comentarios {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comentario-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.autor-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.avatar-autor {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #0088ff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.info-autor {
+  flex: 1;
+}
+
+.info-autor strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.estrelas-mini {
+  font-size: 0.75rem;
+  color: #f59e0b;
+}
+
+.data-comentario {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.texto-comentario {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.reacoes-comentario {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-reacao {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.btn-reacao:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
 .container-imagem-destaque {
   position: relative;
   width: 100%;
+  aspect-ratio: 16 / 9;
   border-radius: 12px;
   overflow: hidden;
-  background: #111827;
-  aspect-ratio: 16 / 9;
+  background: rgba(11, 28, 48, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
 .img-destaque {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
+/* Badges sobrepostas */
 .badge-desconto {
   position: absolute;
   top: 12px;
   left: 12px;
+  z-index: 10;
   background: #0088ff;
-  color: #fff;
+  color: #ffffff;
   font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 4px;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .badge-classificacao {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
-  background: #d97706;
-  color: white;
-  font-weight: bold;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.grid-miniaturas {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.thumb-btn {
-  background: none;
-  border: 2px solid transparent;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: #000000;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 4px 10px;
   border-radius: 6px;
-  padding: 0;
-  cursor: pointer;
-  overflow: hidden;
-  aspect-ratio: 16 / 9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.thumb-btn.ativo {
+/* Botões de Navegação (Setas) */
+.btn-seta {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-seta:hover {
+  background: #0088ff;
   border-color: #0088ff;
 }
 
-.thumb-btn img {
+.btn-prev { left: 12px; }
+.btn-next { right: 12px; }
+
+/* FILA DE MINIATURAS */
+.fila-miniaturas {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-top: 14px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+
+.fila-miniaturas::-webkit-scrollbar {
+  height: 6px;
+}
+
+.fila-miniaturas::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.thumb-item {
+  flex: 0 0 140px;
+  height: 80px;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 0.55;
+  transition: all 0.2s;
+}
+
+.thumb-item:hover {
+  opacity: 0.85;
+}
+
+.thumb-item.ativo {
+  border-color: #00d2ff;
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.6);
+}
+
+.thumb-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Lado Direito */
+/* --- PAINEL LATERAL DIREITO --- */
+.secao-info {
+  width: 100%;
+}
+
 .titulo-jogo {
   font-size: 2.2rem;
   font-weight: 800;
   margin: 0 0 8px 0;
+  color: #ffffff;
 }
 
 .subtitulos {
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.85rem;
   margin-bottom: 12px;
 }
 
 .categoria-tag {
-  color: #00d2ff;
+  color: #72ecff;
 }
 
 .avaliacao-container {
@@ -116,18 +432,26 @@
   padding: 0;
   margin: 0 0 24px 0;
   font-size: 0.85rem;
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .destaques-lista li {
   margin-bottom: 8px;
 }
 
-/* Card de Compra */
-.card-compra {
-  background: #121a2b;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* --- CARDS E SEÇÕES EM GLASSMORPHISM --- */
+.card-compra, 
+.tabela-fatos, 
+.secao-detalhada, 
+.secao-avaliacoes {
+  background: rgba(11, 28, 48, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+}
+
+.card-compra {
   padding: 20px;
   margin-bottom: 24px;
 }
@@ -141,6 +465,7 @@
 
 .badge-desconto-card {
   background: #0088ff;
+  color: #ffffff;
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.8rem;
@@ -150,18 +475,20 @@
 .preco-promo {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #00d2ff;
+  color: #72ecff;
 }
 
 .preco-orig {
   text-decoration: line-through;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.5);
 }
 
+/* --- BOTÕES DE AÇÃO & FAVORITO --- */
 .acoes-botoes {
   display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-bottom: 12px;
+  align-items: center;
 }
 
 .btn-adicionar {
@@ -170,50 +497,84 @@
   color: white;
   border: none;
   padding: 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
-.btn-favorito-detalhes {
-  background: rgba(255, 255, 255, 0.05);
+.btn-adicionar:hover {
+  background: #0066cc;
+}
+
+/* Botão de Favorito (Caixa Escura Neutra Permanente) */
+.btn-favorito {
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  width: 44px;
-  border-radius: 6px;
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
-.icon-heart {
-  width: 20px;
-  height: 20px;
-  color: #ff4757;
+.btn-favorito:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Ícone de Coração em Contorno por Padrão */
+.btn-favorito .icon-heart {
+  width: 22px;
+  height: 22px;
+  fill: transparent;
+  stroke: #ffffff;
+  stroke-width: 2;
+  transition: all 0.2s ease;
+}
+
+/* Estado Ativo: Pinta APENAS o Coração de Vermelho */
+.btn-favorito.ativo .icon-heart {
+  fill: #ff4757;
+  stroke: #ff4757;
+}
+
+.btn-favorito.ativo {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .btn-comprar {
   width: 100%;
   background: transparent;
-  border: 1px solid #0088ff;
-  color: #0088ff;
+  border: 1px solid #72ecff;
+  color: #72ecff;
   padding: 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-comprar:hover {
+  background: rgba(114, 236, 255, 0.15);
 }
 
 .compra-segura {
   text-align: center;
   font-size: 0.75rem;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.6);
   margin-top: 10px;
 }
 
-/* Tabela Fatos */
+/* Tabela de Fatos */
 .tabela-fatos {
-  background: #121a2b;
-  border-radius: 12px;
   padding: 16px;
 }
 
@@ -221,29 +582,45 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fato-linha:last-child {
+  border-bottom: none;
 }
 
 .fato-linha span {
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.fato-linha strong {
+  color: #ffffff;
 }
 
 /* Seções de Texto e Comentários */
-.secao-detalhada, .secao-avaliacoes {
-  background: #121a2b;
-  border-radius: 12px;
+.secao-detalhada, 
+.secao-avaliacoes {
   padding: 24px;
   margin-top: 32px;
 }
 
-.secao-detalhada h2, .secao-avaliacoes h2 {
+.secao-detalhada h2, 
+.secao-avaliacoes h2 {
   font-size: 1.1rem;
   margin-bottom: 12px;
-  color: #fff;
+  color: #ffffff;
 }
 
 .descricao-paragrafo {
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
+}
+
+/* Estado Alternativo */
+.estado-alternativo {
+  text-align: center;
+  padding: 80px 20px;
+  color: #ffffff;
+  font-size: 1.1rem;
 }
