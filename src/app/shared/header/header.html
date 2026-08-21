@@ -1,31 +1,70 @@
 <header class="header-container">
-  <div class="logo">
-    <img src="/img/logo.png" alt="Logo" width="240" height="210" />
+  <!-- Logo + Nome da Loja -->
+  <div class="logo-brand" routerLink="/" (click)="fecharMenu()">
+    <img src="/img/logo.png" alt="Logo Caribe's Gaming" />
+    <span class="brand-title">Caribe's Gaming</span>
   </div>
-  <nav>
+
+  <!-- Botão Hambúrguer Mobile -->
+  <button class="hamburger-btn" (click)="toggleMenu()" aria-label="Abrir Menu">
+    <i class="fa-solid" [ngClass]="menuAberto ? 'fa-xmark' : 'fa-bars'"></i>
+  </button>
+
+  <nav [class.open]="menuAberto">
     <div class="button-row">
-      <button class="botao ativo" pButton variant="outlined">
-        <i class="fa-solid fa-house"></i>HOME
-      </button>
-      <button class="botao" pButton variant="outlined" severity="secondary">
-        <i class="fa-solid fa-gamepad"></i>PRODUTOS
-      </button>
-      <button class="botao" pButton variant="outlined" severity="info">
-        <i class="fa-solid fa-cart-shopping"></i>CARRINHO
+      <!-- Home -->
+      <button
+        class="botao"
+        routerLink="/"
+        routerLinkActive="ativo"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="fecharMenu()"
+      >
+        <img src="/img/coqueiro.png" alt="Home" class="nav-icon" />
+        <span>HOME</span>
       </button>
 
+      <!-- Produtos -->
+      <button class="botao" routerLink="/jogos" routerLinkActive="ativo" (click)="fecharMenu()">
+        <img src="/img/controle-de-video-game.png" alt="Produtos" class="nav-icon" />
+        <span>PRODUTOS</span>
+      </button>
+
+      <!-- Carrinho -->
+      <button
+        class="botao"
+        routerLink="/carrinho"
+        routerLinkActive="ativo"
+        #rlaCarrinho="routerLinkActive"
+        (click)="fecharMenu()"
+      >
+        <img
+          [src]="
+            rlaCarrinho.isActive ? '/img/bau-de-tesouro.png' : '/img/bau-de-tesouro-fechado.png'
+          "
+          alt="Carrinho"
+          class="nav-icon"
+        />
+        <span>CARRINHO</span>
+      </button>
+
+      <!-- Autenticação -->
       <ng-container *ngIf="authFacade.estaLogado(); else botaoLogin">
         <div class="user-info">
           <span class="email">{{ authFacade.usuarioAtual()?.email }}</span>
-          <button pButton variant="text" severity="secondary" class="btn-sair" (click)="sair()">
-            SAIR
-          </button>
+          <button class="btn-sair" (click)="sair()">SAIR</button>
         </div>
       </ng-container>
 
       <ng-template #botaoLogin>
-        <button class="botao" routerLink="/login" pButton variant="outlined" severity="success">
-          <i class="fa-solid fa-anchor"></i>LOGIN
+        <button
+          class="botao btn-login"
+          routerLink="/login"
+          routerLinkActive="ativo"
+          (click)="fecharMenu()"
+        >
+          <img src="/img/ancora-de-navio.png" alt="Login" class="nav-icon" />
+          <span>LOGIN</span>
         </button>
       </ng-template>
     </div>

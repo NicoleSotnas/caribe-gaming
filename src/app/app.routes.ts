@@ -7,9 +7,9 @@ import { Checkout } from './features/checkout/checkout/checkout';
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
 
 export const routes: Routes = [
-  {
+ {
     path: '',
-    component: Home,
+    loadComponent: () => import('./home/home/home').then((m) => m.Home),
   },
   {
     path: 'jogos',
