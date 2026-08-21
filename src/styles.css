@@ -3,6 +3,16 @@
    ========================================================================== */
 
 /* 1. Reset básico e comportamento de rolagem */
+
+:root {
+  --sea-deep: #080e1a;
+  --ocean-blue: #328eaf;
+  --cyan: #3bafd4;
+  --gold: #f4c95d;
+  --text-light: #f8fafc;
+  --danger: #f87171;
+}
+
 html,
 body {
   margin: 0;

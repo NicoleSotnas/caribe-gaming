@@ -5,6 +5,7 @@ import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
  {
@@ -32,8 +33,9 @@ export const routes: Routes = [
     loadComponent: () => import('./features/carrinho/carrinho').then((m) => m.Carrinho),
   },
   {
-    path: 'checkout',
-    component: Checkout,
-  },
+  path: 'checkout',
+  component: Checkout,
+  canActivate: [authGuard],
+},
   { path: '**', redirectTo: '' },
 ];
