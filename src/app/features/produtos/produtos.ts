@@ -121,8 +121,67 @@ export class Produtos implements OnInit {
   }
 
   irParaPaginaDoJogo(produto: ProdutoComFavorito): void {
+    
+    if (produto.id === '1' || produto.nome.toLowerCase().includes('grand')) {
+      this.router.navigate(['/jogos/grand-theft-auto-v']);
+    }
     if (produto.id === '2' || produto.nome.toLowerCase().includes('witcher')) {
       this.router.navigate(['/jogos/the-witcher-3']);
     }
+    if (produto.id === '3' || produto.nome.toLowerCase().includes('sims')) {
+      this.router.navigate(['/jogos/the-sims-4']);
+    }
+    if (produto.id === '4' || produto.nome.toLowerCase().includes('god')) {
+      this.router.navigate(['/jogos/god-of-war']);
+    }
+    if (produto.id === '5' || produto.nome.toLowerCase().includes('spider')) {
+      this.router.navigate(['/jogos/jogos/marvels-spider-Man-remastered']);
+    }
+    if (produto.id === '6' || produto.nome.toLowerCase().includes('call')) {
+      this.router.navigate(['/jogos/call-of-duty-modern-warfare-ii']);
+    }
+    if (produto.id === '7' || produto.nome.toLowerCase().includes('plague')) {
+      this.router.navigate(['/jogos/a-plague-tale']);
+    }
+    if (produto.id === '8' || produto.nome.toLowerCase().includes('ragnarök')) {
+      this.router.navigate(['/jogos/god-of-war-ragnarök']);
+    }
+    if (produto.id === '9' || produto.nome.toLowerCase().includes('knight')) {
+      this.router.navigate(['/jogos/hollow-knight']);
+    }
+    if (produto.id === '10' || produto.nome.toLowerCase().includes('dead')) {
+      this.router.navigate(['/jogos/red-dead-redemption-2']);
+    }
+      if (produto.id === '11' || produto.nome.toLowerCase().includes('assassins')) {
+      this.router.navigate(['/jogos/assassins-creed-iv-black-flag']);
+    }
+      if (produto.id === '12' || produto.nome.toLowerCase().includes('yakuza')) {
+      this.router.navigate(['/jogos/yakuza-0']);
+    }
+      if (produto.id === '13' || produto.nome.toLowerCase().includes('sports')) {
+      this.router.navigate(['/jogos/ea-sports-fc-24']);
+    }
+      if (produto.id === '14' || produto.nome.toLowerCase().includes('strange')) {
+      this.router.navigate(['/jogos/life-is-strange']);
+    }
+      if (produto.id === '15' || produto.nome.toLowerCase().includes('last')) {
+      this.router.navigate(['/jogos/the-last-of-Us']);
+    }
+      if (produto.id === '16' || produto.nome.toLowerCase().includes('f1')) {
+      this.router.navigate(['/jogos/f1-23']);
+    }
+      if (produto.id === '17' || produto.nome.toLowerCase().includes('')) {
+      this.router.navigate(['/jogos/watch-dogs-2']);
+    }
+      if (produto.id === '18' || produto.nome.toLowerCase().includes('cyberpunk')) {
+      this.router.navigate(['/jogos/cyberpunk-2077']);
+    }
+      if (produto.id === '19' || produto.nome.toLowerCase().includes('marvel')) {
+      this.router.navigate(['/jogos/marvel-rivals']);
+    }
+   
+    
   }
+
+  
 }
