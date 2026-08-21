@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <link rel="stylesheet" href="home.css" />
 
 
@@ -15,53 +16,93 @@
           <div class="carousel-card">
             <img [src]="item.image" [alt]="item.title" class="carousel-img" />
             <span class="carousel-title">{{ item.title }}</span>
+=======
+<app-header></app-header>
+
+<main class="main-container">
+  <!-- Banner Principal -->
+  <section class="hero-banner">
+    <div class="hero-slide">
+      <!-- Image principal do Banner com Prioridade de Carregamento -->
+      <img
+        [src]="heroGames[activeHeroIndex].image"
+        [alt]="heroGames[activeHeroIndex].title"
+        class="hero-image"
+        fetchpriority="high"
+      />
+      <div class="hero-overlay"></div>
+    </div>
+
+    <button class="nav-arrow prev" (click)="prevHero()">&#10094;</button>
+    <button class="nav-arrow next" (click)="nextHero()">&#10095;</button>
+
+    <div class="hero-content">
+      <div class="hero-details">
+        <span class="badge">{{ heroGames[activeHeroIndex].badge }}</span>
+        <h1 class="hero-title">{{ heroGames[activeHeroIndex].title }}</h1>
+        <p class="hero-subtitle">{{ heroGames[activeHeroIndex].subtitle }}</p>
+
+        <div class="price-action">
+          <span class="discount-tag">{{ heroGames[activeHeroIndex].discount }}</span>
+          <div class="prices">
+            <span class="old-price">{{ heroGames[activeHeroIndex].originalPrice }}</span>
+            <span class="promo-price">{{ heroGames[activeHeroIndex].promoPrice }}</span>
+>>>>>>> d04ad2c0fc0cf4c359316c5bb2346c2bebd6373f
           </div>
-        </p-carousel-item>
-      }
-    </p-carousel-content>
+          <button class="buy-btn">COMPRAR AGORA</button>
+        </div>
+      </div>
 
-    <div class="carousel-controls">
-      <p-carousel-indicators></p-carousel-indicators>
-
-      <div class="carousel-navigation">
-        <button pCarouselPrev class="carousel-nav-btn">
-          <svg data-p-icon="chevron-left"></svg>
-        </button>
-        <button pCarouselNext class="carousel-nav-btn">
-          <svg data-p-icon="chevron-right"></svg>
-        </button>
+      <div class="hero-indicators">
+        @for (game of heroGames; track game.id; let i = $index) {
+          <button
+            class="indicator-btn"
+            [class.active]="activeHeroIndex === i"
+            (click)="selectHero(i)"
+          >
+            <span>0{{ i + 1 }}</span>
+            <strong>{{ game.title }}</strong>
+          </button>
+        }
       </div>
     </div>
-  </p-carousel>
-</div>
+  </section>
 
-<!-- Segundo Carrossel (Loop e Imagens) -->
-<div class="carousel-wrapper">
-  <p-carousel class="carousel-container" align="center" [loop]="true" [slidesPerPage]="1.75">
-    <p-carousel-content class="carousel-content-secondary">
-      @for (item of loopItems; track item.id) {
-        <p-carousel-item>
-          <div class="carousel-card-secondary">
-            <img [src]="item.image" [alt]="item.title" class="carousel-img" />
-            <span class="carousel-title">{{ item.title }}</span>
-          </div>
-        </p-carousel-item>
-      }
-    </p-carousel-content>
-
-    <div class="carousel-controls">
-      <p-carousel-indicators></p-carousel-indicators>
-
-      <div class="carousel-navigation">
-        <button pCarouselPrev class="carousel-nav-btn">
-          <svg data-p-icon="chevron-left"></svg>
-        </button>
-        <button pCarouselNext class="carousel-nav-btn">
-          <svg data-p-icon="chevron-right"></svg>
-        </button>
+  <!-- Seção de Ofertas Especiais -->
+  <section class="offers-section">
+    <div class="offers-header">
+      <h2>🔥 Ofertas Especiais</h2>
+      <div class="offers-nav">
+        <button class="scroll-btn" (click)="scrollOffers(cardsContainer, 'left')">&#10094;</button>
+        <button class="scroll-btn" (click)="scrollOffers(cardsContainer, 'right')">&#10095;</button>
       </div>
     </div>
+<<<<<<< HEAD
   </p-carousel>
 </div>
 
 </main>
+=======
+
+    <div #cardsContainer class="offers-grid">
+      @for (game of offerGames; track game.id) {
+        <div class="game-card">
+          <div class="card-image-box">
+            <!-- Imagens dos Cards com Lazy Loading Nativo -->
+            <img [src]="game.image" [alt]="game.title" loading="lazy" decoding="async" />
+            <span class="card-discount">{{ game.discount }}</span>
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">{{ game.title }}</h3>
+            <span class="card-publisher">{{ game.subtitle }}</span>
+            <div class="card-price-box">
+              <span class="card-old-price">{{ game.originalPrice }}</span>
+              <span class="card-promo-price">{{ game.promoPrice }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+</main>
+>>>>>>> d04ad2c0fc0cf4c359316c5bb2346c2bebd6373f

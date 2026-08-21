@@ -4,15 +4,12 @@ import { Home } from './home/home/home';
 import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
-import { authGuard } from './core/guards/auth-guard';
-
-
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
 
 export const routes: Routes = [
-  {
+ {
     path: '',
-    component: Home,
+    loadComponent: () => import('./home/home/home').then((m) => m.Home),
   },
   {
     path: 'jogos',
@@ -33,12 +30,10 @@ export const routes: Routes = [
   {
     path: 'carrinho',
     loadComponent: () => import('./features/carrinho/carrinho').then((m) => m.Carrinho),
-    canActivate: [authGuard],
   },
   {
     path: 'checkout',
     component: Checkout,
-    canActivate: [authGuard],
   },
   { path: '**', redirectTo: '' },
 ];
