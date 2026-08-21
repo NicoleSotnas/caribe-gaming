@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 header {
     position: fixed;
     top: 0;
@@ -34,7 +34,7 @@ nav {
     margin-right: 30px;
 
     font-size: 13px;
-=======
+}
 app-header {
   display: block !important;
   width: 100% !important;
@@ -317,9 +317,7 @@ app-header {
     border-left-color: #3bafd4 !important;
     background-color: #346498 !important;
   }
-<<<<<<< HEAD
->>>>>>> d04ad2c0fc0cf4c359316c5bb2346c2bebd6373f
-=======
+
 
   .conta-dropdown {
     position: static !important;
@@ -328,7 +326,6 @@ app-header {
     margin-top: 8px !important;
     border-radius: 6px !important;
   }
->>>>>>> 21aa38c7d07882815a16c4a3670844d627f3e771
 }
 
 .logo {
