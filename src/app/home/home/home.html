@@ -1,3 +1,22 @@
+<<<<<<< HEAD
+<link rel="stylesheet" href="home.css" />
+
+
+
+
+<main>
+  
+
+<!-- Primeiro Carrossel -->
+<div class="carousel-wrapper">
+  <p-carousel class="carousel-container" align="center">
+    <p-carousel-content class="carousel-content">
+      @for (item of items; track item.id) {
+        <p-carousel-item>
+          <div class="carousel-card">
+            <img [src]="item.image" [alt]="item.title" class="carousel-img" />
+            <span class="carousel-title">{{ item.title }}</span>
+=======
 <app-header></app-header>
 
 <main class="main-container">
@@ -28,6 +47,7 @@
           <div class="prices">
             <span class="old-price">{{ heroGames[activeHeroIndex].originalPrice }}</span>
             <span class="promo-price">{{ heroGames[activeHeroIndex].promoPrice }}</span>
+>>>>>>> d04ad2c0fc0cf4c359316c5bb2346c2bebd6373f
           </div>
           <button class="buy-btn">COMPRAR AGORA</button>
         </div>
@@ -57,6 +77,12 @@
         <button class="scroll-btn" (click)="scrollOffers(cardsContainer, 'right')">&#10095;</button>
       </div>
     </div>
+<<<<<<< HEAD
+  </p-carousel>
+</div>
+
+</main>
+=======
 
     <div #cardsContainer class="offers-grid">
       @for (game of offerGames; track game.id) {
@@ -79,3 +105,4 @@
     </div>
   </section>
 </main>
+>>>>>>> d04ad2c0fc0cf4c359316c5bb2346c2bebd6373f
