@@ -1,0 +1,54 @@
+.admin-container {
+  background-color: #6b9e78;
+  color: #ffffff;
+  padding: 2rem 3rem;
+  min-height: calc(100vh - 64px);
+}
+
+.admin-container h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.admin-container h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.admin-container hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 2rem 0;
+}
+
+.cards-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  min-width: 220px;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.card .numero {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.acoes-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
