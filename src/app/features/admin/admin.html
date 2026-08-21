@@ -7,8 +7,8 @@
 
   <h2>Usuário autenticado</h2>
   <p><strong>E-mail:</strong> {{ authFacade.usuarioAtual()?.email }}</p>
-  <p><strong>Perfil:</strong> {{ authFacade.usuarioAtual()?.perfil }}</p>
-  <p>Usuário autenticado como {{ authFacade.usuarioAtual()?.perfil }}.</p>
+  <p><strong>Perfil:</strong> {{ authFacade.ehAdmin() ? 'Administrador' : 'Usuário' }}</p>
+  <p>Usuário autenticado como {{ authFacade.ehAdmin() ? 'Administrador' : 'Usuário' }}.</p>
 
   <hr />
 
