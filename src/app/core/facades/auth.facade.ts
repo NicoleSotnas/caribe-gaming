@@ -1,37 +1,33 @@
-import { Injectable, inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { Injectable, inject, computed } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthService } from '../services/auth';
+
+const EMAIL_ADMIN = 'admin@email.com';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthFacade {
-  // A facade centraliza o acesso da aplicação à autenticação.
-  // Componentes, guards e header passam a usar esta camada simplificada.
   private authService = inject(AuthService);
 
-  // Sinais de autenticação expostos para leitura.
-  usuarioAtual = this.authService.usuarioAtual;
-  estaLogado = this.authService.estaLogado;
-  ehAdmin = this.authService.ehAdmin;
-  token = this.authService.token;
+  usuarioAtual = toSignal(this.authService.usuarioAtual$, { initialValue: null });
 
-  // Ação de alto nível para login.
-  realizarLogin(email: string, senha: string): boolean {
+  estaLogado(): boolean {
+    return !!this.usuarioAtual();
+  }
+
+  // computed: recalcula sozinho toda vez que usuarioAtual muda
+  ehAdmin = computed(() => this.usuarioAtual()?.email === EMAIL_ADMIN);
+
+  realizarLogin(email: string, senha: string) {
     return this.authService.login(email, senha);
   }
 
-  // Ação de alto nível para logout.
+  realizarRegistro(email: string, senha: string) {
+    return this.authService.registrar(email, senha);
+  }
+
   sair() {
-    this.authService.logout();
-  }
-
-  // Método mantido para integrações técnicas, como interceptor HTTP.
-  obterToken(): string | null {
-    return this.authService.obterToken();
-  }
-
-  // Método de leitura do perfil atual.
-  obterPerfil() {
-    return this.authService.obterPerfil();
+    this.authService.logout().subscribe();
   }
 }
