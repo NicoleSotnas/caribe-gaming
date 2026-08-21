@@ -24,7 +24,7 @@ export class Home implements OnInit, OnDestroy {
   activeHeroIndex = 0;
   private autoSlideTimer: any;
 
-  // Banner Principal (Homem-Aranha e EA FC 24)
+  // Banner Principal (Homem-Aranha e Formula 1 25)
   heroGames: GameItem[] = [
     {
       id: 1,
@@ -38,13 +38,13 @@ export class Home implements OnInit, OnDestroy {
     },
     {
       id: 2,
-      title: 'Formula 1 2025',
-      subtitle: 'Sinta a emoção da velocidade com o F1 2025.',
+      title: 'Formula 1 2023',
+      subtitle: 'Sinta a emoção da velocidade com o F1 2023.',
       originalPrice: 'R$ 359,00',
       promoPrice: 'R$ 143,60',
       discount: '-60%',
       badge: 'DESTAQUE DA SEMANA',
-      image: 'https://i.pinimg.com/1200x/8f/f1/cb/8ff1cb847ff1b7e3507ad494a29744c2.jpg',
+      image: 'https://i.pinimg.com/1200x/71/52/68/715268628f6902ea0ed1361b71dbf627.jpg',
     },
   ];
 
@@ -57,7 +57,7 @@ export class Home implements OnInit, OnDestroy {
       originalPrice: 'R$ 299,90',
       promoPrice: 'R$ 98,96',
       discount: '-67%',
-      image: 'https://i.pinimg.com/736x/73/f7/47/73f7476132056ce768d3adee46dafc64.jpg',
+      image: 'https://i.pinimg.com/1200x/71/52/68/715268628f6902ea0ed1361b71dbf627.jpg',
     },
     {
       id: 102,

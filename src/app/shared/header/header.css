@@ -135,30 +135,134 @@ app-header {
   border-radius: 6px 6px 0 0 !important;
 }
 
-.user-info {
+/* ===== Menu da conta (avatar + dropdown) ===== */
+
+.conta-container {
+  position: relative !important;
+}
+
+.conta-trigger {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 6px 10px !important;
+  border-radius: 6px !important;
+  transition: background-color 0.2s !important;
+}
+
+.conta-trigger:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.avatar-usuario {
+  font-size: 1.9rem !important;
+  color: #ffffff !important;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.4)) !important;
+}
+
+.seta {
+  font-size: 0.7rem !important;
+  color: #ffffff !important;
+  transition: transform 0.2s !important;
+}
+
+.seta.rotacionada {
+  transform: rotate(180deg) !important;
+}
+
+.conta-dropdown {
+  position: absolute !important;
+  top: calc(100% + 12px) !important;
+  right: 0 !important;
+  background: linear-gradient(180deg, #346498 0%, #1d3a5f 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  min-width: 240px !important;
+  overflow: hidden !important;
+  z-index: 1000000 !important;
+  animation: dropdown-abrir 0.15s ease-out !important;
+}
+
+@keyframes dropdown-abrir {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.conta-dropdown-header {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
+  padding: 16px !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-.user-info .email {
+.avatar-usuario-grande {
+  font-size: 2.4rem !important;
+  color: #ffffff !important;
+}
+
+.conta-dropdown-header .email {
   font-size: 0.85rem !important;
   color: #ffffff !important;
   font-weight: 600 !important;
+  word-break: break-all !important;
+  font-family: sans-serif !important;
 }
 
-.user-info .btn-sair {
-  font-size: 0.8rem !important;
-  padding: 6px 12px !important;
-  border: 1px solid #ffffff !important;
-  border-radius: 4px !important;
+.dropdown-divisor {
+  display: none !important;
+}
+
+.dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  padding: 12px 16px !important;
   background: transparent !important;
+  border: none !important;
+  text-align: left !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
   color: #ffffff !important;
   cursor: pointer !important;
-  font-weight: 700 !important;
+  font-family: sans-serif !important;
 }
 
-/* Responsividade Mobile */
+.dropdown-item i {
+  width: 18px !important;
+  color: #3bafd4 !important;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dropdown-item.sair {
+  color: #ff8a8a !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dropdown-item.sair i {
+  color: #ff8a8a !important;
+}
+
+.dropdown-item.sair:hover {
+  background-color: rgba(220, 38, 38, 0.15) !important;
+}
+
+/* ===== Responsividade Mobile ===== */
 @media (max-width: 900px) {
   .header-container {
     height: 75px !important;
@@ -213,7 +317,18 @@ app-header {
     border-left-color: #3bafd4 !important;
     background-color: #346498 !important;
   }
+<<<<<<< HEAD
 >>>>>>> d04ad2c0fc0cf4c359316c5bb2346c2bebd6373f
+=======
+
+  .conta-dropdown {
+    position: static !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+    border-radius: 6px !important;
+  }
+>>>>>>> 21aa38c7d07882815a16c4a3670844d627f3e771
 }
 
 .logo {

@@ -9,9 +9,11 @@ import {
 import { from, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
-  constructor(private auth: Auth) {}
 
+export class AuthService {
+  
+  constructor(private auth: Auth) {}
+  
   login(email: string, senha: string): Observable<any> {
     return from(signInWithEmailAndPassword(this.auth, email, senha));
   }
