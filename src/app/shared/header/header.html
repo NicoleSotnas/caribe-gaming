@@ -5,8 +5,69 @@
     <span class="brand-title">Caribe's Gaming</span>
   </div>
 
-  <div class="user-info" *ngIf="authFacade.estaLogado()">
-    <span class="email">{{ authFacade.usuarioAtual()?.email }}</span>
-    <button pButton variant="text" severity="secondary" class="btn-sair" (click)="sair()">SAIR</button>
-  </div>
+  <!-- Botão Hambúrguer Mobile -->
+  <button class="hamburger-btn" (click)="toggleMenu()" aria-label="Abrir Menu">
+    <i class="fa-solid" [ngClass]="menuAberto ? 'fa-xmark' : 'fa-bars'"></i>
+  </button>
+
+  <nav [class.open]="menuAberto">
+    <div class="button-row">
+      <!-- Home -->
+      <button
+        class="botao"
+        routerLink="/"
+        routerLinkActive="ativo"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="fecharMenu()"
+      >
+        <img src="/img/coqueiro.png" alt="Home" class="nav-icon" />
+        <span>HOME</span>
+      </button>
+
+      <!-- Produtos -->
+      <button class="botao" routerLink="/jogos" routerLinkActive="ativo" (click)="fecharMenu()">
+        <img src="/img/controle-de-video-game.png" alt="Produtos" class="nav-icon" />
+        <span>PRODUTOS</span>
+      </button>
+
+      <!-- Carrinho -->
+      <button
+        class="botao"
+        routerLink="/carrinho"
+        routerLinkActive="ativo"
+        #rlaCarrinho="routerLinkActive"
+        (click)="fecharMenu()"
+      >
+        <img
+          [src]="
+            rlaCarrinho.isActive ? '/img/bau-de-tesouro.png' : '/img/bau-de-tesouro-fechado.png'
+          "
+          alt="Carrinho"
+          class="nav-icon"
+        />
+        <span>CARRINHO</span>
+      </button>
+
+      <!-- Autenticação -->
+      <ng-container *ngIf="authFacade.estaLogado(); else botaoLogin">
+        <div class="user-info">
+          <span class="email">{{ authFacade.usuarioAtual()?.email }}</span>
+          <button class="btn-sair" (click)="sair()">SAIR</button>
+        </div>
+      </ng-container>
+
+      <ng-template #botaoLogin>
+        <button
+          class="botao btn-login"
+          routerLink="/login"
+          routerLinkActive="ativo"
+          (click)="fecharMenu()"
+        >
+          <img src="/img/ancora-de-navio.png" alt="Login" class="nav-icon" />
+          <span>LOGIN</span>
+        </button>
+      </ng-template>
+      <!--oi hahahah-->
+    </div>
+  </nav>
 </header>
