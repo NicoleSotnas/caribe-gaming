@@ -1,56 +1,135 @@
-<div class="container-produtos">
-  <div class="grid-produtos">
-    <div *ngFor="let produto of produtos" class="card-produto">
-      
-      <!-- Badges Superiores -->
-      <div class="card-badges">
-        <span class="badge-desconto" *ngIf="produto.desconto > 0">-{{ produto.desconto }}%</span>
-        <span class="badge-plataforma">{{ produto.plataforma }}</span>
+<div class="pagina-produtos">
+
+  <!-- Sidebar de Filtros -->
+  <aside class="sidebar-filtros">
+    <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
+
+    <div class="filtro-grupo">
+      <h4>Preço</h4>
+      <label>
+        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'todos'" (change)="definirFaixaPreco('todos')">
+        Todos os preços
+      </label>
+      <label>
+        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'gratis'" (change)="definirFaixaPreco('gratis')">
+        Grátis
+      </label>
+      <label>
+        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === '0-50'" (change)="definirFaixaPreco('0-50')">
+        R$0 - R$50
+      </label>
+      <label>
+        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === '50-100'" (change)="definirFaixaPreco('50-100')">
+        R$50 - R$100
+      </label>
+      <label>
+        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'acima-100'" (change)="definirFaixaPreco('acima-100')">
+        Acima de R$100
+      </label>
+    </div>
+
+    <div class="filtro-grupo">
+      <h4>Plataforma</h4>
+      <label>
+        <input type="checkbox" (change)="togglePlataforma('PC')"> PC
+      </label>
+      <label>
+        <input type="checkbox" (change)="togglePlataforma('PS5')"> PlayStation
+      </label>
+    </div>
+
+    <div class="filtro-grupo">
+      <h4>Categoria</h4>
+      <label *ngFor="let cat of categorias">
+        <input
+          type="checkbox"
+          [checked]="categoriaAtiva === cat.id"
+          (change)="selecionarCategoria(cat.id)">
+        {{ cat.icone }} {{ cat.nome }}
+      </label>
+    </div>
+  </aside>
+
+  <!-- Conteúdo Principal -->
+  <div class="conteudo-produtos">
+
+    <!-- Barra de categorias estilo "mapa do tesouro" -->
+    <div class="barra-categorias">
+      <button
+        class="pill-categoria"
+        [class.ativa]="categoriaAtiva === null"
+        (click)="selecionarCategoria('')">
+        🏝️ Todas
+      </button>
+      <button
+        *ngFor="let cat of categorias"
+        class="pill-categoria"
+        [class.ativa]="categoriaAtiva === cat.id"
+        (click)="selecionarCategoria(cat.id)">
+        {{ cat.icone }} {{ cat.nome }}
+      </button>
+    </div>
+
+    <div class="produtos-topo">
+      <div>
+        <h2>Todos os Jogos</h2>
+        <span class="produtos-subtitulo">Encontre sua próxima aventura</span>
       </div>
+      <span class="produtos-contador">{{ produtosFiltrados.length }} jogos encontrados</span>
+    </div>
 
-      <!-- Clicar na imagem redireciona para a página do jogo se for The Witcher 3 -->
-      <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
-        <img [src]="produto.imagem" [alt]="produto.nome" />
-      </div>
+    <div class="container-produtos">
+      <div class="grid-produtos">
+        <div *ngFor="let produto of produtosFiltrados" class="card-produto">
 
-      <!-- Conteúdo e Informações -->
-      <div class="card-conteudo">
-        <h3 class="produto-nome" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
-          {{ produto.nome }}
-        </h3>
-        <span class="produto-genero">{{ produto.genero }}</span>
+          <div class="card-badges">
+            <span class="badge-desconto" *ngIf="produto.desconto > 0">-{{ produto.desconto }}%</span>
+            <span class="badge-plataforma">{{ produto.plataforma }}</span>
+          </div>
 
-        <div class="produto-precos">
-          <span class="preco-original" *ngIf="produto.desconto > 0">{{ produto.precoOriginal }}</span>
-          <span class="preco-promocional">{{ produto.precoPromocional }}</span>
+          <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
+            <img [src]="produto.imagem" [alt]="produto.nome" />
+          </div>
+
+          <div class="card-conteudo">
+            <h3 class="produto-nome" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
+              {{ produto.nome }}
+            </h3>
+            <span class="produto-genero">{{ produto.genero }}</span>
+
+            <div class="produto-precos">
+              <span class="preco-original" *ngIf="produto.desconto > 0">{{ produto.precoOriginal }}</span>
+              <span class="preco-promocional">{{ produto.precoPromocional }}</span>
+            </div>
+
+            <div class="card-actions">
+              <button class="btn-carrinho" (click)="adicionarAoCarrinho(produto)">
+                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+              </button>
+
+              <button
+                class="btn-favorito"
+                [class.favoritado]="produto.favorito"
+                (click)="toggleFavorito(produto)"
+                title="Favoritar">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  [attr.fill]="produto.favorito ? '#ff4757' : 'none'"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon-heart">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+            </div>
+
+          </div>
         </div>
-
-        <!-- Ações -->
-        <div class="card-actions">
-          <button class="btn-carrinho" (click)="adicionarAoCarrinho(produto)">
-            <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-          </button>
-
-          <button 
-            class="btn-favorito" 
-            [class.favoritado]="produto.favorito" 
-            (click)="toggleFavorito(produto)"
-            title="Favoritar">
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              viewBox="0 0 24 24" 
-              [attr.fill]="produto.favorito ? '#ff4757' : 'none'" 
-              stroke="currentColor" 
-              stroke-width="2" 
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              class="icon-heart">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-          </button>
-        </div>
-
       </div>
     </div>
   </div>
+
 </div>
