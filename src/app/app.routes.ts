@@ -32,7 +32,7 @@ export const routes: Routes = [
     path: 'carrinho',
     loadComponent: () => import('./features/carrinho/carrinho').then((m) => m.Carrinho),
   },
-  {
+ {
   path: 'checkout',
   component: Checkout,
   canActivate: [authGuard],
