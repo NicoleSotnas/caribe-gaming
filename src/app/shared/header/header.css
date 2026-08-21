@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 header {
     position: fixed;
     top: 0;
@@ -33,6 +34,186 @@ nav {
     margin-right: 30px;
 
     font-size: 13px;
+=======
+app-header {
+  display: block !important;
+  width: 100% !important;
+}
+
+.header-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100px !important;
+  background: linear-gradient(180deg, #476a9b 0%, #3bafd4 50%, #3bafd4 100%) !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 4% !important;
+  box-sizing: border-box !important;
+  border-bottom: 3px solid #346498 !important;
+  z-index: 999999 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.logo-brand {
+  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  text-decoration: none !important;
+}
+
+.logo-brand img {
+  height: 70px !important;
+  width: auto !important;
+  object-fit: contain;
+}
+
+.brand-title {
+  color: #ffffff !important;
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  font-family: sans-serif !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4) !important;
+  white-space: nowrap !important;
+}
+
+.hamburger-btn {
+  display: none !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 2rem !important;
+  cursor: pointer !important;
+}
+
+.button-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.botao {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.6rem 1rem !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  font-family: sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  gap: 8px !important;
+  border: none !important;
+  border-bottom: 4px solid transparent !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+
+.nav-icon {
+  width: 24px !important;
+  height: 24px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.4)) !important;
+}
+
+.botao:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px 6px 0 0 !important;
+}
+
+.botao.ativo {
+  border-bottom-color: #346498 !important;
+  background-color: rgba(52, 100, 152, 0.4) !important;
+  border-radius: 6px 6px 0 0 !important;
+}
+
+.user-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.user-info .email {
+  font-size: 0.85rem !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.user-info .btn-sair {
+  font-size: 0.8rem !important;
+  padding: 6px 12px !important;
+  border: 1px solid #ffffff !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  font-weight: 700 !important;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 900px) {
+  .header-container {
+    height: 75px !important;
+  }
+
+  .logo-brand img {
+    height: 45px !important;
+  }
+
+  .brand-title {
+    font-size: 1.1rem !important;
+  }
+
+  .hamburger-btn {
+    display: block !important;
+  }
+
+  nav {
+    position: fixed !important;
+    top: 75px !important;
+    right: -100% !important;
+    width: 260px !important;
+    height: calc(100vh - 75px) !important;
+    background: #162347 !important;
+    border-left: 3px solid #3bafd4 !important;
+    transition: right 0.3s ease-in-out !important;
+    padding: 1.5rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  nav.open {
+    right: 0 !important;
+  }
+
+  .button-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .botao {
+    justify-content: flex-start !important;
+    width: 100% !important;
+    padding: 0.8rem 1rem !important;
+    border-left: 4px solid transparent !important;
+    border-bottom: none !important;
+    border-radius: 6px !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .botao.ativo {
+    border-left-color: #3bafd4 !important;
+    background-color: #346498 !important;
+  }
+>>>>>>> d04ad2c0fc0cf4c359316c5bb2346c2bebd6373f
 }
 
 .logo {
