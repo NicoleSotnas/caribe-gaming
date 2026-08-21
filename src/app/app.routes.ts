@@ -8,9 +8,9 @@ import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitche
 import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
-  {
+ {
     path: '',
-    component: Home,
+    loadComponent: () => import('./home/home/home').then((m) => m.Home),
   },
   {
     path: 'jogos',
