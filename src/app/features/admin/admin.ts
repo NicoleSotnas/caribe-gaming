@@ -22,3 +22,4 @@ export class Admin {
     this.authFacade.sair();
   }
 }
+//atualizado
