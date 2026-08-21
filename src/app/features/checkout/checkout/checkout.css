@@ -18,3 +18,37 @@ button {
   margin-right: 8px;
   margin-top: 8px;
 }
+
+:host {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 132px 24px 32px;
+  overflow-x: hidden;
+}
+
+@media (max-width: 900px) {
+  :host {
+    padding: 107px 20px 32px;
+  }
+
+  form {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 600px) {
+  :host {
+    padding: 107px 12px 24px;
+  }
+
+  form {
+    max-width: none;
+  }
+
+  button {
+    width: 100%;
+    margin-right: 0;
+  }
+}
