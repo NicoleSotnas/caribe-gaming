@@ -9,7 +9,7 @@ import { TheSims } from './features/produtos/thesims4/thesims/thesims';
 import { WatchDogs2 } from './features/produtos/watch-dogs-2/watch-dogs-2';
 import { Grandtheftautov } from './features/produtos/grandtheftautov/grandtheftautov/grandtheftautov';
 import { Godofwar } from './features/produtos/godofwar/godofwar/godofwar';
-import { Marvelsspidermanremastered } from './features/produtos/marvesspider-manremastered/marvelsspidermanremastered/marvelsspidermanremastered';
+import { MarvelsSpiderManRemastered } from './features/produtos/marvels-spider-man-remastered/marvels-spider-man-remastered';
 import { CallOfDutyModernWarfareIi } from './features/produtos/call-of-duty-modern-warfare-ii/call-of-duty-modern-warfare-ii';
 import { APlagueTale } from './features/produtos/a-plague-tale/a-plague-tale';
 import { Ragnarok } from './features/produtos/ragnarok/ragnarok';
@@ -25,7 +25,7 @@ import { Cyberpunk2077 } from './features/produtos/cyberpunk-2077/cyberpunk-2077
 import { MarvelRivals } from './features/produtos/marvel-rivals/marvel-rivals';
 
 export const routes: Routes = [
- {
+  {
     path: '',
     loadComponent: () => import('./home/home/home').then((m) => m.Home),
   },
@@ -50,16 +50,12 @@ export const routes: Routes = [
     component: Godofwar,
   },
   {
-    path: 'jogos/marvels-spider-Man-remastered',
-    component: Marvelsspidermanremastered,
+    path: 'jogos/marvels-spider-man-remastered',
+    component: MarvelsSpiderManRemastered,
   },
   {
     path: 'jogos/call-of-duty-modern-warfare-ii',
     component: CallOfDutyModernWarfareIi,
-  },
-  {
-    path: 'jogos/marvels-spider-Man-remastered',
-    component: Marvelsspidermanremastered,
   },
   {
     path: 'jogos/a-plague-tale',

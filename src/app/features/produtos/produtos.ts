@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProdutosService, Produto } from '../../core/services/produtos.service';
 import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
+import { FavoritosService } from '../../core/services/favoritos.service';
 
 interface ProdutoComFavorito extends Produto {
   favorito: boolean;
@@ -19,15 +20,19 @@ interface Categoria {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './produtos.html',
-  styleUrls: ['./produtos.css']
+  styleUrls: ['./produtos.css'],
 })
 export class Produtos implements OnInit {
   private produtosService = inject(ProdutosService);
   private router = inject(Router);
   private carrinhoFacade = inject(CarrinhoFacade);
+  private favoritosService = inject(FavoritosService);
 
   produtos: ProdutoComFavorito[] = [];
   produtosFiltrados: ProdutoComFavorito[] = [];
+
+  abaAtiva: 'todos' | 'favoritos' = 'todos';
+  menuCategoriasAberto: boolean = false;
 
   readonly categorias: Categoria[] = [
     { id: 'acao', nome: 'Ação', icone: '⚔️' },
@@ -37,22 +42,53 @@ export class Produtos implements OnInit {
     { id: 'mundo-aberto', nome: 'Mundo Aberto', icone: '🌎' },
   ];
 
-  categoriaAtiva: string | null = null; // null = "todas"
+  categoriaAtiva: string | null = null;
   plataformasAtivas = new Set<string>();
   faixaPrecoAtiva: string = 'todos';
 
   ngOnInit(): void {
     this.produtosService.obterProdutos().subscribe({
       next: (dados) => {
-        this.produtos = dados.map(p => ({ ...p, favorito: false }));
+        this.produtos = dados.map((p) => ({
+          ...p,
+          favorito: this.favoritosService.ehFavorito(p.id),
+        }));
         this.aplicarFiltros();
       },
-      error: (err) => console.error('Erro ao carregar produtos:', err)
+      error: (err) => console.error('Erro ao carregar produtos:', err),
     });
+  }
+
+  get quantidadeFavoritos(): number {
+    return this.produtos.filter((p) => p.favorito).length;
+  }
+
+  toggleMenuCategorias(): void {
+    this.menuCategoriasAberto = !this.menuCategoriasAberto;
+  }
+
+  obterNomeCategoriaAtiva(): string {
+    if (!this.categoriaAtiva) {
+      return '🏷️ Categorias';
+    }
+    const cat = this.categorias.find((c) => c.id === this.categoriaAtiva);
+    return cat ? `${cat.icone} ${cat.nome}` : '🏷️ Categorias';
+  }
+
+  selecionarAba(aba: 'todos' | 'favoritos'): void {
+    this.abaAtiva = aba;
+  }
+
+  get produtosExibidos(): ProdutoComFavorito[] {
+    if (this.abaAtiva === 'favoritos') {
+      return this.produtosFiltrados.filter((p) => p.favorito);
+    }
+    return this.produtosFiltrados;
   }
 
   selecionarCategoria(id: string): void {
     this.categoriaAtiva = this.categoriaAtiva === id ? null : id;
+    this.menuCategoriasAberto = false;
     this.aplicarFiltros();
   }
 
@@ -71,11 +107,13 @@ export class Produtos implements OnInit {
   }
 
   private aplicarFiltros(): void {
-    this.produtosFiltrados = this.produtos.filter(produto => {
-      const passaCategoria = !this.categoriaAtiva || produto.categorias.includes(this.categoriaAtiva);
+    this.produtosFiltrados = this.produtos.filter((produto) => {
+      const passaCategoria =
+        !this.categoriaAtiva || produto.categorias.includes(this.categoriaAtiva);
 
-      const passaPlataforma = this.plataformasAtivas.size === 0 ||
-        [...this.plataformasAtivas].some(plat => produto.plataforma.includes(plat));
+      const passaPlataforma =
+        this.plataformasAtivas.size === 0 ||
+        [...this.plataformasAtivas].some((plat) => produto.plataforma.includes(plat));
 
       const passaPreco = this.passaFiltroPreco(produto);
 
@@ -89,11 +127,16 @@ export class Produtos implements OnInit {
     const preco = this.converterPreco(produto.precoPromocional);
 
     switch (this.faixaPrecoAtiva) {
-      case 'gratis': return preco === 0;
-      case '0-50': return preco > 0 && preco <= 50;
-      case '50-100': return preco > 50 && preco <= 100;
-      case 'acima-100': return preco > 100;
-      default: return true;
+      case 'gratis':
+        return preco === 0;
+      case '0-50':
+        return preco > 0 && preco <= 50;
+      case '50-100':
+        return preco > 50 && preco <= 100;
+      case 'acima-100':
+        return preco > 100;
+      default:
+        return true;
     }
   }
 
@@ -103,7 +146,14 @@ export class Produtos implements OnInit {
   }
 
   toggleFavorito(produto: ProdutoComFavorito): void {
+    this.favoritosService.toggleFavorito(produto);
     produto.favorito = !produto.favorito;
+  }
+
+  // NOVO — Limpa todos os favoritos
+  limparFavoritos(): void {
+    this.favoritosService.limparTodosFavoritos();
+    this.produtos.forEach((p) => (p.favorito = false));
   }
 
   adicionarAoCarrinho(produto: ProdutoComFavorito): void {
@@ -121,67 +171,47 @@ export class Produtos implements OnInit {
   }
 
   irParaPaginaDoJogo(produto: ProdutoComFavorito): void {
-    
-    if (produto.id === '1' || produto.nome.toLowerCase().includes('grand')) {
+    const nome = produto.nome.toLowerCase();
+    const id = String(produto.id);
+
+    if (id === '1' || nome.includes('grand')) {
       this.router.navigate(['/jogos/grand-theft-auto-v']);
-    }
-    if (produto.id === '2' || produto.nome.toLowerCase().includes('witcher')) {
+    } else if (id === '2' || nome.includes('witcher')) {
       this.router.navigate(['/jogos/the-witcher-3']);
-    }
-    if (produto.id === '3' || produto.nome.toLowerCase().includes('sims')) {
+    } else if (id === '3' || nome.includes('sims')) {
       this.router.navigate(['/jogos/the-sims-4']);
-    }
-    if (produto.id === '4' || produto.nome.toLowerCase().includes('god')) {
+    } else if (id === '4' || nome.includes('god')) {
       this.router.navigate(['/jogos/god-of-war']);
-    }
-    if (produto.id === '5' || produto.nome.toLowerCase().includes('spider')) {
-      this.router.navigate(['/jogos/jogos/marvels-spider-Man-remastered']);
-    }
-    if (produto.id === '6' || produto.nome.toLowerCase().includes('call')) {
+    } else if (id === '5' || nome.includes('marvels')) {
+      this.router.navigate(['jogos/marvels-spider-man-remastered']);
+    } else if (id === '6' || nome.includes('call')) {
       this.router.navigate(['/jogos/call-of-duty-modern-warfare-ii']);
-    }
-    if (produto.id === '7' || produto.nome.toLowerCase().includes('plague')) {
+    } else if (id === '7' || nome.includes('plague')) {
       this.router.navigate(['/jogos/a-plague-tale']);
-    }
-    if (produto.id === '8' || produto.nome.toLowerCase().includes('ragnarök')) {
+    } else if (id === '8' || nome.includes('ragnarök')) {
       this.router.navigate(['/jogos/god-of-war-ragnarök']);
-    }
-    if (produto.id === '9' || produto.nome.toLowerCase().includes('knight')) {
+    } else if (id === '9' || nome.includes('knight')) {
       this.router.navigate(['/jogos/hollow-knight']);
-    }
-    if (produto.id === '10' || produto.nome.toLowerCase().includes('dead')) {
+    } else if (id === '10' || nome.includes('dead')) {
       this.router.navigate(['/jogos/red-dead-redemption-2']);
-    }
-      if (produto.id === '11' || produto.nome.toLowerCase().includes('assassins')) {
+    } else if (id === '11' || nome.includes('assassins')) {
       this.router.navigate(['/jogos/assassins-creed-iv-black-flag']);
-    }
-      if (produto.id === '12' || produto.nome.toLowerCase().includes('yakuza')) {
+    } else if (id === '12' || nome.includes('yakuza')) {
       this.router.navigate(['/jogos/yakuza-0']);
-    }
-      if (produto.id === '13' || produto.nome.toLowerCase().includes('sports')) {
+    } else if (id === '13' || nome.includes('sports')) {
       this.router.navigate(['/jogos/ea-sports-fc-24']);
-    }
-      if (produto.id === '14' || produto.nome.toLowerCase().includes('strange')) {
+    } else if (id === '14' || nome.includes('strange')) {
       this.router.navigate(['/jogos/life-is-strange']);
-    }
-      if (produto.id === '15' || produto.nome.toLowerCase().includes('last')) {
+    } else if (id === '15' || nome.includes('last')) {
       this.router.navigate(['/jogos/the-last-of-Us']);
-    }
-      if (produto.id === '16' || produto.nome.toLowerCase().includes('f1')) {
+    } else if (id === '16' || nome.includes('f1')) {
       this.router.navigate(['/jogos/f1-23']);
-    }
-      if (produto.id === '17' || produto.nome.toLowerCase().includes('')) {
+    } else if (id === '17' || nome.includes('watch')) {
       this.router.navigate(['/jogos/watch-dogs-2']);
-    }
-      if (produto.id === '18' || produto.nome.toLowerCase().includes('cyberpunk')) {
+    } else if (id === '18' || nome.includes('cyberpunk')) {
       this.router.navigate(['/jogos/cyberpunk-2077']);
-    }
-      if (produto.id === '19' || produto.nome.toLowerCase().includes('marvel')) {
+    } else if (id === '19' || nome.includes('rivals')) {
       this.router.navigate(['/jogos/marvel-rivals']);
     }
-   
-    
   }
-
-  
 }
