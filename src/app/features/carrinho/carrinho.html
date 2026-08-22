@@ -1,35 +1,35 @@
-<section class="pagina-carrinho">
-  <h1>Carrinho</h1>
+< class="pagina-carrinho">
+<h1>Carrinho</h1>
 
-  @if (carrinhoFacade.carrinhoVazio()) {
-    <p>Seu carrinho está vazio.</p>
-    <button mat-raised-button color="primary" routerLink="/produtos">Ver produtos</button>
-  } @else {
-    <section class="lista-carrinho">
-      @for (item of carrinhoFacade.itens(); track $index) {
-        <article class="item-carrinho">
-          <div>
-            <h3>{{ item.nome }}</h3>
-            <p>R$ {{ item.preco.toFixed(2) }}</p>
-          </div>
+@if (carrinhoFacade.carrinhoVazio()) {
+  <p>Seu carrinho está vazio.</p>
+  <button mat-raised-button color="primary" routerLink="/jogos">Ver jogos</button>
+} @else {
+  <section class="lista-carrinho">
+    @for (item of carrinhoFacade.itens(); track $index) {
+      <article class="item-carrinho">
+        <div>
+          <h3>{{ item.nome }}</h3>
+          <p>R$ {{ item.preco.toFixed(2) }}</p>
+        </div>
 
-          <button mat-stroked-button color="warn" type="button" (click)="removerItem($index)">
-            Remover
-          </button>
-        </article>
-      }
-    </section>
+        <button mat-stroked-button color="warn" type="button" (click)="removerItem($index)">
+          Remover
+        </button>
+      </article>
+    }
+  </section>
 
-    <hr />
+  <hr />
 
-    <section class="resumo-carrinho">
-      <h3>Itens no carrinho: {{ carrinhoFacade.quantidade() }}</h3>
-      <h2>Total: R$ {{ carrinhoFacade.total().toFixed(2) }}</h2>
-    </section>
+  <section class="resumo-carrinho">
+    <h3>Itens no carrinho: {{ carrinhoFacade.quantidade() }}</h3>
+    <h2>Total: R$ {{ carrinhoFacade.total().toFixed(2) }}</h2>
+  </section>
 
-    <section class="acoes-carrinho">
-      <button mat-button type="button" (click)="limparCarrinho()">Limpar carrinho</button>
-      <button mat-stroked-button color="primary" routerLink="/produtos">Continuar comprando</button>
-    </section>
-  }
-</section>
+  <section class="acoes-carrinho">
+    <button mat-button type="button" (click)="limparCarrinho()">Limpar carrinho</button>
+    <button mat-stroked-button color="primary" routerLink="/jogos">Continuar comprando</button>
+    <button mat-raised-button color="primary" routerLink="/checkout">Ir para Checkout</button>
+  </section>
+}
