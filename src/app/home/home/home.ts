@@ -1,6 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Header } from '../../shared/header/header';
+import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
 
 interface GameItem {
   id: number;
@@ -21,6 +23,9 @@ interface GameItem {
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
+  private carrinhoFacade = inject(CarrinhoFacade);
+  private router = inject(Router);
+
   activeHeroIndex = 0;
   private autoSlideTimer: any;
 
@@ -112,6 +117,22 @@ export class Home implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.stopAutoSlide();
+  }
+
+  // Método ajustado para usar adicionarProduto
+  comprarAgora(jogo: GameItem) {
+    const precoNumerico = parseFloat(
+      jogo.promoPrice.replace('R$', '').replace('.', '').replace(',', '.').trim()
+    );
+
+    this.carrinhoFacade.adicionarProduto({
+      id: jogo.id,
+      nome: jogo.title,
+      preco: precoNumerico,
+      imagem: jogo.image,
+    } as any);
+
+    this.router.navigate(['/carrinho']);
   }
 
   startAutoSlide() {

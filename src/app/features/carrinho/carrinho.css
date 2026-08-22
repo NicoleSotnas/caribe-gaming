@@ -1,73 +1,206 @@
 .pagina-carrinho {
-  background: linear-gradient(180deg, #3bafd4 0%, #328eaf 35%, #265f80 65%, #191f3a 100%);
-  min-height: 100vh;
-  padding: 32px 24px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 132px 24px 40px;
+  color: var(--text-light, #f8fafc);
 }
 
-.pagina-carrinho h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
+.titulo-pagina {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--gold, #f4c95d);
   margin-bottom: 24px;
-  color: #ffffff;
 }
 
-.lista-carrinho {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background-color: #0f172a;
-  border: 1px solid #1e293b;
+.lista-carrinho,
+.resumo-carrinho {
+  background: rgba(8, 14, 26, 0.75);
+  border: 1px solid rgba(59, 175, 212, 0.35);
   border-radius: 12px;
-  padding: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
 }
 
 .item-carrinho {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #1e293b;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(248, 250, 252, 0.15);
 }
 
 .item-carrinho:last-child {
   border-bottom: none;
 }
 
-.item-carrinho h3 {
-  margin: 0;
-  font-size: 1.1rem;
+.item-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.15rem;
   color: #ffffff;
 }
 
-.item-carrinho p {
-  margin: 4px 0 0 0;
-  color: #3b82f6;
-  font-weight: 600;
+.item-preco {
+  margin: 0;
+  color: var(--gold, #f4c95d);
+  font-weight: 700;
+  font-size: 1.05rem;
 }
 
+/* ==========================================================================
+   ESTILO DOS BOTÕES E ÍCONES (PADRÃO CHECKOUT)
+   ========================================================================== */
+.btn-acao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 7px;
+  background: linear-gradient(135deg, var(--ocean-blue, #0088ff), var(--cyan, #3bafd4));
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.btn-acao:not(:disabled):hover {
+  transform: translateY(-3px);
+  filter: brightness(1.12);
+  box-shadow: 0 10px 22px rgba(59, 175, 212, 0.35);
+}
+
+.btn-acao:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Uniformiza botões de ação específicos (Principal, Secundário, Perigo e Explorar) */
+.btn-acao.btn-primary,
+.btn-acao.btn-secondary,
+.btn-acao.btn-danger,
+.btn-acao.btn-explorar {
+  background: linear-gradient(135deg, var(--ocean-blue, #0088ff), var(--cyan, #3bafd4));
+  color: #ffffff;
+}
+
+/* Tamanho reduzido para os botões da lista de itens */
+.btn-acao.btn-sm {
+  height: 36px;
+  padding: 0 14px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+/* Tamanho do SVG interno dos botões */
+.btn-icon-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* ==========================================================================
+   RESUMO & VAZIO
+   ========================================================================== */
 .resumo-carrinho {
-  margin-top: 24px;
-  background-color: #0f172a;
-  border: 1px solid #1e293b;
-  border-radius: 12px;
-  padding: 20px;
+  border-left: 4px solid var(--gold, #f4c95d);
 }
 
-.resumo-carrinho h3 {
-  color: #94a3b8;
-  font-size: 1rem;
-  margin-bottom: 8px;
+.resumo-detalhes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.resumo-carrinho h2 {
+.qtd-itens {
+  color: #cbd5e1;
+  font-size: 1.05rem;
+}
+
+.qtd-itens strong {
+  color: #ffffff;
+}
+
+.resumo-detalhes h2 {
+  margin: 0;
   color: #ffffff;
   font-size: 1.5rem;
-  margin: 0;
+}
+
+.resumo-detalhes h2 span {
+  color: var(--gold, #f4c95d);
+}
+
+.carrinho-vazio-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0 60px;
+}
+
+.carrinho-vazio-card {
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+  background: rgba(8, 14, 26, 0.85);
+  border: 1px solid rgba(59, 175, 212, 0.3);
+  border-radius: 16px;
+  padding: 40px 32px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.vazio-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(59, 175, 212, 0.08);
+  border: 1px solid rgba(59, 175, 212, 0.2);
+  border-radius: 50%;
+}
+
+.bau-vazio-icon {
+  width: 44px;
+  height: 44px;
+  opacity: 0.75;
+}
+
+.carrinho-vazio-card h2 {
+  font-size: 1.5rem;
+  color: var(--gold, #f4c95d);
+  margin-bottom: 12px;
+}
+
+.carrinho-vazio-card p {
+  color: #cbd5e1;
+  margin-bottom: 28px;
+  line-height: 1.6;
 }
 
 .acoes-carrinho {
   display: flex;
   gap: 16px;
-  margin-top: 24px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .acoes-carrinho {
+    flex-direction: column-reverse;
+  }
+  .btn-acao {
+    width: 100%;
+  }
 }
