@@ -1,192 +1,287 @@
 /* ==========================================================================
-   ESTRUTURA GERAL DA PÁGINA E LAYOUT
+   LAYOUT COM FLEXBOX ISOLADO
    ========================================================================== */
 .pagina-produtos {
   display: flex;
   gap: 28px;
-  background-color: #080e1a;
-  color: #e2e8f0;
-  padding: 100px;
-  padding-top: 170px;
+  margin-top: 130px;
+  padding: 30px;
   min-height: 100vh;
+  color: #ffffff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 /* ==========================================================================
-   SIDEBAR DE FILTROS (ESTILO NAVEGAÇÃO PIRATA)
+   SIDEBAR DE FILTROS
    ========================================================================== */
 .sidebar-filtros {
-  width: 260px;
+  width: 250px;
   flex-shrink: 0;
-  background: #0f192d;
-  border: 1px solid rgba(0, 210, 255, 0.12);
+  background: #14213a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  padding: 24px;
+  padding: 20px;
   height: fit-content;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  position: sticky;
+  top: 110px;
 }
 
 .filtros-titulo {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #00d2ff;
+  color: #4fc3e8;
   letter-spacing: 1px;
   margin-top: 0;
-  margin-bottom: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 12px;
 }
 
 .filtro-grupo {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .filtro-grupo h4 {
-  font-size: 0.9rem;
-  color: #94a3b8;
-  margin-bottom: 12px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .filtro-grupo label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-size: 0.88rem;
-  color: #cbd5e1;
-  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 8px;
   cursor: pointer;
-  transition: color 0.2s;
 }
 
-.filtro-grupo label:hover {
-  color: #00d2ff;
-}
-
-.filtro-grupo input[type="radio"],
-.filtro-grupo input[type="checkbox"] {
-  accent-color: #0088ff;
-  width: 16px;
-  height: 16px;
+.filtro-grupo input {
+  accent-color: #4fc3e8;
   cursor: pointer;
 }
 
 /* ==========================================================================
-   BARRA DE CATEGORIAS & TOPO
+   CONTEÚDO PRINCIPAL
    ========================================================================== */
 .conteudo-produtos {
   flex: 1;
+  min-width: 0;
 }
 
-.barra-categorias {
+.topo-e-categorias {
+  margin-bottom: 28px;
+}
+
+.linha-controles-topo {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 16px;
   margin-bottom: 24px;
-  overflow-x: auto;
-  padding-bottom: 8px;
 }
 
-.pill-categoria {
-  background: #0f192d;
+.abas-produtos {
+  display: flex;
+  background: #14213a;
+  border-radius: 12px;
+  padding: 4px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
-  padding: 8px 18px;
-  border-radius: 30px;
+}
+
+.aba-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 16px;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 700;
+  border-radius: 8px;
   cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
 }
 
-.pill-categoria:hover {
-  border-color: #00d2ff;
+.aba-btn.ativa {
+  background: #0e7fa8;
   color: #fff;
-  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(14, 127, 168, 0.4);
 }
 
-.pill-categoria.ativa {
-  background: linear-gradient(135deg, #0088ff 0%, #00d2ff 100%);
+.badge-contador-fav {
+  background: #ff4757;
   color: #fff;
-  border-color: transparent;
-  box-shadow: 0 4px 14px rgba(0, 136, 255, 0.4);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+  line-height: 1;
 }
 
+.dropdown-categorias {
+  position: relative;
+}
+
+.btn-dropdown-categoria {
+  background: #14213a;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-dropdown-categoria:hover {
+  border-color: #4fc3e8;
+  color: #4fc3e8;
+}
+
+.seta-icone {
+  font-size: 0.65rem;
+  transition: transform 0.2s ease;
+}
+
+.seta-icone.aberto {
+  transform: rotate(180deg);
+}
+
+.menu-categorias-conteudo {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 110%;
+  background: #14213a;
+  min-width: 180px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  padding: 8px;
+  z-index: 50;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu-categorias-conteudo.mostrar {
+  display: flex;
+}
+
+.item-categoria {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.item-categoria:hover, .item-categoria.ativo {
+  background: rgba(79, 195, 232, 0.15);
+  color: #4fc3e8;
+  font-weight: bold;
+}
+
+/* BLOCO DO TÍTULO E AÇÕES */
 .produtos-topo {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 20px;
+}
+
+.bloco-titulo-pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .produtos-topo h2 {
   font-size: 1.8rem;
   font-weight: 800;
   margin: 0;
-  color: #fff;
+  line-height: 1.1;
 }
 
 .produtos-subtitulo {
-  font-size: 0.9rem;
-  color: #64748b;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.acoes-direita-topo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-limpar-favoritos {
+  background: rgba(255, 71, 87, 0.15);
+  border: 1px solid #ff4757;
+  color: #ff4757;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-limpar-favoritos:hover {
+  background: #ff4757;
+  color: #fff;
 }
 
 .produtos-contador {
   font-size: 0.85rem;
-  color: #00d2ff;
+  color: #fff;
   font-weight: 600;
-  background: rgba(0, 210, 255, 0.1);
+  background: #14213a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 6px 14px;
   border-radius: 20px;
 }
 
 /* ==========================================================================
-   GRID DE PRODUTOS
+   CARDS DE JOGOS
    ========================================================================== */
 .grid-produtos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 20px;
 }
 
 .card-produto {
   position: relative;
-  background: #0f192d;
-  border-radius: 18px;
+  background: #14213a;
+  border-radius: 16px;
   padding: 12px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  border: 1px solid rgba(0, 210, 255, 0.1);
-  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .card-produto:hover {
-  transform: translateY(-8px);
-  border-color: #00d2ff;
-  box-shadow: 0 12px 28px rgba(0, 210, 255, 0.25);
+  transform: translateY(-6px);
+  border-color: #4fc3e8;
+  box-shadow: 0 12px 28px rgba(8, 40, 55, 0.5);
 }
 
-.card-badges,
-.card-imagem,
-.card-conteudo {
-  position: relative;
-  z-index: 2;
-}
-
-/* ==========================================================================
-   MOLDURA ENVOLVENDO A FOTO DO JOGO
-   ========================================================================== */
 .card-imagem {
   width: 100%;
   aspect-ratio: 3 / 4;
   overflow: hidden;
   border-radius: 12px;
-  background: #080e1a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
+  background: #0a1626;
   position: relative;
 }
 
@@ -194,15 +289,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* Badges sobre a foto */
 .card-badges {
   position: absolute;
-  top: 18px;
-  left: 18px;
-  right: 18px;
+  top: 12px;
+  left: 12px;
+  right: 12px;
   display: flex;
   justify-content: space-between;
   pointer-events: none;
@@ -210,62 +303,52 @@
 }
 
 .badge-desconto {
-  background: #0088ff;
+  background: #0e7fa8;
   color: #fff;
   font-weight: 800;
-  font-size: 0.75rem;
-  padding: 4px 8px;
+  font-size: 0.8rem;
+  padding: 5px 10px;
   border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(14, 127, 168, 0.6);
 }
 
 .badge-plataforma {
-  background: rgba(15, 25, 45, 0.85);
+  background: rgba(10, 22, 38, 0.85);
   backdrop-filter: blur(4px);
-  color: #cbd5e1;
-  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.72rem;
   font-weight: 700;
   padding: 4px 8px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* ==========================================================================
-   CONTEÚDO DO CARD & BOTÕES
-   ========================================================================== */
 .card-conteudo {
   padding: 12px 4px 4px 4px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: transparent;
 }
 
 .produto-nome {
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
   margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: color 0.2s;
-}
-
-.produto-nome:hover {
-  color: #00d2ff;
 }
 
 .produto-genero {
   font-size: 0.75rem;
-  color: #64748b;
-  margin-bottom: 12px;
-  display: block;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 10px;
 }
 
 .produto-precos {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
   margin-top: auto;
   margin-bottom: 12px;
@@ -273,14 +356,15 @@
 
 .preco-original {
   font-size: 0.8rem;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.4);
   text-decoration: line-through;
 }
 
 .preco-promocional {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
-  color: #00d2ff;
+  color: #00f0ff;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
 }
 
 .card-actions {
@@ -291,7 +375,7 @@
 
 .btn-carrinho {
   flex: 1;
-  background: #0088ff;
+  background: #0e7fa8;
   color: #fff;
   border: none;
   padding: 10px;
@@ -299,51 +383,42 @@
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
   transition: background 0.2s;
 }
 
 .btn-carrinho:hover {
-  background: #00d2ff;
-  color: #080e1a;
+  background: #4fc3e8;
+  color: #06232f;
 }
 
-/* ==========================================================================
-   BOTÃO FAVORITO (SOMENTE CORAÇÃO)
-   ========================================================================== */
 .btn-favorito {
   background: transparent;
   border: none;
-  color: #a0aec0;
-  width: auto;
-  height: auto;
-  padding: 4px;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: color 0.2s;
 }
 
 .icon-heart {
   width: 20px;
   height: 20px;
-  transition: transform 0.2s ease;
 }
 
-.btn-favorito:hover {
-  background: transparent;
-  color: #ff4757;
+.btn-favorito:hover, .btn-favorito.favoritado {
+  color: #ff6b6b;
 }
 
-.btn-favorito:hover .icon-heart {
-  transform: scale(1.15);
+.favoritos-vazio {
+  background: #14213a;
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.btn-favorito.favoritado {
-  background: transparent;
-  color: #ff4757;
+.favoritos-vazio p {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
 }
