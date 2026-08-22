@@ -1,1 +1,219 @@
-<p>thesims works!</p>
+<div class="pagina-detalhes" *ngIf="jogo; else estadoAlternativo">
+
+  <!-- Breadcrumb Superior -->
+  <div class="breadcrumb">
+    <span class="breadcrumb-link" (click)="irParaHome()">HOME</span> &gt;
+    <span class="breadcrumb-link" (click)="irParaJogos()">JOGOS</span> &gt;
+    <strong>{{ jogo.nome }}</strong>
+  </div>
+
+  <!-- GRID PRINCIPAL -->
+  <div class="grid-principal">
+
+    <!-- Mídia com Carrossel Nativo -->
+    <div class="secao-midia">
+      <div class="container-imagem-destaque">
+        <span class="badge-desconto">Grátis</span>
+        <span class="badge-classificacao">{{ jogo.classificacaoEtaria }}</span>
+
+        <!-- Botões de Setas -->
+        <button class="btn-seta btn-prev" (click)="fotoAnterior()" *ngIf="galeriaImagens.length > 1">❮</button>
+
+        <!-- Imagem Principal -->
+        <img 
+          *ngIf="galeriaImagens.length > 0" 
+          [src]="galeriaImagens[indiceAtivo]" 
+          [alt]="jogo.nome" 
+          class="img-destaque" 
+        />
+
+        <button class="btn-seta btn-next" (click)="proximaFoto()" *ngIf="galeriaImagens.length > 1">❯</button>
+      </div>
+
+      <!-- Fila de Miniaturas -->
+      <div class="fila-miniaturas" *ngIf="galeriaImagens.length > 0">
+        <button
+          *ngFor="let img of galeriaImagens; let i = index"
+          class="thumb-item"
+          [class.ativo]="i === indiceAtivo"
+          (click)="selecionarIndice(i)">
+          <img [src]="img" alt="Thumbnail gameplay" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Painel Lateral de Informações -->
+    <div class="secao-info">
+      <h1 class="titulo-jogo">{{ jogo.nome }}</h1>
+
+      <div class="subtitulos">
+        <span>Maxis</span> •
+        <span>PC / PS4 / Xbox One</span> •
+        <span class="categoria-tag">Simulação, Vida, Casual</span>
+      </div>
+
+      <div class="avaliacao-container">
+        <div class="estrelas">★★★★☆</div>
+        <span class="nota-numero">4.6</span>
+        <span class="total-avaliacoes">(18.900 avaliações)</span>
+      </div>
+
+      <ul class="destaques-lista">
+        <li><i class="fas fa-users"></i> <strong>Crie Sims Únicos:</strong> Personalize a aparência, traços e personalidades.</li>
+        <li><i class="fas fa-home"></i> <strong>Modo Construção Poderoso:</strong> Projete e decore casas dos sonhos.</li>
+        <li><i class="fas fa-heart"></i> <strong>Liberdade Criativa:</strong> Controle histórias, carreiras e relacionamentos.</li>
+      </ul>
+
+      <!-- Card de Preço e Compra -->
+      <div class="card-compra">
+        <div class="precos-linha">
+          <span class="badge-desconto-card">Base</span>
+          <span class="preco-promo">Gratuito para Jogar</span>
+        </div>
+
+        <div class="acoes-botoes">
+          <button class="btn-adicionar"><i class="fas fa-gamepad"></i> Baixar jogo base</button>
+          
+          <button 
+            class="btn-favorito" 
+            [class.ativo]="favorito" 
+            (click)="favorito = !favorito"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-heart">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </button>
+        </div>
+
+        <button class="btn-comprar">Ver expansões e pacotes</button>
+        <div class="compra-segura"><i class="fas fa-lock"></i> Download 100% seguro pela EA</div>
+      </div>
+
+      <!-- Fatos do Jogo -->
+      <div class="tabela-fatos">
+        <div class="fato-linha"><span>Plataforma:</span> <strong>PC, PS4, Xbox One</strong></div>
+        <div class="fato-linha"><span>Gênero:</span> <strong>Simulação, Casual</strong></div>
+        <div class="fato-linha"><span>Lançamento:</span> <strong>02/09/2014</strong></div>
+        <div class="fato-linha"><span>Desenvolvedor:</span> <strong>Maxis</strong></div>
+        <div class="fato-linha"><span>Distribuidora:</span> <strong>Electronic Arts</strong></div>
+        <div class="fato-linha"><span>Idioma:</span> <strong>Português (Brasil) e mais</strong></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SEÇÃO SOBRE O JOGO -->
+  <div class="secao-detalhada">
+    <h2>SOBRE O JOGO</h2>
+    <p class="descricao-paragrafo">
+      Liberte sua imaginação e crie um mundo de Sims exclusivo que é só seu! Explore e personalize cada detalhe, desde os Sims até as casas, e muito mais. Escolha a aparência, as roupas e os traços de personalidade dos seus Sims, decidindo como eles vão passar os dias.
+    </p>
+
+    <!-- Banner Ilustrativo Interno -->
+    <div class="banner-sobre-jogo">
+      <img src="https://media.rawg.io/media/games/618/618c2031a07bb6b39e6129521d02eabf.jpg" alt="Banner The Sims 4" />
+    </div>
+  </div>
+
+  <!-- SEÇÃO AVALIAÇÕES DOS JOGADORES -->
+  <div class="secao-avaliacoes">
+    <h2>AVALIAÇÕES DOS JOGADORES</h2>
+
+    <div class="grid-avaliacoes">
+      
+      <!-- Lado Esquerdo: Resumo e Gráfico de Barras -->
+      <div class="resumo-avaliacoes-card">
+        <div class="nota-gigante">4.6</div>
+        <div class="estrelas">★★★★☆</div>
+        <span class="total-votos">18.900 avaliações</span>
+
+        <div class="barras-avaliacao">
+          <div class="linha-barra">
+            <span>5 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 78%;"></div></div>
+            <span class="votos-num">14.700</span>
+          </div>
+          <div class="linha-barra">
+            <span>4 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 15%;"></div></div>
+            <span class="votos-num">2.800</span>
+          </div>
+          <div class="linha-barra">
+            <span>3 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 4%;"></div></div>
+            <span class="votos-num">750</span>
+          </div>
+          <div class="linha-barra">
+            <span>2 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 2%;"></div></div>
+            <span class="votos-num">400</span>
+          </div>
+          <div class="linha-barra">
+            <span>1 estrela</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 1%;"></div></div>
+            <span class="votos-num">250</span>
+          </div>
+        </div>
+
+        <button class="btn-escrever-avaliacao">Escrever avaliação</button>
+      </div>
+
+      <!-- Lado Direito: Lista de Comentários com Reações -->
+      <div class="lista-comentarios">
+        
+        <!-- Comentário 1 -->
+        <div class="comentario-card">
+          <div class="autor-cabecalho">
+            <div class="avatar-autor">B</div>
+            <div class="info-autor">
+              <strong>BellaGoth_Lover</strong>
+              <div class="estrelas-mini">★★★★★</div>
+            </div>
+            <span class="data-comentario">19/08/2026</span>
+          </div>
+          <p class="texto-comentario">
+            O modo construção desse jogo é simplesmente viciante! Passo horas construindo mansões e criando famílias criativas.
+          </p>
+          <div class="reacoes-comentario">
+            <span>Isso foi útil?</span>
+            <button class="btn-reacao"><i class="fas fa-thumbs-up"></i> 320</button>
+            <button class="btn-reacao"><i class="fas fa-thumbs-down"></i> 4</button>
+          </div>
+        </div>
+
+        <!-- Comentário 2 -->
+        <div class="comentario-card">
+          <div class="autor-cabecalho">
+            <div class="avatar-autor">M</div>
+            <div class="info-autor">
+              <strong>PlumbobBuilder</strong>
+              <div class="estrelas-mini">★★★★★</div>
+            </div>
+            <span class="data-comentario">17/08/2026</span>
+          </div>
+          <p class="texto-comentario">
+            Mesmo com os anos, continua sendo um simulador incrível de vida. Os pacotes de expansão trazem muita variedade.
+          </p>
+          <div class="reacoes-comentario">
+            <span>Isso foi útil?</span>
+            <button class="btn-reacao"><i class="fas fa-thumbs-up"></i> 178</button>
+            <button class="btn-reacao"><i class="fas fa-thumbs-down"></i> 2</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Estado de Carregamento / Erro -->
+<ng-template #estadoAlternativo>
+  <div class="estado-alternativo">
+    <p *ngIf="carregando">Carregando informações do jogo...</p>
+    <p *ngIf="!carregando && erro">
+      Não foi possível carregar os dados do jogo agora. Tente novamente em instantes.
+    </p>
+  </div>
+</ng-template>
