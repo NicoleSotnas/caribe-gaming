@@ -5,6 +5,7 @@ export type Produto = {
   id: string;
   nome: string;
   imagem: string;
+  imagemPosicao: string;
   precoOriginal: string;
   precoPromocional: string;
   desconto: number;
@@ -16,7 +17,9 @@ export type Produto = {
 type ItemCatalogo = {
   id: string;
   nome: string;
-  steamAppId: string;
+  steamAppId?: string;
+  imagemCustom?: string;
+  imagemPosicao?: string;
   genero: string;
   plat: string;
   orig: string;
@@ -28,7 +31,7 @@ type ItemCatalogo = {
 @Injectable({ providedIn: 'root' })
 export class ProdutosService {
 
-  readonly lista19Produtos: ItemCatalogo[] = [
+  readonly listaProdutos: ItemCatalogo[] = [
     { id: '1', nome: 'Grand Theft Auto V', steamAppId: '271590', genero: 'Ação / Mundo Aberto', plat: 'PC', orig: 'R$ 149,90', promo: 'R$ 74,95', desc: 50, categorias: ['mundo-aberto'] },
     { id: '2', nome: 'The Witcher 3: Wild Hunt', steamAppId: '292030', genero: 'RPG / Mundo Aberto', plat: 'PC / PS5', orig: 'R$ 129,99', promo: 'R$ 129,99', desc: 0, categorias: ['rpg'] },
     { id: '3', nome: 'The Sims 4', steamAppId: '1222670', genero: 'Simulação', plat: 'PC', orig: 'Grátis', promo: 'Grátis', desc: 0, categorias: ['simulacao'] },
@@ -47,14 +50,18 @@ export class ProdutosService {
     { id: '16', nome: 'F1 23', steamAppId: '2108330', genero: 'Corrida', plat: 'PC', orig: 'R$ 350,00', promo: 'R$ 143,60', desc: 60, categorias: ['simulacao'] },
     { id: '17', nome: 'Watch Dogs 2', steamAppId: '447040', genero: 'Mundo Aberto', plat: 'PC', orig: 'R$ 149,99', promo: 'R$ 149,99', desc: 0, categorias: ['mundo-aberto'] },
     { id: '18', nome: 'Cyberpunk 2077', steamAppId: '1091500', genero: 'RPG / Sci-Fi', plat: 'PC', orig: 'R$ 199,90', promo: 'R$ 99,95', desc: 50, categorias: ['rpg'] },
-    { id: '19', nome: 'Marvel Rivals', steamAppId: '2767030', genero: 'Hero Shooter', plat: 'PC', orig: 'Grátis', promo: 'Grátis', desc: 0, categorias: ['acao'] }
+    { id: '19', nome: 'Marvel Rivals', steamAppId: '2767030', genero: 'Hero Shooter', plat: 'PC', orig: 'Grátis', promo: 'Grátis', desc: 0, categorias: ['acao'] },
+    { id: '20', nome: 'The Last of Us Part II', imagemCustom: 'https://i.pinimg.com/736x/af/d9/62/afd962cd0ddbaf6209f340e4d6edcd39.jpg', imagemPosicao: 'center 15%', genero: 'Ação / Sobrevivência', plat: 'PS5', orig: 'R$ 249,90', promo: 'R$ 249,90', desc: 0, categorias: ['aventura'] }
   ];
 
   obterProdutos(): Observable<Produto[]> {
-    const produtosMapeados: Produto[] = this.lista19Produtos.map(item => ({
+    const produtosMapeados: Produto[] = this.listaProdutos.map(item => ({
       id: item.id,
       nome: item.nome,
-      imagem: `https://cdn.cloudflare.steamstatic.com/steam/apps/${item.steamAppId}/library_600x900.jpg`,
+      imagem: item.imagemCustom
+        ? item.imagemCustom
+        : `https://cdn.cloudflare.steamstatic.com/steam/apps/${item.steamAppId}/library_600x900.jpg`,
+      imagemPosicao: item.imagemPosicao ?? 'center',
       precoOriginal: item.orig,
       precoPromocional: item.promo,
       desconto: item.desc,
@@ -66,5 +73,4 @@ export class ProdutosService {
     return of(produtosMapeados);
   }
 
-  
 }
