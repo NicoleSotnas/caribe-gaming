@@ -16,15 +16,24 @@ export class AuthFacade {
     return !!this.usuarioAtual();
   }
 
-  // computed: recalcula sozinho toda vez que usuarioAtual muda
   ehAdmin = computed(() => this.usuarioAtual()?.email === EMAIL_ADMIN);
+
+  // nome de exibição: usa o nome de usuário se tiver, senão cai no email
+  nomeExibicao = computed(() => {
+    const usuario = this.usuarioAtual();
+    return usuario?.displayName || usuario?.email || '';
+  });
 
   realizarLogin(email: string, senha: string) {
     return this.authService.login(email, senha);
   }
 
-  realizarRegistro(email: string, senha: string) {
-    return this.authService.registrar(email, senha);
+  realizarRegistro(email: string, senha: string, nome: string) {
+    return this.authService.registrar(email, senha, nome);
+  }
+
+  atualizarNomeUsuario(nome: string) {
+    return this.authService.atualizarNomeUsuario(nome);
   }
 
   sair() {
