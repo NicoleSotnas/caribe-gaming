@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProdutosService, Produto } from '../../core/services/produtos.service';
@@ -27,12 +27,14 @@ export class Produtos implements OnInit {
   private router = inject(Router);
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
+  private cdr = inject(ChangeDetectorRef);
 
   produtos: ProdutoComFavorito[] = [];
   produtosFiltrados: ProdutoComFavorito[] = [];
 
   abaAtiva: 'todos' | 'favoritos' = 'todos';
   menuCategoriasAberto: boolean = false;
+  mensagemToast: string | null = null;
 
   readonly categorias: Categoria[] = [
     { id: 'acao', nome: 'Ação', icone: '⚔️' },
@@ -141,24 +143,44 @@ export class Produtos implements OnInit {
   }
 
   private converterPreco(preco: string): number {
-    if (preco.toLowerCase().includes('grátis')) return 0;
+    if (!preco || preco.toLowerCase().includes('grátis')) return 0;
     return Number(preco.replace('R$', '').replace(',', '.').trim());
+  }
+
+  private exibirToast(mensagem: string): void {
+    this.mensagemToast = mensagem;
+    this.cdr.markForCheck();
+
+    setTimeout(() => {
+      this.mensagemToast = null;
+      this.cdr.markForCheck();
+    }, 3000);
   }
 
   toggleFavorito(produto: ProdutoComFavorito): void {
     this.favoritosService.toggleFavorito(produto);
     produto.favorito = !produto.favorito;
+    
+    const msg = produto.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
+    this.exibirToast(msg);
   }
 
-  // NOVO — Limpa todos os favoritos
   limparFavoritos(): void {
     this.favoritosService.limparTodosFavoritos();
     this.produtos.forEach((p) => (p.favorito = false));
+    this.exibirToast('🗑️ Favoritos limpos!');
   }
 
   adicionarAoCarrinho(produto: ProdutoComFavorito): void {
     const preco = this.converterPreco(produto.precoPromocional);
 
+    // Se o jogo for de graça (preço = 0)
+    if (preco === 0) {
+      this.exibirToast('🎉 Jogo obtido com sucesso!');
+      return;
+    }
+
+    // Se for jogo pago, adiciona no carrinho
     this.carrinhoFacade.adicionarProduto({
       id: Number(produto.id),
       nome: produto.nome,
@@ -168,6 +190,8 @@ export class Produtos implements OnInit {
       plataforma: produto.plataforma,
       categoria: produto.genero,
     });
+
+    this.exibirToast('🛒 Jogo adicionado ao carrinho!');
   }
 
   irParaPaginaDoJogo(produto: ProdutoComFavorito): void {
@@ -180,6 +204,8 @@ export class Produtos implements OnInit {
       this.router.navigate(['/jogos/the-witcher-3']);
     } else if (id === '3' || nome.includes('sims')) {
       this.router.navigate(['/jogos/the-sims-4']);
+    } else if (id === '8' || nome.includes('ragnarök')) {
+      this.router.navigate(['/jogos/god-of-war-ragnarök']);
     } else if (id === '4' || nome.includes('god')) {
       this.router.navigate(['/jogos/god-of-war']);
     } else if (id === '5' || nome.includes('marvels')) {
@@ -188,8 +214,6 @@ export class Produtos implements OnInit {
       this.router.navigate(['/jogos/call-of-duty-modern-warfare-ii']);
     } else if (id === '7' || nome.includes('plague')) {
       this.router.navigate(['/jogos/a-plague-tale']);
-    } else if (id === '8' || nome.includes('ragnarök')) {
-      this.router.navigate(['/jogos/god-of-war-ragnarök']);
     } else if (id === '9' || nome.includes('knight')) {
       this.router.navigate(['/jogos/hollow-knight']);
     } else if (id === '10' || nome.includes('dead')) {
@@ -202,16 +226,19 @@ export class Produtos implements OnInit {
       this.router.navigate(['/jogos/ea-sports-fc-24']);
     } else if (id === '14' || nome.includes('strange')) {
       this.router.navigate(['/jogos/life-is-strange']);
-    } else if (id === '15' || nome.includes('last')) {
+    } else if (id === '20' || nome.includes('the')) {
+      this.router.navigate(['/jogos/the-last-of-us-II']); 
+    }else if (id === '15' || nome.includes('last')) {
       this.router.navigate(['/jogos/the-last-of-Us']);
     } else if (id === '16' || nome.includes('f1')) {
       this.router.navigate(['/jogos/f1-23']);
-    } else if (id === '17' || nome.includes('watch')) {
-      this.router.navigate(['/jogos/watch-dogs-2']);
+    } else if (id === '17' || nome.includes('elden')) {
+      this.router.navigate(['/jogos/elden-ring']);
     } else if (id === '18' || nome.includes('cyberpunk')) {
       this.router.navigate(['/jogos/cyberpunk-2077']);
     } else if (id === '19' || nome.includes('rivals')) {
       this.router.navigate(['/jogos/marvel-rivals']);
+
     }
   }
 }

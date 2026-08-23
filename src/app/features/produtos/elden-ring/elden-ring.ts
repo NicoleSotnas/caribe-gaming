@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { RawgService, DetalhesJogo } from '../../../core/services/rawg.service';
+import { RawgService,DetalhesJogo } from '../../../core/services/rawg.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
+
 export interface Comentario {
   id: number;
   autor: string;
@@ -19,17 +20,17 @@ export interface Comentario {
   votouDislike?: boolean;
 }
 
-const CHAVE_CACHE = 'cod_mw2_dados_completos';
-const CHAVE_AVALIACOES = 'cod_mw2_avaliacoes_lista';
+const CHAVE_CACHE = 'eldenring_dados_completos';
+const CHAVE_AVALIACOES = 'eldenring_avaliacoes_lista';
 
 @Component({
-  selector: 'app-call-of-duty-modern-warfare-ii',
+  selector: 'app-elden-ring',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './call-of-duty-modern-warfare-ii.html',
-  styleUrl: './call-of-duty-modern-warfare-ii.css',
+  templateUrl: './elden-ring.html',
+  styleUrl: './elden-ring.css',
 })
-export class CallOfDutyModernWarfareIi implements OnInit {
+export class EldenRing implements OnInit {
   jogo: DetalhesJogo | null = null;
   carregando: boolean = true;
   erro: boolean = false;
@@ -39,6 +40,7 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   favorito: boolean = false;
   mensagemToast: string | null = null;
 
+  // Controle de Modal e Formulário de Avaliação
   exibirModalAvaliacao: boolean = false;
   novoNome: string = '';
   novoTexto: string = '';
@@ -53,29 +55,30 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   listaComentarios: Comentario[] = [
     {
       id: 1,
-      autor: 'Ghost_TF141',
-      avatar: 'G',
+      autor: 'TarnishedLord',
+      avatar: 'T',
       estrelas: 5,
-      texto: 'A campanha está espetacular! Os gráficos e o nível de detalhes das armas superaram todas as expectativas.',
-      data: '20/08/2026',
-      likes: 112,
-      dislikes: 2,
+      texto:
+        'A reinvenção dos jogos de mundo aberto. Sensação constante de exploração e descoberta única, combinada com o melhor combate que a FromSoftware já fez!',
+      data: '18/05/2026',
+      likes: 342,
+      dislikes: 5,
     },
     {
       id: 2,
-      autor: 'SoapMacTavish',
-      avatar: 'S',
+      autor: 'MaleniaVanquisher',
+      avatar: 'M',
       estrelas: 5,
-      texto: 'Multiplayer muito fluido e dinâmico. O gunplay continua sendo o melhor do mercado atual.',
-      data: '18/08/2026',
-      likes: 74,
-      dislikes: 4,
+      texto: 'Simplesmente espetacular. O nível de liberdade, a variedade de builds e o design artístico dos cenários e chefes é sem igual.',
+      data: '15/05/2026',
+      likes: 215,
+      dislikes: 2,
     },
   ];
 
-  readonly ID_PRODUTO = '6';
-  readonly precoJogo = 299.00;
-  readonly precoFormatado = 'R$ 299,00';
+  readonly ID_PRODUTO = '17';
+  readonly precoJogo = 229.90;
+  readonly precoFormatado = 'R$ 229,90';
 
   private cdr = inject(ChangeDetectorRef);
   private rawgService = inject(RawgService);
@@ -83,8 +86,8 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
 
-  private jogoSlug = 'call-of-duty-modern-warfare-ii';
-  private steamAppId = '1938090';
+  private jogoSlug = 'elden-ring';
+  private steamAppId = '1245620';
 
   constructor() {
     this.carregarDoCache();
@@ -103,6 +106,7 @@ export class CallOfDutyModernWarfareIi implements OnInit {
 
   ngOnInit(): void {}
 
+  // Gerenciamento das Avaliações
   carregarAvaliacoes(): void {
     try {
       if (typeof localStorage !== 'undefined') {
@@ -213,7 +217,7 @@ export class CallOfDutyModernWarfareIi implements OnInit {
       quantidade: 1,
       imagemUrl: this.galeriaImagens[0] || this.jogo.background_image || '',
       plataforma: this.jogo.plataformas || 'PC / PS5',
-      categoria: 'Tiro / FPS, Ação',
+      categoria: 'RPG, Souls-like, Mundo Aberto',
     });
 
     this.exibirToast('🛒 Jogo adicionado ao carrinho!');
@@ -232,9 +236,9 @@ export class CallOfDutyModernWarfareIi implements OnInit {
       precoOriginal: this.precoFormatado,
       precoPromocional: this.precoFormatado,
       desconto: 0,
-      genero: 'Tiro / FPS',
+      genero: 'RPG / Souls-like',
       plataforma: this.jogo.plataformas || 'PC / PS5',
-      categorias: ['fps', 'acao', 'tiro'],
+      categorias: ['rpg', 'mundo-aberto'],
     });
 
     const msg = this.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
@@ -251,13 +255,13 @@ export class CallOfDutyModernWarfareIi implements OnInit {
       next: (res: any) => {
         this.jogo = {
           id: res.id,
-          nome: res.name,
-          descricao: `Bem-vindo à nova era do Call of Duty. Modern Warfare II coloca os jogadores em um conflito global sem precedentes que traz de retorno os icônicos operadores da Força-Tarefa 141. Da resolução de pequenas infiltrações táticas e altamente confidenciais a missões ultrassecretas, os jogadores desfrutarão de uma experiência imersiva ao lado de amigos com um manuseio de armas totalmente novo, sistema de IA avançado, um novo armeiro e um conjunto de outras inovações gráficas e de jogabilidade que elevam a franquia a um patamar totalmente inédito.`,
-          dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '28/10/2022',
-          desenvolvedoras: res.developers?.[0]?.name || 'Infinity Ward',
-          distribuidoras: res.publishers?.[0]?.name || 'Activision',
-          classificacaoEtaria: '+18',
-          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS5',
+          nome: res.name || 'Elden Ring',
+          descricao: `Levante-se, Maculado, e seja guiado pela graça para empunhar o poder do Anel Prístino e se tornar um Lorde Prístino nas Terras Intermédias. Um mundo vasto onde campos abertos com uma diversidade de situações e masmorras imensas com complexos designs tridimensionais se conectam perfeitamente. Conforme explora, sinta a alegria de descobrir ameaças desconhecidas e impressionantes que lhe dão uma grande sensação de conquista. Crie e personalize seu personagem com uma infinidade de armas, magias e habilidades.`,
+          dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '25/02/2022',
+          desenvolvedoras: res.developers?.[0]?.name || 'FromSoftware Inc.',
+          distribuidoras: res.publishers?.[0]?.name || 'Bandai Namco Entertainment',
+          classificacaoEtaria: '+16',
+          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS5 / Xbox Series',
           background_image: res.background_image,
         };
         this.cdr.markForCheck();

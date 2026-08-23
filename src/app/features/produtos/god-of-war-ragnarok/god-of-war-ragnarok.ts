@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { RawgService, DetalhesJogo } from '../../../core/services/rawg.service';
+import { RawgService,DetalhesJogo } from '../../../core/services/rawg.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
+
 export interface Comentario {
   id: number;
   autor: string;
@@ -19,17 +20,17 @@ export interface Comentario {
   votouDislike?: boolean;
 }
 
-const CHAVE_CACHE = 'cod_mw2_dados_completos';
-const CHAVE_AVALIACOES = 'cod_mw2_avaliacoes_lista';
+const CHAVE_CACHE = 'gow_ragnarok_dados_completos';
+const CHAVE_AVALIACOES = 'gow_ragnarok_avaliacoes_lista';
 
 @Component({
-  selector: 'app-call-of-duty-modern-warfare-ii',
+  selector: 'app-god-of-war-ragnarok',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './call-of-duty-modern-warfare-ii.html',
-  styleUrl: './call-of-duty-modern-warfare-ii.css',
+  templateUrl: './god-of-war-ragnarok.html',
+  styleUrl: './god-of-war-ragnarok.css',
 })
-export class CallOfDutyModernWarfareIi implements OnInit {
+export class GodOfWarRagnarok implements OnInit {
   jogo: DetalhesJogo | null = null;
   carregando: boolean = true;
   erro: boolean = false;
@@ -53,29 +54,29 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   listaComentarios: Comentario[] = [
     {
       id: 1,
-      autor: 'Ghost_TF141',
-      avatar: 'G',
+      autor: 'AtreusLoki',
+      avatar: 'A',
       estrelas: 5,
-      texto: 'A campanha está espetacular! Os gráficos e o nível de detalhes das armas superaram todas as expectativas.',
-      data: '20/08/2026',
-      likes: 112,
+      texto: 'Uma conclusão monumental para a saga nórdica. A relação entre o Kratos e o Atreus atinge um nível emocional incrível!',
+      data: '22/08/2026',
+      likes: 210,
       dislikes: 2,
     },
     {
       id: 2,
-      autor: 'SoapMacTavish',
-      avatar: 'S',
+      autor: 'MimirWisdom',
+      avatar: 'M',
       estrelas: 5,
-      texto: 'Multiplayer muito fluido e dinâmico. O gunplay continua sendo o melhor do mercado atual.',
-      data: '18/08/2026',
-      likes: 74,
-      dislikes: 4,
+      texto: 'Combate refinado, chefes espetaculares e uma otimização fantástica no PC. Vale cada centavo.',
+      data: '20/08/2026',
+      likes: 145,
+      dislikes: 3,
     },
   ];
 
-  readonly ID_PRODUTO = '6';
-  readonly precoJogo = 299.00;
-  readonly precoFormatado = 'R$ 299,00';
+  readonly ID_PRODUTO = '8';
+  readonly precoJogo = 249.90;
+  readonly precoFormatado = 'R$ 249,90';
 
   private cdr = inject(ChangeDetectorRef);
   private rawgService = inject(RawgService);
@@ -83,8 +84,8 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
 
-  private jogoSlug = 'call-of-duty-modern-warfare-ii';
-  private steamAppId = '1938090';
+  private jogoSlug = 'god-of-war-ragnarok';
+  private steamAppId = '2322010';
 
   constructor() {
     this.carregarDoCache();
@@ -213,7 +214,7 @@ export class CallOfDutyModernWarfareIi implements OnInit {
       quantidade: 1,
       imagemUrl: this.galeriaImagens[0] || this.jogo.background_image || '',
       plataforma: this.jogo.plataformas || 'PC / PS5',
-      categoria: 'Tiro / FPS, Ação',
+      categoria: 'Ação, Aventura, RPG',
     });
 
     this.exibirToast('🛒 Jogo adicionado ao carrinho!');
@@ -232,9 +233,9 @@ export class CallOfDutyModernWarfareIi implements OnInit {
       precoOriginal: this.precoFormatado,
       precoPromocional: this.precoFormatado,
       desconto: 0,
-      genero: 'Tiro / FPS',
+      genero: 'Ação / Aventura',
       plataforma: this.jogo.plataformas || 'PC / PS5',
-      categorias: ['fps', 'acao', 'tiro'],
+      categorias: ['acao', 'aventura', 'rpg'],
     });
 
     const msg = this.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
@@ -247,47 +248,29 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   }
 
   private carregarDadosDoJogo(): void {
-    this.rawgService.obterDetalhesJogo(this.jogoSlug).subscribe({
-      next: (res: any) => {
-        this.jogo = {
-          id: res.id,
-          nome: res.name,
-          descricao: `Bem-vindo à nova era do Call of Duty. Modern Warfare II coloca os jogadores em um conflito global sem precedentes que traz de retorno os icônicos operadores da Força-Tarefa 141. Da resolução de pequenas infiltrações táticas e altamente confidenciais a missões ultrassecretas, os jogadores desfrutarão de uma experiência imersiva ao lado de amigos com um manuseio de armas totalmente novo, sistema de IA avançado, um novo armeiro e um conjunto de outras inovações gráficas e de jogabilidade que elevam a franquia a um patamar totalmente inédito.`,
-          dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '28/10/2022',
-          desenvolvedoras: res.developers?.[0]?.name || 'Infinity Ward',
-          distribuidoras: res.publishers?.[0]?.name || 'Activision',
-          classificacaoEtaria: '+18',
-          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS5',
-          background_image: res.background_image,
-        };
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('Erro ao buscar detalhes do jogo:', err);
-        this.erro = true;
-        this.cdr.markForCheck();
-      },
-    });
+    this.jogo = {
+      id: 8,
+      nome: 'God of War Ragnarök',
+      descricao: `Embarque em uma jornada épica e comovente ao lado de Kratos e Atreus enquanto lutam para se segurar e deixar ir. Com o Fimbulwinter em pleno andamento, pai e filho devem viajar por cada um dos Nove Reinos em busca de respostas, enquanto as forças de Asgard se preparam para a batalha profetizada que acabará com o mundo. Explore paisagens míticas deslumbrantes, domine novos elementos de combate e enfrente deuses e monstros nórdicos em uma das narrativas mais marcantes dos videogames.`,
+      dataLancamento: '19/09/2024',
+      desenvolvedoras: 'Santa Monica Studio / Jetpack Interactive',
+      distribuidoras: 'PlayStation Publishing LLC',
+      classificacaoEtaria: '+18',
+      plataformas: 'PC / PS5',
+      background_image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/capsule_616x353.jpg',
+    };
 
-    this.rawgService.obterScreenshots(this.jogoSlug).subscribe({
-      next: (res) => {
-        if (res.results && res.results.length > 0) {
-          const capaSteam = `https://cdn.cloudflare.steamstatic.com/steam/apps/${this.steamAppId}/capsule_616x353.jpg`;
-          const screenshots = res.results.map((item: any) => item.image);
+    const capaSteam = `https://cdn.cloudflare.steamstatic.com/steam/apps/${this.steamAppId}/capsule_616x353.jpg`;
+    this.galeriaImagens = [
+      capaSteam,
+      'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/ss_1e11361cd35441865415785081b83d81b95603d3.1920x1080.jpg',
+      'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/ss_8440535e6c1e30954b04bf62580a5de62a70bf9d.1920x1080.jpg',
+      'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/ss_017b2b6348c414902b5db000109968a9b6c0e0b3.1920x1080.jpg'
+    ];
 
-          this.galeriaImagens = [capaSteam, ...screenshots];
-          this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
-        }
-        this.carregando = false;
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('Erro ao carregar screenshots:', err);
-        this.carregando = false;
-        this.erro = true;
-        this.cdr.markForCheck();
-      },
-    });
+    this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
+    this.carregando = false;
+    this.cdr.markForCheck();
   }
 
   private carregarDoCache(): void {
@@ -311,7 +294,7 @@ export class CallOfDutyModernWarfareIi implements OnInit {
     } catch {}
   }
 
-  proximaFoto(): void {
+  proximaFoto():void {
     if (this.galeriaImagens.length === 0) return;
     this.indiceAtivo = this.indiceAtivo < this.galeriaImagens.length - 1 ? this.indiceAtivo + 1 : 0;
   }

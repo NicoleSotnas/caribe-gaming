@@ -40,19 +40,19 @@ export class FavoritosService {
     return this.favoritosSubject.value.some(p => p.id === produtoId);
   }
 
-  toggleFavorito(produto: Produto) {
+  // Método flexível para aceitar tanto a interface completa de Produto quanto objetos parciais das telas de detalhes
+  toggleFavorito(produto: Produto | { id: string; nome: string; imagem: string; [key: string]: any }) {
     const listaAtual = this.favoritosSubject.value;
     const jaExiste = listaAtual.some(p => p.id === produto.id);
 
     const novaLista = jaExiste
       ? listaAtual.filter(p => p.id !== produto.id)
-      : [...listaAtual, produto];
+      : [...listaAtual, produto as Produto];
 
     this.favoritosSubject.next(novaLista);
     this.salvarNoStorage(novaLista);
   }
 
-  // MÉTODO QUE FALTAVA PARA RESOLVER O ERRO:
   limparTodosFavoritos(): void {
     this.favoritosSubject.next([]);
     this.salvarNoStorage([]);

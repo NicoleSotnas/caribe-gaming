@@ -363,7 +363,7 @@
 .preco-promocional {
   font-size: 1.15rem;
   font-weight: 800;
-  color: #00f0ff;
+  color: #4ade80;
   text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
 }
 
@@ -421,4 +421,32 @@
   margin-bottom: 16px;
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* --- MENSAGEM FLUTUANTE (TOAST) --- */
+.toast-notificacao {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #00f0ff;
+  color: #0a1626;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 24px rgba(0, 240, 255, 0.4);
+  z-index: 9999;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
