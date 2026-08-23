@@ -29,7 +29,7 @@
             <span class="old-price">{{ heroGames[activeHeroIndex].originalPrice }}</span>
             <span class="promo-price">{{ heroGames[activeHeroIndex].promoPrice }}</span>
           </div>
-          <button class="buy-btn">COMPRAR AGORA</button>
+          <button class="buy-btn" (click)="comprarAgora(heroGames[activeHeroIndex])">COMPRAR AGORA</button>
         </div>
       </div>
 
@@ -60,7 +60,7 @@
 
     <div #cardsContainer class="offers-grid">
       @for (game of offerGames; track game.id) {
-        <div class="game-card">
+        <div class="game-card" (click)="comprarAgora(game)" style="cursor: pointer;">
           <div class="card-image-box">
             <!-- Imagens dos Cards com Lazy Loading Nativo -->
             <img [src]="game.image" [alt]="game.title" loading="lazy" decoding="async" />
