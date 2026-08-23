@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { Login } from './features/login/login';
+import { Perfil } from './features/perfil/perfil';
 import { Home } from './home/home/home';
 import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
@@ -7,6 +8,7 @@ import { Checkout } from './features/checkout/checkout/checkout';
 import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
 import { Admin } from './features/admin/admin';
 import { adminGuard } from './core/guards/admin-guard';
+import { authGuard } from './core/guards/auth-guard';
 import { TheSims } from './features/produtos/thesims4/thesims/thesims';
 import { WatchDogs2 } from './features/produtos/watch-dogs-2/watch-dogs-2';
 import { Grandtheftautov } from './features/produtos/grandtheftautov/grandtheftautov/grandtheftautov';
@@ -131,6 +133,11 @@ export const routes: Routes = [
     path: 'admin',
     component: Admin,
     canActivate: [adminGuard],
+  },
+  {
+    path: 'perfil',
+    component: Perfil,
+    canActivate: [authGuard],
   },
   { path: '**', redirectTo: '' },
 ];

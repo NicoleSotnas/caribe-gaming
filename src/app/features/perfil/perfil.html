@@ -1,0 +1,43 @@
+<div class="tela-perfil">
+  <div class="card-perfil">
+
+    <div class="avatar-grande-container">
+      <i class="fa-solid fa-circle-user avatar-grande"></i>
+    </div>
+
+    <h1>Meu Perfil</h1>
+
+    <div class="info-fixa">
+      <label>Email</label>
+      <p>{{ authFacade.usuarioAtual()?.email }}</p>
+    </div>
+
+    <form [formGroup]="perfilForm" (ngSubmit)="salvar()">
+      <div class="campo">
+        <label for="nomeUsuario">Nome de usuário</label>
+        <input
+          id="nomeUsuario"
+          type="text"
+          formControlName="nomeUsuario"
+          placeholder="Como você quer ser chamado?"
+        />
+
+        <span
+          class="erro"
+          *ngIf="perfilForm.get('nomeUsuario')?.touched && perfilForm.get('nomeUsuario')?.invalid"
+        >
+          O nome de usuário precisa ter no mínimo 3 caracteres
+        </span>
+      </div>
+
+      <p class="mensagem-sucesso" *ngIf="mensagemSucesso()">{{ mensagemSucesso() }}</p>
+      <p class="erro-geral" *ngIf="mensagemErro()">{{ mensagemErro() }}</p>
+
+      <button type="submit" [disabled]="salvando()">
+        {{ salvando() ? 'Salvando...' : 'Salvar alterações' }}
+      </button>
+    </form>
+
+    <a routerLink="/" class="link-voltar">← Voltar para a Home</a>
+  </div>
+</div>
