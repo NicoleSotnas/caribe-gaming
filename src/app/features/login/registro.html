@@ -3,6 +3,23 @@
     <h1>Criar conta</h1>
 
     <div class="campo">
+      <label for="nome">Nome de usuário</label>
+      <input
+        id="nome"
+        type="text"
+        formControlName="nome"
+        placeholder="Como você quer ser chamado?"
+      />
+
+      <span
+        class="erro"
+        *ngIf="registroForm.get('nome')?.touched && registroForm.get('nome')?.invalid"
+      >
+        O nome precisa ter no mínimo 3 caracteres
+      </span>
+    </div>
+
+    <div class="campo">
       <label for="email">Email</label>
       <input id="email" type="email" formControlName="email" placeholder="seu@email.com" />
 
