@@ -47,17 +47,26 @@
         <div class="conta-container">
           <button class="conta-trigger" (click)="toggleMenuUsuario()">
             <i class="fa-solid fa-circle-user avatar-usuario"></i>
+            <span class="nome-usuario-header">{{ authFacade.nomeExibicao() }}</span>
             <i class="fa-solid fa-chevron-down seta" [class.rotacionada]="menuUsuarioAberto"></i>
           </button>
-
           @if (menuUsuarioAberto) {
             <div class="conta-dropdown">
               <div class="conta-dropdown-header">
                 <i class="fa-solid fa-circle-user avatar-usuario-grande"></i>
-                <span class="email">{{ authFacade.usuarioAtual()?.email }}</span>
+                <span class="email">{{ authFacade.nomeExibicao() }}</span>
               </div>
 
               <hr class="dropdown-divisor" />
+
+              <button
+                class="dropdown-item"
+                routerLink="/perfil"
+                (click)="menuUsuarioAberto = false; fecharMenu()"
+              >
+                <i class="fa-solid fa-id-card"></i>
+                Meu Perfil
+              </button>
 
               @if (authFacade.ehAdmin()) {
                 <button
