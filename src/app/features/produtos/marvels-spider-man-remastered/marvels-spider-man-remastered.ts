@@ -106,6 +106,29 @@ export class MarvelsSpiderManRemastered implements OnInit {
 
   ngOnInit(): void {}
 
+  // Propriedades computadas e dinâmicas para o painel de avaliações
+  get totalVotosGeral(): number {
+    return 29400 + this.listaComentarios.length;
+  }
+
+  getPorcentagemEstrelas(numEstrelas: number): number {
+    const total = this.listaComentarios.length;
+    if (total === 0) return numEstrelas === 5 ? 84 : 4; 
+    
+    const filtrados = this.listaComentarios.filter(c => c.estrelas === numEstrelas).length;
+    const fatorTempo = Math.floor((Date.now() / (1000 * 60 * 60)) % 24); 
+    const dinamico = filtrados + (fatorTempo % 3); 
+    
+    return Math.min(Math.max(Math.round((dinamico / total) * 100), 2), 95);
+  }
+
+  get mediaNotasDinamica(): string {
+    if (this.listaComentarios.length === 0) return '4.8';
+    const soma = this.listaComentarios.reduce((acc, curr) => acc + curr.estrelas, 4.8 * 29400);
+    const media = soma / (29400 + this.listaComentarios.length);
+    return media.toFixed(1);
+  }
+
   carregarAvaliacoes(): void {
     try {
       if (typeof localStorage !== 'undefined') {
@@ -257,7 +280,8 @@ export class MarvelsSpiderManRemastered implements OnInit {
         this.jogo = {
           id: res.id,
           nome: res.name,
-          descricao: res.description_raw || 'Descrição indisponível.',
+          // Você pode customizar a descrição aqui se quiser, ou usar o padrão da API:
+          descricao: `Viva a experiência definitiva de ser o herói aracnídeo em uma Nova York vibrante e detalhada pela Insomniac Games. Nesta versão remasterizada para PC com gráficos otimizados e taxas de quadros desbloqueadas, você assume o papel de um Peter Parker experiente, com anos de combate ao crime nas costas, equilibrando sua caótica vida pessoal e carreira enquanto o destino de milhões pesa sobre seus ombros. Balance-se livremente por Manhattan utilizando acrobacias fluidas, domine um sistema de combate dinâmico e enfrente vilões icônicos em uma história cinematográfica original e emocionante.`,
           dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '12/08/2022',
           desenvolvedoras: res.developers?.[0]?.name || 'Insomniac Games / Nixxes',
           distribuidoras: res.publishers?.[0]?.name || 'PlayStation Publishing LLC',

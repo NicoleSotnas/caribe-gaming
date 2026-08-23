@@ -258,7 +258,7 @@ export class GodOfWar implements OnInit {
         this.jogo = {
           id: res.id,
           nome: res.name,
-          descricao: res.description_raw || 'Descrição indisponível.',
+         descricao: `Deixando para trás sua vingança contra os deuses do Olimpo, Kratos vive agora como um mortal no reino das divindades e monstros nórdicos. Em um ambiente hostil e implacável, ele precisa lutar pela sobrevivência enquanto ensina seu filho Atreus a fazer o mesmo. Servindo como mentor e protetor de um garoto determinado a ganhar o respeito do pai, Kratos é forçado a lidar com a fúria que o definiu por tanto tempo, equilibrando sua brutalidade com a nova responsabilidade de ser pai. Uma jornada visceral, emocionante e cinematográfica através de paisagens mitológicas estonteantes.`,
           dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '20/04/2018',
           desenvolvedoras: res.developers?.[0]?.name || 'Santa Monica Studio',
           distribuidoras: res.publishers?.[0]?.name || 'PlayStation PC LLC',

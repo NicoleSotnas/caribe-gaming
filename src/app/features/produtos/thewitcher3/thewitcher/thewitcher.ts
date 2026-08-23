@@ -255,7 +255,7 @@ export class Thewitcher implements OnInit {
         this.jogo = {
           id: res.id,
           nome: res.name,
-          descricao: res.description_raw || 'Descrição indisponível.',
+          descricao: `Mergulhe no aclamado épico de fantasia sombria e mundo aberto desenvolvido pela CD Projekt Red. Você é Geralt de Rivia, um mutante caçador de monstros conhecido como Bruxo, encarregado de encontrar a Ciri — a Criança da Profecia capaz de destruir ou salvar o mundo. Explore um continente vasto, devastado por guerras, repleto de cidades comerciais, ilhas vikings traiçoeiras, florestas sussurrantes e cavernas esquecidas. Suas escolhas moldam o destino de reinos inteiros em uma narrativa madura, onde a linha entre o bem e o mal é terrivelmente tênue.`,
           dataLancamento: res.released ? res.released.split('-').reverse().join('/') : 'N/A',
           desenvolvedoras: res.developers?.[0]?.name || 'CD PROJEKT RED',
           distribuidoras: res.publishers?.[0]?.name || 'CD PROJEKT RED',

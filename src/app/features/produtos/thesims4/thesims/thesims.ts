@@ -58,7 +58,8 @@ export class TheSims implements OnInit {
       autor: 'BellaGoth_Lover',
       avatar: 'B',
       estrelas: 5,
-      texto: 'O modo construção desse jogo é simplesmente viciante! Passo horas construindo mansões e criando famílias criativas.',
+      texto:
+        'O modo construção desse jogo é simplesmente viciante! Passo horas construindo mansões e criando famílias criativas.',
       data: '19/08/2026',
       likes: 320,
       dislikes: 4,
@@ -68,7 +69,8 @@ export class TheSims implements OnInit {
       autor: 'PlumbobBuilder',
       avatar: 'P',
       estrelas: 5,
-      texto: 'Mesmo com os anos, continua sendo um simulador incrível de vida. Os pacotes de expansão trazem muita variedade.',
+      texto:
+        'Mesmo com os anos, continua sendo um simulador incrível de vida. Os pacotes de expansão trazem muita variedade.',
       data: '17/08/2026',
       likes: 178,
       dislikes: 2,
@@ -76,7 +78,7 @@ export class TheSims implements OnInit {
   ];
 
   readonly ID_PRODUTO = '1';
-  readonly precoJogo = 0.00;
+  readonly precoJogo = 0.0;
   readonly precoFormatado = 'Gratuito';
 
   private cdr = inject(ChangeDetectorRef);
@@ -258,12 +260,13 @@ export class TheSims implements OnInit {
         this.jogo = {
           id: res.id,
           nome: res.name,
-          descricao: res.description_raw || 'Descrição indisponível.',
+          descricao: `Liberte sua imaginação e crie um mundo único de Sims totalmente personalizados, com aparências expressivas, personalidades marcantes e aspirações profundas. Em The Sims 4, você tem o poder de construir e projetar casas detalhadas para eles, guiar suas carreiras profissionais, gerenciar relacionamentos complexos e explorar histórias ricas cheias de comédia, drama e momentos inusitados. Sem regras rígidas, o jogo oferece total liberdade para você decidir como seus Sims vão viver, amar, fracassar e prosperar no dia a dia.`,
           dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '02/09/2014',
           desenvolvedoras: res.developers?.[0]?.name || 'Electronic Arts',
           distribuidoras: res.publishers?.[0]?.name || 'Electronic Arts',
           classificacaoEtaria: '12+',
-          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS4 / Xbox One',
+          plataformas:
+            res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS4 / Xbox One',
           background_image: res.background_image,
         };
         this.cdr.markForCheck();

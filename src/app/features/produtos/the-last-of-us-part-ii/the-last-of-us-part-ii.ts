@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { RawgService, DetalhesJogo } from '../../../core/services/rawg.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
+
 export interface Comentario {
   id: number;
   autor: string;
@@ -19,17 +20,17 @@ export interface Comentario {
   votouDislike?: boolean;
 }
 
-const CHAVE_CACHE = 'cod_mw2_dados_completos';
-const CHAVE_AVALIACOES = 'cod_mw2_avaliacoes_lista';
+const CHAVE_CACHE = 'tlou_part2_dados_completos';
+const CHAVE_AVALIACOES = 'tlou_part2_avaliacoes_lista';
 
 @Component({
-  selector: 'app-call-of-duty-modern-warfare-ii',
+  selector: 'app-the-last-of-us-part-2',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './call-of-duty-modern-warfare-ii.html',
-  styleUrl: './call-of-duty-modern-warfare-ii.css',
+  templateUrl: './the-last-of-us-part-ii.html',
+  styleUrl: './the-last-of-us-part-ii.css',
 })
-export class CallOfDutyModernWarfareIi implements OnInit {
+export class TheLastOfUsPartii implements OnInit {
   jogo: DetalhesJogo | null = null;
   carregando: boolean = true;
   erro: boolean = false;
@@ -39,6 +40,7 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   favorito: boolean = false;
   mensagemToast: string | null = null;
 
+  // Controle de Modal e Formulário de Avaliação
   exibirModalAvaliacao: boolean = false;
   novoNome: string = '';
   novoTexto: string = '';
@@ -53,38 +55,37 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   listaComentarios: Comentario[] = [
     {
       id: 1,
-      autor: 'Ghost_TF141',
-      avatar: 'G',
+      autor: 'EllieRevenge',
+      avatar: 'E',
       estrelas: 5,
-      texto: 'A campanha está espetacular! Os gráficos e o nível de detalhes das armas superaram todas as expectativas.',
-      data: '20/08/2026',
-      likes: 112,
-      dislikes: 2,
+      texto:
+        'Uma obra-prima técnica e de enredo desafiador. As animações de combate, os detalhes dos cenários e a carga emocional tornam a experiência inesquecível!',
+      data: '18/05/2026',
+      likes: 480,
+      dislikes: 5,
     },
     {
       id: 2,
-      autor: 'SoapMacTavish',
-      avatar: 'S',
+      autor: 'AbbyAnderson',
+      avatar: 'A',
       estrelas: 5,
-      texto: 'Multiplayer muito fluido e dinâmico. O gunplay continua sendo o melhor do mercado atual.',
-      data: '18/08/2026',
-      likes: 74,
+      texto: 'Incrível do começo ao fim. A Naughty Dog conseguiu criar um dos jogos mais intensos e viscerais da história dos videogames.',
+      data: '15/05/2026',
+      likes: 310,
       dislikes: 4,
     },
   ];
 
-  readonly ID_PRODUTO = '6';
-  readonly precoJogo = 299.00;
-  readonly precoFormatado = 'R$ 299,00';
+  readonly ID_PRODUTO = '20';
+  readonly precoJogo = 124.75;
+  readonly precoOriginalFormatado = 'R$ 249,50';
+  readonly precoFormatado = 'R$ 124,75';
 
   private cdr = inject(ChangeDetectorRef);
   private rawgService = inject(RawgService);
   private router = inject(Router);
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
-
-  private jogoSlug = 'call-of-duty-modern-warfare-ii';
-  private steamAppId = '1938090';
 
   constructor() {
     this.carregarDoCache();
@@ -103,6 +104,7 @@ export class CallOfDutyModernWarfareIi implements OnInit {
 
   ngOnInit(): void {}
 
+  // Gerenciamento das Avaliações
   carregarAvaliacoes(): void {
     try {
       if (typeof localStorage !== 'undefined') {
@@ -212,8 +214,8 @@ export class CallOfDutyModernWarfareIi implements OnInit {
       preco: this.precoJogo,
       quantidade: 1,
       imagemUrl: this.galeriaImagens[0] || this.jogo.background_image || '',
-      plataforma: this.jogo.plataformas || 'PC / PS5',
-      categoria: 'Tiro / FPS, Ação',
+      plataforma: this.jogo.plataformas || 'PC / PS5 / PS4',
+      categoria: 'Ação, Aventura, Sobrevivência',
     });
 
     this.exibirToast('🛒 Jogo adicionado ao carrinho!');
@@ -229,12 +231,12 @@ export class CallOfDutyModernWarfareIi implements OnInit {
       nome: this.jogo.nome,
       imagem: this.galeriaImagens[0] || this.jogo.background_image || '',
       imagemPosicao: 'center',
-      precoOriginal: this.precoFormatado,
+      precoOriginal: this.precoOriginalFormatado,
       precoPromocional: this.precoFormatado,
-      desconto: 0,
-      genero: 'Tiro / FPS',
-      plataforma: this.jogo.plataformas || 'PC / PS5',
-      categorias: ['fps', 'acao', 'tiro'],
+      desconto: '-50%',
+      genero: 'Ação / Sobrevivência',
+      plataforma: this.jogo.plataformas || 'PC / PS5 / PS4',
+      categorias: ['aventura'],
     });
 
     const msg = this.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
@@ -247,47 +249,33 @@ export class CallOfDutyModernWarfareIi implements OnInit {
   }
 
   private carregarDadosDoJogo(): void {
-    this.rawgService.obterDetalhesJogo(this.jogoSlug).subscribe({
-      next: (res: any) => {
-        this.jogo = {
-          id: res.id,
-          nome: res.name,
-          descricao: `Bem-vindo à nova era do Call of Duty. Modern Warfare II coloca os jogadores em um conflito global sem precedentes que traz de retorno os icônicos operadores da Força-Tarefa 141. Da resolução de pequenas infiltrações táticas e altamente confidenciais a missões ultrassecretas, os jogadores desfrutarão de uma experiência imersiva ao lado de amigos com um manuseio de armas totalmente novo, sistema de IA avançado, um novo armeiro e um conjunto de outras inovações gráficas e de jogabilidade que elevam a franquia a um patamar totalmente inédito.`,
-          dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '28/10/2022',
-          desenvolvedoras: res.developers?.[0]?.name || 'Infinity Ward',
-          distribuidoras: res.publishers?.[0]?.name || 'Activision',
-          classificacaoEtaria: '+18',
-          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS5',
-          background_image: res.background_image,
-        };
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('Erro ao buscar detalhes do jogo:', err);
-        this.erro = true;
-        this.cdr.markForCheck();
-      },
-    });
+    // Galeria 100% oficial e estável do The Last of Us Part II
+    const imagensOficiaisTLOU2 = [
+      'https://images.igdb.com/igdb/image/upload/t_1080p/co2f89.jpg', // Capa Ellie
+      'https://images.igdb.com/igdb/image/upload/t_1080p/sc85z8.jpg', // Gameplay Seattle
+      'https://images.igdb.com/igdb/image/upload/t_1080p/sc85z9.jpg', // Combate Furtivo
+      'https://images.igdb.com/igdb/image/upload/t_1080p/sc85z7.jpg', // Ellie no Cavalo
+      'https://images.igdb.com/igdb/image/upload/t_1080p/sc85za.jpg', // Cenários
+    ];
 
-    this.rawgService.obterScreenshots(this.jogoSlug).subscribe({
-      next: (res) => {
-        if (res.results && res.results.length > 0) {
-          const capaSteam = `https://cdn.cloudflare.steamstatic.com/steam/apps/${this.steamAppId}/capsule_616x353.jpg`;
-          const screenshots = res.results.map((item: any) => item.image);
+    this.jogo = {
+      id: 20,
+      nome: 'The Last of Us Part II',
+      descricao: `Cinco anos após sua jornada perigosa pelos Estados Unidos pós-pandêmicos, Ellie e Joel se estabeleceram em Jackson, Wyoming. A convivência em uma comunidade próspera de sobreviventes trouxe paz e estabilidade, apesar da ameaça constante dos infectados e de outros sobreviventes desesperados. Quando um evento violento interrompe essa paz, Ellie embarca em uma jornada incansável em busca de justiça e encerramento. Conforme vai caçando os responsáveis um por um, ela se defronta com as profundas repercussões físicas e emocionais de suas ações.`,
+      dataLancamento: '19/06/2020',
+      desenvolvedoras: 'Naughty Dog',
+      distribuidoras: 'Sony Interactive Entertainment',
+      classificacaoEtaria: '+18',
+      plataformas: 'PlayStation 5 / PlayStation 4',
+      background_image: imagensOficiaisTLOU2[0],
+    };
 
-          this.galeriaImagens = [capaSteam, ...screenshots];
-          this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
-        }
-        this.carregando = false;
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('Erro ao carregar screenshots:', err);
-        this.carregando = false;
-        this.erro = true;
-        this.cdr.markForCheck();
-      },
-    });
+    this.galeriaImagens = imagensOficiaisTLOU2;
+    this.carregando = false;
+    this.erro = false;
+
+    this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
+    this.cdr.markForCheck();
   }
 
   private carregarDoCache(): void {
