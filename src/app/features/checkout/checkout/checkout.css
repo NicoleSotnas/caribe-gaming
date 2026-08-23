@@ -76,31 +76,17 @@
   color: var(--danger);
 }
 
-.checkout-form button {
-  width: 100%;
-  margin-top: 8px;
-  padding: 13px 18px;
-  border: 0;
-  border-radius: 7px;
-  background: linear-gradient(135deg, var(--ocean-blue), var(--cyan));
-  color: #ffffff;
-  font-weight: 800;
-  cursor: pointer;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    filter 180ms ease;
+/* Integração com o padrão global .btn-acao */
+.btn-finalizar {
+  width: 100% !important;
+  margin-top: 12px !important;
 }
 
-.checkout-form button:not(:disabled):hover {
-  transform: translateY(-3px);
-  filter: brightness(1.12);
-  box-shadow: 0 10px 22px rgba(59, 175, 212, 0.35);
-}
-
-.checkout-form button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+.btn-finalizar:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .checkout-sucesso,
@@ -154,7 +140,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .checkout-form input,
-  .checkout-form button {
-    transition: none;
+  .btn-acao {
+    transition: none !important;
   }
 }

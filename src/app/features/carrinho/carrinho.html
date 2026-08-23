@@ -1,35 +1,131 @@
-< class="pagina-carrinho">
-<h1>Carrinho</h1>
-
-@if (carrinhoFacade.carrinhoVazio()) {
-  <p>Seu carrinho está vazio.</p>
-  <button mat-raised-button color="primary" routerLink="/jogos">Ver jogos</button>
-} @else {
-  <section class="lista-carrinho">
-    @for (item of carrinhoFacade.itens(); track $index) {
-      <article class="item-carrinho">
-        <div>
-          <h3>{{ item.nome }}</h3>
-          <p>R$ {{ item.preco.toFixed(2) }}</p>
+<div class="pagina-carrinho">
+  @if (carrinhoFacade.carrinhoVazio()) {
+    <div class="carrinho-vazio-container">
+      <div class="carrinho-vazio-card">
+        <div class="vazio-icon-wrapper">
+          <svg class="bau-vazio-icon" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M2 9C2 7.5 3.5 6 5.5 6H18.5C20.5 6 22 7.5 22 9L20 4H4L2 9Z"
+              fill="#334155"
+              stroke="#64748b"
+              stroke-width="1.5"
+            />
+            <rect
+              x="3"
+              y="10"
+              width="18"
+              height="11"
+              rx="2"
+              fill="#1e293b"
+              stroke="#475569"
+              stroke-width="1.5"
+            />
+            <rect x="10.5" y="12" width="3" height="4" rx="1" fill="#64748b" />
+          </svg>
         </div>
 
-        <button mat-stroked-button color="warn" type="button" (click)="removerItem($index)">
-          Remover
+        <h2>Seu porão de tesouros está vazio!</h2>
+        <p>
+          Você ainda não adicionou nenhum jogo ao seu carrinho. Explore nosso catálogo e encontre
+          suas próximas aventuras.
+        </p>
+
+        <button class="btn-acao btn-primary btn-explorar" type="button" routerLink="/jogos">
+          <svg
+            class="btn-icon-svg mapa-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+            <line x1="8" y1="2" x2="8" y2="18"></line>
+            <line x1="16" y1="6" x2="16" y2="22"></line>
+          </svg>
+          Explorar Jogos
         </button>
-      </article>
-    }
-  </section>
+      </div>
+    </div>
+  } @else {
+    <h1 class="titulo-pagina">Seu Carrinho</h1>
 
-  <hr />
+    <section class="lista-carrinho">
+      @for (item of carrinhoFacade.itens(); track $index) {
+        <article class="item-carrinho">
+          <div class="item-info">
+            <h3>{{ item.nome }}</h3>
+            <p class="item-preco">R$ {{ item.preco.toFixed(2) }}</p>
+          </div>
 
-  <section class="resumo-carrinho">
-    <h3>Itens no carrinho: {{ carrinhoFacade.quantidade() }}</h3>
-    <h2>Total: R$ {{ carrinhoFacade.total().toFixed(2) }}</h2>
-  </section>
+          <button class="btn-acao btn-danger btn-sm" type="button" (click)="removerItem($index)">
+            Remover
+          </button>
+        </article>
+      }
+    </section>
 
-  <section class="acoes-carrinho">
-    <button mat-button type="button" (click)="limparCarrinho()">Limpar carrinho</button>
-    <button mat-stroked-button color="primary" routerLink="/jogos">Continuar comprando</button>
-    <button mat-raised-button color="primary" routerLink="/checkout">Ir para Checkout</button>
-  </section>
-}
+    <section class="resumo-carrinho">
+      <div class="resumo-detalhes">
+        <span class="qtd-itens"
+          >Itens no carrinho: <strong>{{ carrinhoFacade.quantidade() }}</strong></span
+        >
+        <h2>
+          Total: <span>R$ {{ carrinhoFacade.total().toFixed(2) }}</span>
+        </h2>
+      </div>
+    </section>
+
+    <section class="acoes-carrinho">
+      <button class="btn-acao btn-danger" type="button" (click)="limparCarrinho()">
+        <svg
+          class="btn-icon-svg rum-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+          ></path>
+        </svg>
+        Limpar carrinho
+      </button>
+
+      <button class="btn-acao btn-secondary" type="button" routerLink="/jogos">
+        <svg
+          class="btn-icon-svg mapa-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+          <line x1="8" y1="2" x2="8" y2="18"></line>
+          <line x1="16" y1="6" x2="16" y2="22"></line>
+        </svg>
+        Continuar comprando
+      </button>
+
+      <button class="btn-acao btn-primary" type="button" routerLink="/checkout">
+        <svg
+          class="btn-icon-svg bau-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        Ir para Checkout
+      </button>
+    </section>
+  }
+</div>
