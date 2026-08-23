@@ -6,7 +6,6 @@ import { Location } from '@angular/common';
 import { RawgService, DetalhesJogo } from '../../../../core/services/rawg.service';
 import { CarrinhoFacade } from '../../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../../core/services/favoritos.service';
-
 export interface Comentario {
   id: number;
   autor: string;
@@ -20,17 +19,17 @@ export interface Comentario {
   votouDislike?: boolean;
 }
 
-const CHAVE_CACHE = 'gta5_dados_completos';
-const CHAVE_AVALIACOES = 'gta5_avaliacoes_lista';
+const CHAVE_CACHE = 'gta_dados_completos';
+const CHAVE_AVALIACOES = 'gta_avaliacoes_lista';
 
 @Component({
-  selector: 'app-gta',
+  selector: 'app-grandtheftautov',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './grandtheftautov.html',
   styleUrl: './grandtheftautov.css',
 })
-export class Grandtheftautov implements OnInit {
+export class GrandTheftAutoV implements OnInit {
   jogo: DetalhesJogo | null = null;
   carregando: boolean = true;
   erro: boolean = false;
@@ -55,29 +54,30 @@ export class Grandtheftautov implements OnInit {
   listaComentarios: Comentario[] = [
     {
       id: 1,
-      autor: 'TrevorPhilips_LS',
+      autor: 'TrevorPhilips',
       avatar: 'T',
       estrelas: 5,
-      texto: 'O mundo aberto mais vivo e detalhado dos videogames. A campanha com os três protagonistas é fantástica!',
-      data: '21/08/2026',
+      texto: 'O melhor mundo aberto já criado. A liberdade de alternar entre os três personagens é fantástica!',
+      data: '22/08/2026',
       likes: 412,
-      dislikes: 8,
+      dislikes: 12,
     },
     {
       id: 2,
       autor: 'FranklinClient',
       avatar: 'F',
       estrelas: 5,
-      texto: 'Jogaço clássico que nunca envelhece. Jogabilidade fluida e Los Santos é incrível de explorar.',
-      data: '18/08/2026',
-      likes: 230,
+      texto: 'Los Santos continua incrível, gráficos excelentes e missões de assalto muito criativas.',
+      data: '20/08/2026',
+      likes: 254,
       dislikes: 5,
     },
   ];
 
-  readonly ID_PRODUTO = '1';
-  readonly precoJogo = 149.90;
-  readonly precoFormatado = 'R$ 83,90';
+  readonly ID_PRODUTO = '2';
+  readonly precoJogo = 74.95;
+  readonly precoOriginalFormatado = 'R$ 149,90';
+  readonly precoFormatado = 'R$ 74,95';
 
   private cdr = inject(ChangeDetectorRef);
   private rawgService = inject(RawgService);
@@ -104,6 +104,29 @@ export class Grandtheftautov implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  // Propriedades computadas e dinâmicas para o painel de avaliações do GTA V
+  get totalVotosGeral(): number {
+    return 34200 + this.listaComentarios.length;
+  }
+
+  getPorcentagemEstrelas(numEstrelas: number): number {
+    const total = this.listaComentarios.length;
+    if (total === 0) return numEstrelas === 5 ? 82 : 4; 
+    
+    const filtrados = this.listaComentarios.filter(c => c.estrelas === numEstrelas).length;
+    const fatorTempo = Math.floor((Date.now() / (1000 * 60 * 60)) % 24); 
+    const dinamico = filtrados + (fatorTempo % 3); 
+    
+    return Math.min(Math.max(Math.round((dinamico / total) * 100), 2), 95);
+  }
+
+  get mediaNotasDinamica(): string {
+    if (this.listaComentarios.length === 0) return '4.8';
+    const soma = this.listaComentarios.reduce((acc, curr) => acc + curr.estrelas, 4.8 * 34200);
+    const media = soma / (34200 + this.listaComentarios.length);
+    return media.toFixed(1);
+  }
 
   carregarAvaliacoes(): void {
     try {
@@ -208,17 +231,15 @@ export class Grandtheftautov implements OnInit {
   adicionarAoCarrinho(): void {
     if (!this.jogo) return;
 
- 
-
     this.carrinhoFacade.adicionarProduto({
       id: Number(this.ID_PRODUTO),
       nome: this.jogo.nome,
       preco: this.precoJogo,
       quantidade: 1,
       imagemUrl: this.galeriaImagens[0] || this.jogo.background_image || '',
-      plataforma: this.jogo.plataformas || 'PC / PS4 / Xbox One',
+      plataforma: this.jogo.plataformas || 'PC / PS5',
       categoria: 'Ação, Mundo Aberto',
-    });
+    } as any);
 
     this.exibirToast('🛒 Jogo adicionado ao carrinho!');
   }
@@ -232,14 +253,14 @@ export class Grandtheftautov implements OnInit {
       id: this.ID_PRODUTO,
       nome: this.jogo.nome,
       imagem: this.galeriaImagens[0] || this.jogo.background_image || '',
-      precoOriginal: this.precoFormatado,
+      precoOriginal: this.precoOriginalFormatado,
       precoPromocional: this.precoFormatado,
-      desconto: '-60%',
+      desconto: '-50%',
       genero: 'Ação / Mundo Aberto',
-      plataforma: this.jogo.plataformas || 'PC / PS4 / Xbox One',
+      plataforma: this.jogo.plataformas || 'PC / PS5',
       categorias: ['acao', 'mundo-aberto'],
       favorito: this.favorito,
-    });
+    } as any);
 
     const msg = this.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
     this.exibirToast(msg);
@@ -258,12 +279,12 @@ export class Grandtheftautov implements OnInit {
         this.jogo = {
           id: res.id,
           nome: res.name,
-          descricao: res.description_raw || 'Descrição indisponível.',
+         descricao: `Explore o vasto e vibrante mundo de Los Santos e Blaine County na experiência definitiva de Grand Theft Auto V. Acompanhe a trajetória de três criminosos muito diferentes — Michael, o ex-assaltante em crise familiar; Franklin, o jovem hustler em busca de oportunidades reais; e Trevor, o psicopata imprevisível movido pelo caos. Junte-se a eles em arriscados e espetaculares golpes para sobreviver em uma cidade implacável onde ninguém é confiável, muito menos o governo. Com uma liberdade sem precedentes, alternância instantânea de personagens e uma narrativa repleta de sátira social, este clássico moderno redefine o gênero de mundo aberto.`,
           dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '17/09/2013',
           desenvolvedoras: res.developers?.[0]?.name || 'Rockstar North',
           distribuidoras: res.publishers?.[0]?.name || 'Rockstar Games',
           classificacaoEtaria: '18+',
-          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS4 / Xbox One',
+          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS5 / Xbox',
           background_image: res.background_image,
         };
         this.cdr.markForCheck();

@@ -285,6 +285,7 @@
   margin-bottom: 16px;
 }
 
+
 .badge-desconto-card {
   background: #0088ff;
   color: #ffffff;
@@ -295,6 +296,12 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 2px 8px rgba(0, 136, 255, 0.4);
+}
+
+.preco-original {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: line-through;
 }
 
 .preco-promo {
