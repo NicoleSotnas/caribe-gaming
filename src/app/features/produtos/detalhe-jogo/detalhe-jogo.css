@@ -36,7 +36,6 @@
   }
 }
 
-/* Breadcrumb Superior */
 .breadcrumb {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
@@ -53,7 +52,6 @@
   text-decoration: underline;
 }
 
-/* Grid Principal (2 Colunas) */
 .grid-principal {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
@@ -61,7 +59,6 @@
   align-items: start;
 }
 
-/* --- MÍDIA E CARROSSEL NATIVO --- */
 .secao-midia {
   width: 100%;
   max-width: 100%;
@@ -90,25 +87,6 @@
   display: block;
 }
 
-/* Badges sobrepostas e Classificação Preta (18+) */
-.badge-classificacao {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 10;
-  font-weight: 800;
-  font-size: 0.85rem;
-  padding: 4px 10px;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.badge-classificacao.badge-18 {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
 .badge-desconto {
   position: absolute;
   top: 12px;
@@ -123,7 +101,20 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Botões de Navegação (Setas) */
+.badge-classificacao {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: #000000;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
 .btn-seta {
   position: absolute;
   top: 50%;
@@ -151,7 +142,6 @@
 .btn-prev { left: 12px; }
 .btn-next { right: 12px; }
 
-/* FILA DE MINIATURAS E BARRA DE ROLAGEM TRANSPARENTE */
 .fila-miniaturas {
   display: flex;
   flex-wrap: nowrap;
@@ -211,7 +201,6 @@
   object-fit: cover;
 }
 
-/* --- PAINEL LATERAL DIREITO --- */
 .secao-info {
   width: 100%;
 }
@@ -262,7 +251,6 @@
   margin-bottom: 0;
 }
 
-/* --- CARDS E SEÇÕES EM GLASSMORPHISM --- */
 .card-compra, 
 .tabela-fatos, 
 .secao-detalhada, 
@@ -286,31 +274,12 @@
   margin-bottom: 16px;
 }
 
-.badge-desconto-card {
-  background: #0088ff;
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 800;
-  padding: 4px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(0, 136, 255, 0.4);
-}
-
-.preco-original {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: line-through;
-}
-
 .preco-promo {
   font-size: 1.8rem;
   font-weight: 800;
   color: #72ecff;
 }
 
-/* --- BOTÕES DE AÇÃO & FAVORITO --- */
 .acoes-botoes {
   display: flex;
   gap: 10px;
@@ -388,7 +357,6 @@
   margin-top: 10px;
 }
 
-/* Tabela de Fatos */
 .tabela-fatos {
   padding: 16px;
 }
@@ -413,7 +381,6 @@
   color: #ffffff;
 }
 
-/* Seções de Texto e Comentários */
 .secao-detalhada, 
 .secao-avaliacoes {
   padding: 28px;
@@ -432,7 +399,6 @@
   line-height: 1.6;
 }
 
-/* --- SEÇÃO AVALIAÇÕES (GRID 2 COLUNAS) --- */
 .secao-avaliacoes {
   margin-bottom: 40px;
 }
@@ -615,7 +581,6 @@
   color: #00f0ff;
 }
 
-/* --- MODAL DE ESCREVER AVALIAÇÃO --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -699,7 +664,6 @@
   border-color: #00f0ff;
 }
 
-/* Seletor de Estrelas em Botões Interativos */
 .seletor-estrelas-botoes {
   display: flex;
   align-items: center;
@@ -773,7 +737,6 @@
   opacity: 0.9;
 }
 
-/* Estado Alternativo */
 .estado-alternativo {
   text-align: center;
   padding: 80px 20px;
@@ -781,7 +744,6 @@
   font-size: 1.1rem;
 }
 
-/* --- CABEÇALHO DE NAVEGAÇÃO E BOTÃO VOLTAR --- */
 .cabecalho-navegacao {
   display: flex;
   align-items: center;
@@ -825,4 +787,17 @@
 .btn-voltar:hover .icon-pirata {
   stroke: #72ecff;
   transform: rotate(-45deg);
+}
+
+/* --- CORES DE CLASSIFICAÇÃO ETÁRIA --- */
+.badge-classificacao.livre { background: #4ade80; color: #06231a; }
+.badge-classificacao.dez   { background: #4fc3e8; color: #06232f; }
+.badge-classificacao.doze  { background: #ffd93d; color: #3a2c00; }
+.badge-classificacao.quatorze { background: #ffb454; color: #3a2200; }
+.badge-classificacao.dezesseis { background: #ff8a3d; color: #3a1800; }
+.badge-classificacao.dezoito { background: #ff5252; color: #ffffff; }
+
+.badge-gratis {
+  background: #4ade80;
+  color: #06231a;
 }

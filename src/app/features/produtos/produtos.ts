@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProdutosService, Produto } from '../../core/services/produtos.service';
@@ -27,12 +27,14 @@ export class Produtos implements OnInit {
   private router = inject(Router);
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
+  private cdr = inject(ChangeDetectorRef);
 
   produtos: ProdutoComFavorito[] = [];
   produtosFiltrados: ProdutoComFavorito[] = [];
 
   abaAtiva: 'todos' | 'favoritos' = 'todos';
   menuCategoriasAberto: boolean = false;
+  mensagemToast: string | null = null;
 
   readonly categorias: Categoria[] = [
     { id: 'acao', nome: 'Ação', icone: '⚔️' },
@@ -141,24 +143,44 @@ export class Produtos implements OnInit {
   }
 
   private converterPreco(preco: string): number {
-    if (preco.toLowerCase().includes('grátis')) return 0;
+    if (!preco || preco.toLowerCase().includes('grátis')) return 0;
     return Number(preco.replace('R$', '').replace(',', '.').trim());
+  }
+
+  private exibirToast(mensagem: string): void {
+    this.mensagemToast = mensagem;
+    this.cdr.markForCheck();
+
+    setTimeout(() => {
+      this.mensagemToast = null;
+      this.cdr.markForCheck();
+    }, 3000);
   }
 
   toggleFavorito(produto: ProdutoComFavorito): void {
     this.favoritosService.toggleFavorito(produto);
     produto.favorito = !produto.favorito;
+    
+    const msg = produto.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
+    this.exibirToast(msg);
   }
 
-  // NOVO — Limpa todos os favoritos
   limparFavoritos(): void {
     this.favoritosService.limparTodosFavoritos();
     this.produtos.forEach((p) => (p.favorito = false));
+    this.exibirToast('🗑️ Favoritos limpos!');
   }
 
   adicionarAoCarrinho(produto: ProdutoComFavorito): void {
     const preco = this.converterPreco(produto.precoPromocional);
 
+    // Se o jogo for de graça (preço = 0)
+    if (preco === 0) {
+      this.exibirToast('🎉 Jogo obtido com sucesso!');
+      return;
+    }
+
+    // Se for jogo pago, adiciona no carrinho
     this.carrinhoFacade.adicionarProduto({
       id: Number(produto.id),
       nome: produto.nome,
@@ -168,6 +190,8 @@ export class Produtos implements OnInit {
       plataforma: produto.plataforma,
       categoria: produto.genero,
     });
+
+    this.exibirToast('🛒 Jogo adicionado ao carrinho!');
   }
 
   irParaPaginaDoJogo(produto: ProdutoComFavorito): void {

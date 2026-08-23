@@ -10,7 +10,7 @@ import { adminGuard } from './core/guards/admin-guard';
 import { TheSims } from './features/produtos/thesims4/thesims/thesims';
 import { WatchDogs2 } from './features/produtos/watch-dogs-2/watch-dogs-2';
 import { Grandtheftautov } from './features/produtos/grandtheftautov/grandtheftautov/grandtheftautov';
-import { Godofwar } from './features/produtos/godofwar/godofwar/godofwar';
+import { GodOfWar } from './features/produtos/godofwar/godofwar/godofwar';
 import { MarvelsSpiderManRemastered } from './features/produtos/marvels-spider-man-remastered/marvels-spider-man-remastered';
 import { CallOfDutyModernWarfareIi } from './features/produtos/call-of-duty-modern-warfare-ii/call-of-duty-modern-warfare-ii';
 import { APlagueTale } from './features/produtos/a-plague-tale/a-plague-tale';
@@ -49,7 +49,7 @@ export const routes: Routes = [
   },
   {
     path: 'jogos/god-of-war',
-    component: Godofwar,
+    component: GodOfWar,
   },
   {
     path: 'jogos/marvels-spider-man-remastered',
