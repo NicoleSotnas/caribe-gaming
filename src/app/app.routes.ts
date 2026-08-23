@@ -10,13 +10,13 @@ import { Admin } from './features/admin/admin';
 import { adminGuard } from './core/guards/admin-guard';
 import { authGuard } from './core/guards/auth-guard';
 import { TheSims } from './features/produtos/thesims4/thesims/thesims';
-import { WatchDogs2 } from './features/produtos/watch-dogs-2/watch-dogs-2';
-import { Grandtheftautov } from './features/produtos/grandtheftautov/grandtheftautov/grandtheftautov';
-import { Godofwar } from './features/produtos/godofwar/godofwar/godofwar';
+import { EldenRing } from './features/produtos/elden-ring/elden-ring';
+import { GrandTheftAutoV } from './features/produtos/grandtheftautov/grandtheftautov/grandtheftautov';
+import { GodOfWar } from './features/produtos/godofwar/godofwar/godofwar';
 import { MarvelsSpiderManRemastered } from './features/produtos/marvels-spider-man-remastered/marvels-spider-man-remastered';
 import { CallOfDutyModernWarfareIi } from './features/produtos/call-of-duty-modern-warfare-ii/call-of-duty-modern-warfare-ii';
 import { APlagueTale } from './features/produtos/a-plague-tale/a-plague-tale';
-import { Ragnarok } from './features/produtos/ragnarok/ragnarok';
+import { GodOfWarRagnarok } from './features/produtos/god-of-war-ragnarok/god-of-war-ragnarok';
 import { HollowKnight } from './features/produtos/hollow-knight/hollow-knight';
 import { RedDeadRedemption2 } from './features/produtos/red-dead-redemption-2/red-dead-redemption-2';
 import { AssassinsCreedBlackFlag } from './features/produtos/assassins-creed-black-flag/assassins-creed-black-flag';
@@ -27,6 +27,7 @@ import { TheLastOfUs } from './features/produtos/the-last-of-us/the-last-of-us';
 import { F1 } from './features/produtos/f1/f1';
 import { Cyberpunk2077 } from './features/produtos/cyberpunk-2077/cyberpunk-2077';
 import { MarvelRivals } from './features/produtos/marvel-rivals/marvel-rivals';
+import { TheLastOfUsPartii } from './features/produtos/the-last-of-us-part-ii/the-last-of-us-part-ii';
 
 export const routes: Routes = [
   {
@@ -39,7 +40,7 @@ export const routes: Routes = [
   },
   {
     path: 'jogos/grand-theft-auto-v',
-    component: Grandtheftautov,
+    component: GrandTheftAutoV,
   },
   {
     path: 'jogos/the-witcher-3',
@@ -51,7 +52,7 @@ export const routes: Routes = [
   },
   {
     path: 'jogos/god-of-war',
-    component: Godofwar,
+    component: GodOfWar,
   },
   {
     path: 'jogos/marvels-spider-man-remastered',
@@ -67,11 +68,15 @@ export const routes: Routes = [
   },
   {
     path: 'jogos/god-of-war-ragnarök',
-    component: Ragnarok,
+    component: GodOfWarRagnarok,
   },
   {
     path: 'jogos/hollow-knight',
     component: HollowKnight,
+  },
+   {
+    path: 'jogos/the-last-of-us-II',
+    component: TheLastOfUsPartii,
   },
   {
     path: 'jogos/red-dead-redemption-2',
@@ -102,8 +107,8 @@ export const routes: Routes = [
     component: F1,
   },
   {
-    path: 'jogos/watch-dogs-2',
-    component: WatchDogs2,
+    path: 'jogos/elden-ring',
+    component: EldenRing,
   },
   {
     path: 'jogos/cyberpunk-2077',

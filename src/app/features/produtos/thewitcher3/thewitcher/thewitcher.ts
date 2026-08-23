@@ -1,14 +1,32 @@
 import { Component, OnInit, inject, ChangeDetectorRef, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { RawgService, DetalhesJogo } from '../../../../core/services/rawg.service';
+import { CarrinhoFacade } from '../../../../core/facades/carrinho.facade';
+import { FavoritosService } from '../../../../core/services/favoritos.service';
+
+export interface Comentario {
+  id: number;
+  autor: string;
+  avatar: string;
+  estrelas: number;
+  texto: string;
+  data: string;
+  likes: number;
+  dislikes: number;
+  votouLike?: boolean;
+  votouDislike?: boolean;
+}
 
 const CHAVE_CACHE = 'witcher3_dados_completos';
+const CHAVE_AVALIACOES = 'witcher3_avaliacoes_lista';
 
 @Component({
   selector: 'app-thewitcher',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './thewitcher.html',
   styleUrl: './thewitcher.css',
 })
@@ -20,12 +38,53 @@ export class Thewitcher implements OnInit {
   galeriaImagens: string[] = [];
   indiceAtivo: number = 0;
   favorito: boolean = false;
+  mensagemToast: string | null = null;
+
+  // Controle de Modal e Formulário de Avaliação
+  exibirModalAvaliacao: boolean = false;
+  novoNome: string = '';
+  novoTexto: string = '';
+  novaNota: number = 5;
+
+  private location = inject(Location);
+
+  voltarPagina(): void {
+    this.location.back();
+  }
+  listaComentarios: Comentario[] = [
+    {
+      id: 1,
+      autor: 'GeraltDeRivia_BR',
+      avatar: 'G',
+      estrelas: 5,
+      texto:
+        'Um dos melhores RPGs já feitos na história. A riqueza de detalhes do mundo e das missões secundárias é simplesmente impressionante!',
+      data: '18/05/2026',
+      likes: 142,
+      dislikes: 3,
+    },
+    {
+      id: 2,
+      autor: 'YenneferVengerberg',
+      avatar: 'Y',
+      estrelas: 5,
+      texto: 'Trilha sonora impecável, enredo maduro e imersão absurda. Vale cada segundo jogado.',
+      data: '15/05/2026',
+      likes: 89,
+      dislikes: 1,
+    },
+  ];
+
+  readonly ID_PRODUTO = '2';
+  readonly precoJogo = 129.99;
+  readonly precoFormatado = 'R$ 129,99';
 
   private cdr = inject(ChangeDetectorRef);
   private rawgService = inject(RawgService);
   private router = inject(Router);
+  private carrinhoFacade = inject(CarrinhoFacade);
+  private favoritosService = inject(FavoritosService);
 
-  // Identificadores do The Witcher 3 na RAWG e na Steam
   private jogoSlug = 'the-witcher-3-wild-hunt';
   private steamAppId = '292030';
 
@@ -33,6 +92,9 @@ export class Thewitcher implements OnInit {
     this.carregarDoCache();
 
     afterNextRender(() => {
+      this.favorito = this.favoritosService.ehFavorito(this.ID_PRODUTO);
+      this.carregarAvaliacoes();
+
       if (!this.jogo || this.galeriaImagens.length === 0) {
         this.carregarDadosDoJogo();
       } else {
@@ -43,19 +105,163 @@ export class Thewitcher implements OnInit {
 
   ngOnInit(): void {}
 
+  // Gerenciamento das Avaliações
+  carregarAvaliacoes(): void {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const salvas = localStorage.getItem(CHAVE_AVALIACOES);
+        if (salvas) {
+          this.listaComentarios = JSON.parse(salvas);
+        }
+      }
+    } catch {}
+  }
+
+  salvarAvaliacoes(): void {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(CHAVE_AVALIACOES, JSON.stringify(this.listaComentarios));
+      }
+    } catch {}
+  }
+
+  abrirModal(): void {
+    this.exibirModalAvaliacao = true;
+  }
+
+  fecharModal(): void {
+    this.exibirModalAvaliacao = false;
+    this.novoNome = '';
+    this.novoTexto = '';
+    this.novaNota = 5;
+  }
+
+  enviarAvaliacao(): void {
+    if (!this.novoNome.trim() || !this.novoTexto.trim()) {
+      this.exibirToast('⚠️ Preencha seu nome e comentário!');
+      return;
+    }
+
+    const hoje = new Date();
+    const dataFormatada = hoje.toLocaleDateString('pt-BR');
+
+    const novaAvaliacao: Comentario = {
+      id: Date.now(),
+      autor: this.novoNome.trim(),
+      avatar: this.novoNome.trim().charAt(0).toUpperCase(),
+      estrelas: Number(this.novaNota),
+      texto: this.novoTexto.trim(),
+      data: dataFormatada,
+      likes: 0,
+      dislikes: 0,
+    };
+
+    this.listaComentarios.unshift(novaAvaliacao);
+    this.salvarAvaliacoes();
+    this.fecharModal();
+    this.exibirToast('⭐ Sua avaliação foi publicada!');
+  }
+
+  darLike(c: Comentario): void {
+    if (c.votouLike) {
+      c.likes--;
+      c.votouLike = false;
+    } else {
+      c.likes++;
+      if (c.votouDislike) {
+        c.dislikes--;
+        c.votouDislike = false;
+      }
+      c.votouLike = true;
+    }
+    this.salvarAvaliacoes();
+  }
+
+  darDislike(c: Comentario): void {
+    if (c.votouDislike) {
+      c.dislikes--;
+      c.votouDislike = false;
+    } else {
+      c.dislikes++;
+      if (c.votouLike) {
+        c.likes--;
+        c.votouLike = false;
+      }
+      c.votouDislike = true;
+    }
+    this.salvarAvaliacoes();
+  }
+
+  getEstrelasTexto(num: number): string {
+    return '★'.repeat(num) + '☆'.repeat(5 - num);
+  }
+
+  private exibirToast(mensagem: string): void {
+    this.mensagemToast = mensagem;
+    this.cdr.markForCheck();
+
+    setTimeout(() => {
+      this.mensagemToast = null;
+      this.cdr.markForCheck();
+    }, 3000);
+  }
+
+  adicionarAoCarrinho(): void {
+    if (!this.jogo) return;
+
+    this.carrinhoFacade.adicionarProduto({
+      id: Number(this.ID_PRODUTO),
+      nome: this.jogo.nome,
+      preco: this.precoJogo,
+      quantidade: 1,
+      imagemUrl: this.galeriaImagens[0] || this.jogo.background_image || '',
+      plataforma: this.jogo.plataformas || 'PC / PS5',
+      categoria: 'RPG, Ação, Mundo Aberto',
+    });
+
+    this.exibirToast('🛒 Jogo adicionado ao carrinho!');
+  }
+
+  toggleFavorito(): void {
+    if (!this.jogo) return;
+
+    this.favorito = !this.favorito;
+
+    this.favoritosService.toggleFavorito({
+      id: this.ID_PRODUTO,
+      nome: this.jogo.nome,
+      imagem: this.galeriaImagens[0] || this.jogo.background_image || '',
+      imagemPosicao: 'center',
+      precoOriginal: this.precoFormatado,
+      precoPromocional: this.precoFormatado,
+      desconto: 0,
+      genero: 'RPG / Mundo Aberto',
+      plataforma: this.jogo.plataformas || 'PC / PS5',
+      categorias: ['rpg', 'mundo-aberto', 'aventura'],
+    });
+
+    const msg = this.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
+    this.exibirToast(msg);
+  }
+
+  comprarAgora(): void {
+    this.adicionarAoCarrinho();
+    this.router.navigate(['/carrinho']);
+  }
+
   private carregarDadosDoJogo(): void {
-    // 1. Busca os detalhes textuais dinamicamente pelo serviço genérico
     this.rawgService.obterDetalhesJogo(this.jogoSlug).subscribe({
       next: (res: any) => {
         this.jogo = {
           id: res.id,
           nome: res.name,
-          descricao: res.description_raw || 'Descrição indisponível.',
+          descricao: `Mergulhe no aclamado épico de fantasia sombria e mundo aberto desenvolvido pela CD Projekt Red. Você é Geralt de Rivia, um mutante caçador de monstros conhecido como Bruxo, encarregado de encontrar a Ciri — a Criança da Profecia capaz de destruir ou salvar o mundo. Explore um continente vasto, devastado por guerras, repleto de cidades comerciais, ilhas vikings traiçoeiras, florestas sussurrantes e cavernas esquecidas. Suas escolhas moldam o destino de reinos inteiros em uma narrativa madura, onde a linha entre o bem e o mal é terrivelmente tênue.`,
           dataLancamento: res.released ? res.released.split('-').reverse().join('/') : 'N/A',
           desenvolvedoras: res.developers?.[0]?.name || 'CD PROJEKT RED',
           distribuidoras: res.publishers?.[0]?.name || 'CD PROJEKT RED',
-          classificacaoEtaria: res.esrb_rating?.name || '18+',
-          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS5'
+          classificacaoEtaria: '+18',
+          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS5',
+          background_image: res.background_image,
         };
         this.cdr.markForCheck();
       },
@@ -63,16 +269,15 @@ export class Thewitcher implements OnInit {
         console.error('Erro ao buscar detalhes do jogo:', err);
         this.erro = true;
         this.cdr.markForCheck();
-      }
+      },
     });
 
-    // 2. Busca as screenshots e adiciona a capa da Steam na frente
     this.rawgService.obterScreenshots(this.jogoSlug).subscribe({
       next: (res) => {
         if (res.results && res.results.length > 0) {
           const capaSteam = `https://cdn.cloudflare.steamstatic.com/steam/apps/${this.steamAppId}/capsule_616x353.jpg`;
           const screenshots = res.results.map((item: any) => item.image);
-          
+
           this.galeriaImagens = [capaSteam, ...screenshots];
           this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
         }
@@ -111,12 +316,12 @@ export class Thewitcher implements OnInit {
 
   proximaFoto(): void {
     if (this.galeriaImagens.length === 0) return;
-    this.indiceAtivo = (this.indiceAtivo < this.galeriaImagens.length - 1) ? this.indiceAtivo + 1 : 0;
+    this.indiceAtivo = this.indiceAtivo < this.galeriaImagens.length - 1 ? this.indiceAtivo + 1 : 0;
   }
 
   fotoAnterior(): void {
     if (this.galeriaImagens.length === 0) return;
-    this.indiceAtivo = (this.indiceAtivo > 0) ? this.indiceAtivo - 1 : this.galeriaImagens.length - 1;
+    this.indiceAtivo = this.indiceAtivo > 0 ? this.indiceAtivo - 1 : this.galeriaImagens.length - 1;
   }
 
   selecionarIndice(index: number): void {
