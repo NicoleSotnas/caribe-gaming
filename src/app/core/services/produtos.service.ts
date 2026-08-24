@@ -56,7 +56,7 @@ export class ProdutosService {
     { id: '17', nome: 'Elden Ring', steamAppId: '1245620', genero: 'RPG / Souls-like', plat: 'PC / PS5', orig: 'R$ 229,90', promo: 'R$ 229,90', desc: 0, categorias: ['rpg'], slug: 'elden-ring' },
     { id: '18', nome: 'Cyberpunk 2077', steamAppId: '1091500', genero: 'RPG / Sci-Fi', plat: 'PC', orig: 'R$ 199,90', promo: 'R$ 99,95', desc: 50, categorias: ['rpg'], slug: 'cyberpunk-2077' },
     { id: '19', nome: 'Marvel Rivals', steamAppId: '2767030', genero: 'Hero Shooter', plat: 'PC', orig: 'Grátis', promo: 'Grátis', desc: 0, categorias: ['acao'], slug: 'marvel-rivals' },
-    { id: '20', nome: 'The Last of Us Part II', steamAppId: '2531310', genero: 'Ação / Sobrevivência', plat: 'PS5', orig: 'R$ 249,90', promo: 'R$ 249,90', desc: 0, categorias: ['aventura'], slug: 'the-last-of-us-part-ii-remastered' },
+    { id: '20', nome: 'The Last of Us Part II', steamAppId: '2531310', genero: 'Ação / Sobrevivência', plat: 'PS5', orig: 'R$ 249,90', promo: 'R$ 124,75', desc: 50, categorias: ['aventura'], slug: 'the-last-of-us-part-ii-remastered' },
     // ===== JOGOS NOVOS — só pra encher o catálogo (usam o componente único) =====
     
     { id: '22', nome: 'Resident Evil 4', steamAppId: '2050650', genero: 'Ação / Terror', plat: 'PC / PS5', orig: 'R$ 249,90', promo: 'R$ 249,90', desc: 0, categorias: ['acao', 'aventura'], slug: 'resident-evil-4-2023', descricaoCustom: 'Leon S. Kennedy é enviado a uma vila rural na Europa para resgatar a filha do presidente dos EUA, sequestrada por um culto sinistro, nesta refação moderna do clássico de terror e ação.' },
