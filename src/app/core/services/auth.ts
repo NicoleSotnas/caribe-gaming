@@ -3,6 +3,8 @@ import {
   Auth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
   signOut,
   updateProfile,
   user,
@@ -21,6 +23,13 @@ export class AuthService {
     return runInInjectionContext(this.injector, () =>
       from(signInWithEmailAndPassword(this.auth, email, senha)),
     );
+  }
+
+  loginComGoogle(): Observable<any> {
+    return runInInjectionContext(this.injector, () => {
+      const provider = new GoogleAuthProvider();
+      return from(signInWithPopup(this.auth, provider));
+    });
   }
 
   registrar(email: string, senha: string, nome: string): Observable<any> {
