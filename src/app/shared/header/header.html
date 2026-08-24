@@ -1,6 +1,6 @@
 <header class="header-container">
   <div class="logo-brand" routerLink="/" (click)="fecharMenu()">
-    <img src="/img/logo.png" alt="Logo Caribe's Gaming" />
+    <img src="/img/logo-caribe.png" alt="Logo Caribe's Gaming" />
     <span class="brand-title">Caribe's Gaming</span>
   </div>
 
@@ -46,14 +46,18 @@
       @if (authFacade.estaLogado()) {
         <div class="conta-container">
           <button class="conta-trigger" (click)="toggleMenuUsuario()">
-            <i class="fa-solid fa-circle-user avatar-usuario"></i>
+            <img src="/img/caveira-de-pirata.png" alt="Avatar Usuário" class="avatar-usuario" />
             <span class="nome-usuario-header">{{ authFacade.nomeExibicao() }}</span>
             <i class="fa-solid fa-chevron-down seta" [class.rotacionada]="menuUsuarioAberto"></i>
           </button>
           @if (menuUsuarioAberto) {
             <div class="conta-dropdown">
               <div class="conta-dropdown-header">
-                <i class="fa-solid fa-circle-user avatar-usuario-grande"></i>
+                <img
+                  src="/img/caveira-de-pirata.png"
+                  alt="Avatar Usuário"
+                  class="avatar-usuario-grande"
+                />
                 <span class="email">{{ authFacade.nomeExibicao() }}</span>
               </div>
 

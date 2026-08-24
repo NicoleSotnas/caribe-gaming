@@ -118,6 +118,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; /* Permite a quebra dos textos em telas menores */
+  gap: 12px;
 }
 
 .qtd-itens {
@@ -196,6 +198,35 @@
   flex-wrap: wrap;
 }
 
+@media (max-width: 768px) {
+  /* Empilha o Resumo no celular para não espremer os textos */
+  .resumo-detalhes {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .resumo-detalhes h2 {
+    font-size: 1.35rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Faz os botões ocuparem 100% da largura no celular */
+  .acoes-carrinho {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-acao {
+    width: 100%;
+  }
+
+  .item-carrinho {
+    gap: 12px;
+  }
+}
 @media (max-width: 768px) {
   .acoes-carrinho {
     flex-direction: column-reverse;
