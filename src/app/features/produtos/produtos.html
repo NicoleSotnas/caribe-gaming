@@ -42,16 +42,7 @@
       </label>
     </div>
 
-    <div class="filtro-grupo filtro-categoria">
-      <h4>Categoria</h4>
-      <label *ngFor="let cat of categorias">
-        <input
-          type="checkbox"
-          [checked]="categoriaAtiva === cat.id"
-          (change)="selecionarCategoria(cat.id)">
-        {{ cat.icone }} {{ cat.nome }}
-      </label>
-    </div>
+   
   </aside>
 
   <!-- 2. Conteúdo Principal -->

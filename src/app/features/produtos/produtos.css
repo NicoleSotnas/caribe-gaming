@@ -423,7 +423,6 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-
 /* --- MENSAGEM FLUTUANTE (TOAST) --- */
 .toast-notificacao {
   position: fixed;
@@ -448,5 +447,117 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   REGRAS DE RESPONSIVIDADE (MEDIA QUERIES)
+   ========================================================================== */
+
+/* Notebooks Menores e Tablets (Até 1024px) */
+@media (max-width: 1024px) {
+  .pagina-produtos {
+    flex-direction: column;
+    padding: 20px;
+    margin-top: 100px;
+    gap: 20px;
+  }
+
+  .sidebar-filtros {
+    width: 100%;
+    position: static;
+    box-sizing: border-box;
+  }
+
+  .grid-produtos {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* Smartphones e Displays Móveis (Até 768px) */
+@media (max-width: 768px) {
+  .pagina-produtos {
+    margin-top: 80px;
+    padding: 16px;
+  }
+
+  .linha-controles-topo {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .abas-produtos {
+    width: 100%;
+  }
+
+  .aba-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .dropdown-categorias {
+    width: 100%;
+  }
+
+  .btn-dropdown-categoria {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .menu-categorias-conteudo {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .produtos-topo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .produtos-topo h2 {
+    font-size: 1.5rem;
+  }
+
+  .acoes-direita-topo {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .grid-produtos {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .card-produto {
+    padding: 8px;
+  }
+
+  .produto-nome {
+    font-size: 0.88rem;
+  }
+
+  .preco-promocional {
+    font-size: 1rem;
+  }
+
+  .btn-carrinho {
+    padding: 8px 6px;
+    font-size: 0.75rem;
+  }
+
+  .toast-notificacao {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    text-align: center;
+  }
+}
+
+/* Celulares Muito Pequenos (Até 480px) */
+@media (max-width: 480px) {
+  .grid-produtos {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
