@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { RawgService, DetalhesJogo } from '../../../core/services/rawg.service';
+import { RawgService,DetalhesJogo } from '../../../core/services/rawg.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
 
@@ -20,11 +20,11 @@ export interface Comentario {
   votouDislike?: boolean;
 }
 
-const CHAVE_CACHE = 'tlou_part2_dados_completos';
-const CHAVE_AVALIACOES = 'tlou_part2_avaliacoes_lista';
+const CHAVE_CACHE = 'tlou2_dados_completos';
+const CHAVE_AVALIACOES = 'tlou2_avaliacoes_lista';
 
 @Component({
-  selector: 'app-the-last-of-us-part-2',
+  selector: 'app-the-last-of-us-ii',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './the-last-of-us-part-ii.html',
@@ -40,7 +40,6 @@ export class TheLastOfUsPartii implements OnInit {
   favorito: boolean = false;
   mensagemToast: string | null = null;
 
-  // Controle de Modal e Formulário de Avaliação
   exibirModalAvaliacao: boolean = false;
   novoNome: string = '';
   novoTexto: string = '';
@@ -55,37 +54,38 @@ export class TheLastOfUsPartii implements OnInit {
   listaComentarios: Comentario[] = [
     {
       id: 1,
-      autor: 'EllieRevenge',
+      autor: 'EllieW_BR',
       avatar: 'E',
       estrelas: 5,
-      texto:
-        'Uma obra-prima técnica e de enredo desafiador. As animações de combate, os detalhes dos cenários e a carga emocional tornam a experiência inesquecível!',
-      data: '18/05/2026',
-      likes: 480,
-      dislikes: 5,
+      texto: 'Uma das narrativas mais intensas e maduras já feitas em um jogo. Emocionalmente devastador do início ao fim.',
+      data: '20/06/2026',
+      likes: 298,
+      dislikes: 4,
     },
     {
       id: 2,
-      autor: 'AbbyAnderson',
-      avatar: 'A',
+      autor: 'JoelFan_BR',
+      avatar: 'J',
       estrelas: 5,
-      texto: 'Incrível do começo ao fim. A Naughty Dog conseguiu criar um dos jogos mais intensos e viscerais da história dos videogames.',
-      data: '15/05/2026',
-      likes: 310,
-      dislikes: 4,
+      texto: 'Gameplay refinadíssimo e uma história corajosa que não tem medo de te fazer desconfortável. Obra-prima da Naughty Dog.',
+      data: '17/06/2026',
+      likes: 176,
+      dislikes: 3,
     },
   ];
 
   readonly ID_PRODUTO = '20';
-  readonly precoJogo = 124.75;
-  readonly precoOriginalFormatado = 'R$ 249,50';
-  readonly precoFormatado = 'R$ 124,75';
+  readonly precoJogo = 249.90;
+  readonly precoFormatado = 'R$ 249,90';
 
   private cdr = inject(ChangeDetectorRef);
   private rawgService = inject(RawgService);
   private router = inject(Router);
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
+
+  private jogoSlug = 'the-last-of-us-part-ii-remastered';
+  private steamAppId = '2531310';
 
   constructor() {
     this.carregarDoCache();
@@ -104,7 +104,6 @@ export class TheLastOfUsPartii implements OnInit {
 
   ngOnInit(): void {}
 
-  // Gerenciamento das Avaliações
   carregarAvaliacoes(): void {
     try {
       if (typeof localStorage !== 'undefined') {
@@ -214,8 +213,8 @@ export class TheLastOfUsPartii implements OnInit {
       preco: this.precoJogo,
       quantidade: 1,
       imagemUrl: this.galeriaImagens[0] || this.jogo.background_image || '',
-      plataforma: this.jogo.plataformas || 'PC / PS5 / PS4',
-      categoria: 'Ação, Aventura, Sobrevivência',
+      plataforma: this.jogo.plataformas || 'PC / PS5',
+      categoria: 'Ação, Sobrevivência',
     });
 
     this.exibirToast('🛒 Jogo adicionado ao carrinho!');
@@ -231,12 +230,12 @@ export class TheLastOfUsPartii implements OnInit {
       nome: this.jogo.nome,
       imagem: this.galeriaImagens[0] || this.jogo.background_image || '',
       imagemPosicao: 'center',
-      precoOriginal: this.precoOriginalFormatado,
+      precoOriginal: this.precoFormatado,
       precoPromocional: this.precoFormatado,
-      desconto: '-50%',
+      desconto: 0,
       genero: 'Ação / Sobrevivência',
-      plataforma: this.jogo.plataformas || 'PC / PS5 / PS4',
-      categorias: ['aventura'],
+      plataforma: this.jogo.plataformas || 'PC / PS5',
+      categorias: ['aventura', 'acao'],
     });
 
     const msg = this.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
@@ -249,33 +248,53 @@ export class TheLastOfUsPartii implements OnInit {
   }
 
   private carregarDadosDoJogo(): void {
-    // Galeria 100% oficial e estável do The Last of Us Part II
-    const imagensOficiaisTLOU2 = [
-      'https://images.igdb.com/igdb/image/upload/t_1080p/co2f89.jpg', // Capa Ellie
-      'https://images.igdb.com/igdb/image/upload/t_1080p/sc85z8.jpg', // Gameplay Seattle
-      'https://images.igdb.com/igdb/image/upload/t_1080p/sc85z9.jpg', // Combate Furtivo
-      'https://images.igdb.com/igdb/image/upload/t_1080p/sc85z7.jpg', // Ellie no Cavalo
-      'https://images.igdb.com/igdb/image/upload/t_1080p/sc85za.jpg', // Cenários
-    ];
+    this.rawgService.obterDetalhesJogo(this.jogoSlug).subscribe({
+      next: (res: any) => {
+        this.jogo = {
+          id: res.id,
+          nome: 'The Last of Us Part II',
+          descricao: `Quatro anos após seus perigosos eventos ao percorrer os Estados Unidos pós-pandêmicos, Ellie e Joel se estabeleceram em Jackson, Wyoming. Vivendo entre uma comunidade de sobreviventes, ambos conseguiram encontrar certa paz apesar do mundo brutal ao seu redor. Um evento violento perturba essa paz e desencadeia uma jornada implacável de Ellie em busca de justiça e acerto de contas contra aqueles que a machucaram. Enquanto ela caça cada um deles com metodicidade, é forçada a confrontar as consequências físicas e emocionais brutais de seus atos.`,
+          dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '19/06/2020',
+          desenvolvedoras: res.developers?.[0]?.name || 'Naughty Dog',
+          distribuidoras: res.publishers?.[0]?.name || 'Sony Interactive Entertainment',
+          classificacaoEtaria: '+18',
+          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PlayStation 5',
+          background_image: res.background_image,
+        };
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Erro ao buscar detalhes do jogo:', err);
+        this.erro = true;
+        this.cdr.markForCheck();
+      },
+    });
 
-    this.jogo = {
-      id: 20,
-      nome: 'The Last of Us Part II',
-      descricao: `Cinco anos após sua jornada perigosa pelos Estados Unidos pós-pandêmicos, Ellie e Joel se estabeleceram em Jackson, Wyoming. A convivência em uma comunidade próspera de sobreviventes trouxe paz e estabilidade, apesar da ameaça constante dos infectados e de outros sobreviventes desesperados. Quando um evento violento interrompe essa paz, Ellie embarca em uma jornada incansável em busca de justiça e encerramento. Conforme vai caçando os responsáveis um por um, ela se defronta com as profundas repercussões físicas e emocionais de suas ações.`,
-      dataLancamento: '19/06/2020',
-      desenvolvedoras: 'Naughty Dog',
-      distribuidoras: 'Sony Interactive Entertainment',
-      classificacaoEtaria: '+18',
-      plataformas: 'PlayStation 5 / PlayStation 4',
-      background_image: imagensOficiaisTLOU2[0],
-    };
+    this.rawgService.obterScreenshots(this.jogoSlug).subscribe({
+      next: (res) => {
+        const capaSteam = this.steamAppId
+          ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${this.steamAppId}/header.jpg`
+          : this.jogo?.background_image || '';
 
-    this.galeriaImagens = imagensOficiaisTLOU2;
-    this.carregando = false;
-    this.erro = false;
+        const screenshots = res.results?.length ? res.results.map((item: any) => item.image) : [];
 
-    this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
-    this.cdr.markForCheck();
+        this.galeriaImagens = capaSteam ? [capaSteam, ...screenshots] : screenshots;
+        this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
+
+        this.carregando = false;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar screenshots:', err);
+        const capaSteam = this.steamAppId
+          ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${this.steamAppId}/header.jpg`
+          : this.jogo?.background_image || '';
+
+        this.galeriaImagens = capaSteam ? [capaSteam] : [];
+        this.carregando = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   private carregarDoCache(): void {
