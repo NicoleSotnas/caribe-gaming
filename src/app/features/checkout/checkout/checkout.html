@@ -18,18 +18,47 @@
         <h3>Dados de Conclusão</h3>
 
         <div class="field-group">
-          <input type="text" formControlName="nome" placeholder="Nome Completo" />
+          <input
+            type="text"
+            formControlName="nome"
+            placeholder="Nome Completo"
+            [class.input-erro]="campoInvalido('nome')"
+          />
+          @if (campoInvalido('nome')) {
+            <small>Por favor, informe seu nome completo (mínimo 3 caracteres).</small>
+          }
         </div>
 
         <div class="field-group">
-          <input type="email" formControlName="email" placeholder="E-mail" />
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="E-mail"
+            [class.input-erro]="campoInvalido('email')"
+          />
+          @if (campoInvalido('email')) {
+            <small>Informe um e-mail válido com domínio (ex: usuario@gmail.com).</small>
+          }
         </div>
 
         <div class="field-group">
-          <input type="text" formControlName="endereco" placeholder="Endereço de Entrega" />
+          <input
+            type="text"
+            formControlName="endereco"
+            placeholder="Endereço de Entrega"
+            [class.input-erro]="campoInvalido('endereco')"
+          />
+          @if (campoInvalido('endereco')) {
+            <small>Por favor, informe um endereço completo para entrega.</small>
+          }
         </div>
 
-        <button type="button" class="btn-acao btn-primary btn-finalizar" (click)="finalizar()" [disabled]="formulario.invalid">
+        <button
+          type="button"
+          class="btn-acao btn-primary btn-finalizar"
+          (click)="finalizar()"
+          [disabled]="formulario.invalid"
+        >
           Finalizar Compra
         </button>
       </form>
