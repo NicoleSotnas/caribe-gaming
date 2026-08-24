@@ -62,7 +62,7 @@ export class Cyberpunk2077 implements OnInit {
         'Após a atualização 2.0 o jogo se transformou completamente! A ambientação de Night City é disparada a mais imersiva de todos os tempos.',
       data: '18/05/2026',
       likes: 290,
-      dislikes: 4,
+      dislikes: 156,
     },
     {
       id: 2,
@@ -72,7 +72,7 @@ export class Cyberpunk2077 implements OnInit {
       texto: 'Trilha sonora sensacional, história emocionante e combates extremamente dinâmicos. Valeu cada centavo!',
       data: '15/05/2026',
       likes: 185,
-      dislikes: 2,
+      dislikes: 81,
     },
   ];
 
