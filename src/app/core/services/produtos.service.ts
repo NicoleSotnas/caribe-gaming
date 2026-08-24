@@ -108,6 +108,35 @@ export class ProdutosService {
    
     { id: '69', nome: 'Kingdom Come: Deliverance', steamAppId: '379430', genero: 'RPG', plat: 'PC', orig: 'R$ 89,99', promo: 'R$ 89,99', desc: 0, categorias: ['rpg', 'mundo-aberto'], slug: 'kingdom-come-deliverance', descricaoCustom: 'Ambientado na Boêmia medieval historicamente precisa, Henry busca vingança pela morte de sua família em um RPG realista sem magia ou fantasia, apenas espada e sobrevivência.' },
     { id: '70', nome: 'Civilization VI', steamAppId: '289070', genero: 'Estratégia', plat: 'PC', orig: 'R$ 129,90', promo: 'R$ 129,90', desc: 0, categorias: ['simulacao'], slug: 'sid-meiers-civilization-vi', descricaoCustom: 'Construa um império que resista ao teste do tempo, guiando uma civilização desde a Idade da Pedra até a era espacial neste clássico jogo de estratégia por turnos.' },
+   { id: '72', nome: 'Control', steamAppId: '870780', genero: 'Ação / Aventura', plat: 'PC / PS5', orig: 'R$ 129,00', promo: 'R$ 129,00', desc: 0, categorias: ['acao', 'aventura'], slug: 'control' },
+   
+    { id: '74', nome: 'Deathloop', steamAppId: '1252330', genero: 'Tiro / Ação', plat: 'PC / PS5', orig: 'R$ 249,00', promo: 'R$ 249,00', desc: 0, categorias: ['acao'], slug: 'deathloop' },
+    { id: '75', nome: 'Dishonored 2', steamAppId: '403640', genero: 'Ação / Furtividade', plat: 'PC', orig: 'R$ 89,99', promo: 'R$ 89,99', desc: 0, categorias: ['acao'], slug: 'dishonored-2' },
+    { id: '76', nome: 'Prey', steamAppId: '480490', genero: 'Ficção Científica / Ação', plat: 'PC', orig: 'R$ 119,00', promo: 'R$ 119,00', desc: 0, categorias: ['acao', 'aventura'], slug: 'prey' },
+    { id: '77', nome: 'Hitman 3', steamAppId: '1659040', genero: 'Ação / Furtividade', plat: 'PC / PS5', orig: 'R$ 249,00', promo: 'R$ 249,00', desc: 0, categorias: ['acao'], slug: 'hitman-3' },
+    { id: '78', nome: 'Devil May Cry 5', steamAppId: '601150', genero: 'Ação / Hack and Slash', plat: 'PC / PS5', orig: 'R$ 99,90', promo: 'R$ 99,90', desc: 0, categorias: ['acao'], slug: 'devil-may-cry-5' },
+    { id: '79', nome: 'Monster Hunter: World', steamAppId: '582010', genero: 'RPG / Ação', plat: 'PC', orig: 'R$ 99,90', promo: 'R$ 99,90', desc: 0, categorias: ['rpg', 'acao'], slug: 'monster-hunter-world' },
+    { id: '80', nome: 'Monster Hunter Rise', steamAppId: '1446780', genero: 'RPG / Ação', plat: 'PC / PS5', orig: 'R$ 139,90', promo: 'R$ 139,90', desc: 0, categorias: ['rpg', 'acao'], slug: 'monster-hunter-rise' },
+    { id: '81', nome: 'Street Fighter 6', steamAppId: '1364780', genero: 'Luta', plat: 'PC / PS5', orig: 'R$ 249,00', promo: 'R$ 249,00', desc: 0, categorias: ['acao'], slug: 'street-fighter-6' },
+    { id: '82', nome: 'Tekken 8', steamAppId: '1778820', genero: 'Luta', plat: 'PC / PS5', orig: 'R$ 349,90', promo: 'R$ 349,90', desc: 0, categorias: ['acao'], slug: 'tekken-8' },
+    { id: '83', nome: 'Mortal Kombat 1', steamAppId: '1792600', genero: 'Luta', plat: 'PC / PS5', orig: 'R$ 279,90', promo: 'R$ 279,90', desc: 0, categorias: ['acao'], slug: 'mortal-kombat-1' },
+    { id: '84', nome: 'Dragon Ball FighterZ', steamAppId: '678950', genero: 'Luta', plat: 'PC', orig: 'R$ 149,90', promo: 'R$ 149,90', desc: 0, categorias: ['acao'], slug: 'dragon-ball-fighterz' },
+    { id: '85', nome: 'Guilty Gear Strive', steamAppId: '1384160', genero: 'Luta', plat: 'PC / PS5', orig: 'R$ 149,90', promo: 'R$ 149,90', desc: 0, categorias: ['acao'], slug: 'guilty-gear-strive' },
+    { id: '86', nome: 'Sea of Thieves', steamAppId: '1172620', genero: 'Aventura / Mundo Aberto', plat: 'PC / PS5', orig: 'R$ 89,00', promo: 'R$ 89,00', desc: 0, categorias: ['aventura', 'mundo-aberto'], slug: 'sea-of-thieves' },
+    { id: '87', nome: 'Deep Rock Galactic', steamAppId: '548430', genero: 'Tiro / Cooperativo', plat: 'PC', orig: 'R$ 57,99', promo: 'R$ 57,99', desc: 0, categorias: ['acao'], slug: 'deep-rock-galactic' },
+    { id: '88', nome: 'Helldivers 2', steamAppId: '553850', genero: 'Tiro / Cooperativo', plat: 'PC / PS5', orig: 'R$ 199,50', promo: 'R$ 199,50', desc: 0, categorias: ['acao'], slug: 'helldivers-2' },
+    { id: '89', nome: 'Palworld', steamAppId: '1623730', genero: 'Sobrevivência / Mundo Aberto', plat: 'PC', orig: 'R$ 88,99', promo: 'R$ 88,99', desc: 0, categorias: ['aventura', 'mundo-aberto'], slug: 'palworld' },
+    
+    { id: '91', nome: 'Phasmophobia', steamAppId: '739630', genero: 'Terror', plat: 'PC', orig: 'R$ 27,89', promo: 'R$ 27,89', desc: 0, categorias: ['aventura'], slug: 'phasmophobia' },
+    { id: '92', nome: 'Dead by Daylight', steamAppId: '381210', genero: 'Terror / Sobrevivência', plat: 'PC', orig: 'R$ 49,99', promo: 'R$ 49,99', desc: 0, categorias: ['acao'], slug: 'dead-by-daylight' },
+    { id: '93', nome: 'Vampire Survivors', steamAppId: '1794680', genero: 'Ação / Casual', plat: 'PC', orig: 'R$ 12,99', promo: 'R$ 12,99', desc: 0, categorias: ['acao'], slug: 'vampire-survivors' },
+    { id: '94', nome: 'Risk of Rain 2', steamAppId: '632360', genero: 'Roguelike / Ação', plat: 'PC', orig: 'R$ 59,99', promo: 'R$ 59,99', desc: 0, categorias: ['acao'], slug: 'risk-of-rain-2' },
+    { id: '95', nome: 'Cult of the Lamb', steamAppId: '1313140', genero: 'Ação / Simulação', plat: 'PC / PS5', orig: 'R$ 64,95', promo: 'R$ 64,95', desc: 0, categorias: ['acao', 'simulacao'], slug: 'cult-of-the-lamb' },
+    { id: '96', nome: 'Dave the Diver', steamAppId: '1868140', genero: 'Aventura / Simulação', plat: 'PC / PS5', orig: 'R$ 59,99', promo: 'R$ 59,99', desc: 0, categorias: ['aventura', 'simulacao'], slug: 'dave-the-diver' },
+    { id: '97', nome: 'Stray', steamAppId: '1332010', genero: 'Aventura', plat: 'PC / PS5', orig: 'R$ 69,99', promo: 'R$ 69,99', desc: 0, categorias: ['aventura'], slug: 'stray' },
+    { id: '98', nome: 'Outer Wilds', steamAppId: '753640', genero: 'Exploração / Aventura', plat: 'PC / PS5', orig: 'R$ 73,99', promo: 'R$ 73,99', desc: 0, categorias: ['aventura'], slug: 'outer-wilds' },
+    { id: '99', nome: 'Tunic', steamAppId: '553420', genero: 'Ação / Aventura', plat: 'PC / PS5', orig: 'R$ 88,99', promo: 'R$ 88,99', desc: 0, categorias: ['acao', 'aventura'], slug: 'tunic' },
+    { id: '100', nome: 'Sea of Stars', steamAppId: '1244090', genero: 'RPG', plat: 'PC / PS5', orig: 'R$ 99,99', promo: 'R$ 99,99', desc: 0, categorias: ['rpg'], slug: 'sea-of-stars' },
   ];
 
   obterProdutos(): Observable<Produto[]> {
