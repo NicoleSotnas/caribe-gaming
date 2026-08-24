@@ -50,4 +50,21 @@ export class Login {
       },
     });
   }
+
+  onGoogleLogin(): void {
+    this.carregando = true;
+    this.mensagemErro = '';
+
+    this.authService.loginComGoogle().subscribe({
+      next: () => {
+        this.carregando = false;
+        this.router.navigate(['/']);
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.mensagemErro = 'Não foi possível entrar com o Google. Tente novamente.';
+        console.error(erro);
+      },
+    });
+  }
 }
