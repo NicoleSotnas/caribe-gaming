@@ -15,9 +15,12 @@ export class Checkout {
 
   compraFinalizada = signal<boolean>(false);
 
+  // Regex estrita que exige algo@dominio.com (exige ponto e pelo menos 2 letras após o ponto)
+  private emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
+
   formulario: FormGroup = this.fb.group({
     nome: ['', [Validators.required, Validators.minLength(3)]],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
     endereco: ['', [Validators.required, Validators.minLength(5)]],
   });
 

@@ -17,7 +17,8 @@
   font-weight: 800;
 }
 
-.checkout-container {
+/* Container principal com fluxo vertical (empilhado) */
+.checkout-grid {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -28,9 +29,7 @@
 .checkout-resumo,
 .checkout-form {
   width: 100%;
-  max-width: 1050px;
   box-sizing: border-box;
-  margin: 0 auto;
   padding: 24px;
   border: 1px solid rgba(59, 175, 212, 0.35);
   border-radius: 12px;
@@ -46,7 +45,7 @@
   font-size: 1.3rem;
 }
 
-/* Agrupamento e Tratamento de Erros de Entrada */
+/* Grupos e Campos de Entrada com Tratamento Visual de Erro */
 .field-group {
   margin-bottom: 16px;
 }
@@ -83,7 +82,7 @@
   font-size: 0.85rem;
 }
 
-/* Resumo de Pedidos */
+/* Área de Resumo e Valores */
 .checkout-item {
   display: flex;
   justify-content: space-between;
@@ -99,11 +98,12 @@
 
 .checkout-total-box {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
-  margin-top: 16px;
-  padding-top: 12px;
-  font-size: 1.1rem;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px solid rgba(59, 175, 212, 0.35);
+  font-size: 1.25rem;
   font-weight: 700;
 }
 
@@ -111,7 +111,7 @@
   color: #ffffff;
 }
 
-/* Botão de Finalizar */
+/* Botões */
 .btn-finalizar {
   width: 100% !important;
   margin-top: 12px !important;
@@ -124,7 +124,7 @@
   box-shadow: none !important;
 }
 
-/* Feedback do Estado da Compra */
+/* Estado de Sucesso / Vazio */
 .checkout-sucesso,
 .checkout-vazio {
   max-width: 1050px;
