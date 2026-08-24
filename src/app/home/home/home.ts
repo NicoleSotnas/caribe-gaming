@@ -60,7 +60,7 @@ export class Home implements OnInit, OnDestroy {
       originalPrice: 'R$ 299,90',
       promoPrice: 'R$ 98,96',
       discount: '-67%',
-      image: 'https://i.pinimg.com/1200x/71/52/68/715268628f6902ea0ed1361b71dbf627.jpg',
+      image: 'https://i.pinimg.com/736x/73/f7/47/73f7476132056ce768d3adee46dafc64.jpg',
     },
     {
       id: 102,
