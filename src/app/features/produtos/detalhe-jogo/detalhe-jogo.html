@@ -1,11 +1,22 @@
+<!-- Mensagem Flutuante (Toast) -->
 <div class="toast-notificacao" *ngIf="mensagemToast">
   {{ mensagemToast }}
 </div>
 
 <div class="pagina-detalhes" *ngIf="jogo; else estadoAlternativo">
+  <!-- Breadcrumb com Botão Voltar -->
   <div class="cabecalho-navegacao">
     <button class="btn-voltar" (click)="voltarPagina()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-pirata">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="icon-pirata"
+      >
         <circle cx="12" cy="12" r="9"></circle>
         <circle cx="12" cy="12" r="3"></circle>
         <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -22,25 +33,52 @@
     </div>
   </div>
 
+  <!-- GRID PRINCIPAL -->
   <div class="grid-principal">
+    <!-- Mídia com Carrossel Nativo -->
     <div class="secao-midia">
       <div class="container-imagem-destaque">
+        <!-- Badges Dinâmicos -->
         <span class="badge-desconto" *ngIf="jogo.desconto > 0">-{{ jogo.desconto }}%</span>
         <span class="badge-desconto badge-gratis" *ngIf="jogo.desconto === 0 && jogo.precoPromocional.toLowerCase().includes('grátis')">Grátis</span>
         <span class="badge-classificacao" *ngIf="info" [ngClass]="classificacaoClasse(info.classificacaoEtaria)">{{ info.classificacaoEtaria }}</span>
 
-        <button class="btn-seta btn-prev" (click)="fotoAnterior()" *ngIf="galeriaImagens.length > 1">❮</button>
-        <img *ngIf="galeriaImagens.length > 0" [src]="galeriaImagens[indiceAtivo]" [alt]="jogo.nome" class="img-destaque" />
-        <button class="btn-seta btn-next" (click)="proximaFoto()" *ngIf="galeriaImagens.length > 1">❯</button>
+        <!-- Botões de Setas -->
+        <button
+          class="btn-seta btn-prev"
+          (click)="fotoAnterior()"
+          *ngIf="galeriaImagens.length > 1"
+        >
+          ❮
+        </button>
+
+        <!-- Imagem Principal -->
+        <img
+          *ngIf="galeriaImagens.length > 0"
+          [src]="galeriaImagens[indiceAtivo]"
+          [alt]="jogo.nome"
+          class="img-destaque"
+        />
+
+        <button class="btn-seta btn-next" (click)="proximaFoto()" *ngIf="galeriaImagens.length > 1">
+          ❯
+        </button>
       </div>
 
+      <!-- Fila de Miniaturas -->
       <div class="fila-miniaturas" *ngIf="galeriaImagens.length > 1">
-        <button *ngFor="let img of galeriaImagens; let i = index" class="thumb-item" [class.ativo]="i === indiceAtivo" (click)="selecionarIndice(i)">
-          <img [src]="img" alt="Thumbnail" />
+        <button
+          *ngFor="let img of galeriaImagens; let i = index"
+          class="thumb-item"
+          [class.ativo]="i === indiceAtivo"
+          (click)="selecionarIndice(i)"
+        >
+          <img [src]="img" alt="Thumbnail gameplay" />
         </button>
       </div>
     </div>
 
+    <!-- Painel Lateral de Informações -->
     <div class="secao-info">
       <h1 class="titulo-jogo">{{ jogo.nome }}</h1>
 
@@ -52,12 +90,14 @@
       <div class="avaliacao-container">
         <div class="estrelas">★★★★★</div>
         <span class="nota-numero">4.9</span>
-        <span class="total-avaliacoes">({{ 2450 + listaComentarios.length }} avaliações)</span>
+        <span class="total-avaliacoes">({{ 1200 + listaComentarios.length }} avaliações)</span>
       </div>
 
       <div class="card-compra">
         <div class="precos-linha">
-          <span class="preco-original" *ngIf="jogo.desconto > 0" style="text-decoration: line-through; color: rgba(255,255,255,0.4); font-size: 1rem;">{{ jogo.precoOriginal }}</span>
+          <span class="preco-original" *ngIf="jogo.desconto > 0" style="text-decoration: line-through; color: rgba(255,255,255,0.4); font-size: 1rem;">
+            {{ jogo.precoOriginal }}
+          </span>
           <span class="preco-promo">{{ jogo.precoPromocional }}</span>
         </div>
 
@@ -66,9 +106,26 @@
             <i class="fas fa-shopping-cart"></i> Adicionar ao carrinho
           </button>
 
-          <button class="btn-favorito" [class.favoritado]="favorito" (click)="toggleFavorito()" type="button" title="Favoritar">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" [attr.fill]="favorito ? '#ff4757' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-heart">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          <button
+            class="btn-favorito"
+            [class.favoritado]="favorito"
+            (click)="toggleFavorito()"
+            type="button"
+            title="Favoritar"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              [attr.fill]="favorito ? '#ff4757' : 'none'"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon-heart"
+            >
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              ></path>
             </svg>
           </button>
         </div>
@@ -77,44 +134,75 @@
         <div class="compra-segura"><i class="fas fa-lock"></i> Compra 100% segura</div>
       </div>
 
+      <!-- Fatos do Jogo Dinâmicos -->
       <div class="tabela-fatos">
-        <div class="fato-linha"><span>Plataforma:</span> <strong>{{ jogo.plataforma }}</strong></div>
-        <div class="fato-linha"><span>Gênero:</span> <strong>{{ jogo.genero }}</strong></div>
-        <div class="fato-linha"><span>Lançamento:</span> <strong>{{ info?.dataLancamento || '...' }}</strong></div>
-        <div class="fato-linha"><span>Desenvolvedor:</span> <strong>{{ info?.desenvolvedora || '...' }}</strong></div>
-        <div class="fato-linha"><span>Distribuidora:</span> <strong>{{ info?.distribuidora || '...' }}</strong></div>
-        <div class="fato-linha"><span>Idioma:</span> <strong>Português (Brasil) e mais</strong></div>
+        <div class="fato-linha">
+          <span>Plataforma:</span> <strong>{{ jogo.plataforma }}</strong>
+        </div>
+        <div class="fato-linha">
+          <span>Gênero:</span> <strong>{{ jogo.genero }}</strong>
+        </div>
+        <div class="fato-linha">
+          <span>Lançamento:</span> <strong>{{ info?.dataLancamento || '...' }}</strong>
+        </div>
+        <div class="fato-linha">
+          <span>Desenvolvedor:</span> <strong>{{ info?.desenvolvedora || '...' }}</strong>
+        </div>
+        <div class="fato-linha">
+          <span>Distribuidora:</span> <strong>{{ info?.distribuidora || '...' }}</strong>
+        </div>
+        <div class="fato-linha">
+          <span>Idioma:</span> <strong>Português (Brasil) e mais</strong>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- SEÇÃO SOBRE O JOGO -->
   <div class="secao-detalhada">
     <h2>SOBRE O JOGO</h2>
-    <p class="descricao-paragrafo">{{ info?.descricao || 'Carregando descrição...' }}</p>
+    <p class="descricao-paragrafo">{{ info?.descricao || 'Carregando descrição do jogo...' }}</p>
   </div>
 
+  <!-- Modal de Escrever Avaliação -->
   <div class="modal-overlay" *ngIf="exibirModalAvaliacao">
     <div class="modal-card">
       <div class="modal-header">
         <h3>ESCREVER AVALIAÇÃO</h3>
         <button class="btn-fechar-modal" (click)="fecharModal()">✕</button>
       </div>
+
       <div class="modal-body">
         <div class="campo-grupo">
           <label>Seu Nome ou GamerTag</label>
-          <input type="text" [(ngModel)]="novoNome" placeholder="Ex: Geralt_BR" />
+          <input type="text" [(ngModel)]="novoNome" placeholder="Ex: Player1" />
         </div>
+
         <div class="campo-grupo">
           <label>Sua Nota</label>
           <div class="seletor-estrelas-botoes">
-            <button type="button" *ngFor="let nota of [1,2,3,4,5]" class="btn-estrela-opcao" [class.selecionado]="novaNota >= nota" (click)="novaNota = nota">★</button>
+            <button
+              type="button"
+              *ngFor="let nota of [1, 2, 3, 4, 5]"
+              class="btn-estrela-opcao"
+              [class.selecionado]="novaNota >= nota"
+              (click)="novaNota = nota"
+            >
+              ★
+            </button>
             <span class="texto-nota-selecionada">{{ novaNota }} de 5</span>
           </div>
         </div>
+
         <div class="campo-grupo">
           <label>Sua Opinião</label>
-          <textarea [(ngModel)]="novoTexto" rows="4" placeholder="O que você achou do jogo?"></textarea>
+          <textarea
+            [(ngModel)]="novoTexto"
+            rows="4"
+            placeholder="O que você achou do jogo?"
+          ></textarea>
         </div>
+
         <div class="modal-acoes">
           <button class="btn-cancelar" (click)="fecharModal()">Cancelar</button>
           <button class="btn-enviar" (click)="enviarAvaliacao()">Publicar Avaliação</button>
@@ -123,20 +211,44 @@
     </div>
   </div>
 
+  <!-- SEÇÃO AVALIAÇÕES DOS JOGADORES -->
   <div class="secao-avaliacoes">
     <h2>AVALIAÇÕES DOS JOGADORES</h2>
+
     <div class="grid-avaliacoes">
       <div class="resumo-avaliacoes-card">
         <div class="nota-gigante">4.9</div>
         <div class="estrelas">★★★★★</div>
-        <span class="total-votos">{{ 2450 + listaComentarios.length }} avaliações</span>
+        <span class="total-votos">{{ 1200 + listaComentarios.length }} avaliações</span>
+
         <div class="barras-avaliacao">
-          <div class="linha-barra"><span>5 estrelas</span><div class="barra-fundo"><div class="barra-progresso" style="width: 85%"></div></div><span class="votos-num">2.080</span></div>
-          <div class="linha-barra"><span>4 estrelas</span><div class="barra-fundo"><div class="barra-progresso" style="width: 12%"></div></div><span class="votos-num">300</span></div>
-          <div class="linha-barra"><span>3 estrelas</span><div class="barra-fundo"><div class="barra-progresso" style="width: 2%"></div></div><span class="votos-num">50</span></div>
-          <div class="linha-barra"><span>2 estrelas</span><div class="barra-fundo"><div class="barra-progresso" style="width: 0.5%"></div></div><span class="votos-num">12</span></div>
-          <div class="linha-barra"><span>1 estrela</span><div class="barra-fundo"><div class="barra-progresso" style="width: 0.3%"></div></div><span class="votos-num">8</span></div>
+          <div class="linha-barra">
+            <span>5 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 85%"></div></div>
+            <span class="votos-num">1.020</span>
+          </div>
+          <div class="linha-barra">
+            <span>4 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 10%"></div></div>
+            <span class="votos-num">120</span>
+          </div>
+          <div class="linha-barra">
+            <span>3 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 3%"></div></div>
+            <span class="votos-num">36</span>
+          </div>
+          <div class="linha-barra">
+            <span>2 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 1%"></div></div>
+            <span class="votos-num">12</span>
+          </div>
+          <div class="linha-barra">
+            <span>1 estrela</span>
+            <div class="barra-fundo"><div class="barra-progresso" style="width: 1%"></div></div>
+            <span class="votos-num">12</span>
+          </div>
         </div>
+
         <button class="btn-escrever-avaliacao" (click)="abrirModal()">Escrever avaliação</button>
       </div>
 
@@ -150,11 +262,17 @@
             </div>
             <span class="data-comentario">{{ c.data }}</span>
           </div>
+
           <p class="texto-comentario">{{ c.texto }}</p>
+
           <div class="reacoes-comentario">
             <span>Isso foi útil?</span>
-            <button class="btn-reacao" [class.ativo]="c.votouLike" (click)="darLike(c)">👍 {{ c.likes }}</button>
-            <button class="btn-reacao" [class.ativo]="c.votouDislike" (click)="darDislike(c)">👎 {{ c.dislikes }}</button>
+            <button class="btn-reacao" [class.ativo]="c.votouLike" (click)="darLike(c)">
+              👍 {{ c.likes }}
+            </button>
+            <button class="btn-reacao" [class.ativo]="c.votouDislike" (click)="darDislike(c)">
+              👎 {{ c.dislikes }}
+            </button>
           </div>
         </div>
       </div>
@@ -162,9 +280,12 @@
   </div>
 </div>
 
+<!-- Estado de Carregamento / Erro -->
 <ng-template #estadoAlternativo>
   <div class="estado-alternativo">
     <p *ngIf="carregando">Carregando informações do jogo...</p>
-    <p *ngIf="!carregando && erro">Não foi possível carregar os dados do jogo agora. Tente novamente em instantes.</p>
+    <p *ngIf="!carregando && erro">
+      Não foi possível carregar os dados do jogo agora. Tente novamente em instantes.
+    </p>
   </div>
 </ng-template>

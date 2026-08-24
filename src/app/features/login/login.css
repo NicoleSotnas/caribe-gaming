@@ -15,7 +15,6 @@
     linear-gradient(160deg, #5fd8ea 0%, #1c92ae 22%, #0f5f7a 42%, #0b1e33 72%, #050d18 100%);
 }
 
-/* Bolhas ambientes, geradas sem precisar mexer no HTML */
 .tela-login::before,
 .tela-login::after {
   content: '';
@@ -68,6 +67,7 @@
     0 0 40px rgba(95, 216, 234, 0.08);
   width: 100%;
   max-width: 380px;
+  box-sizing: border-box;
   overflow: hidden;
   z-index: 2;
 }
@@ -112,6 +112,8 @@
 }
 
 .campo input {
+  width: 100%;
+  box-sizing: border-box;
   padding: 0.75rem 0.9rem 0.75rem 2.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
@@ -162,6 +164,7 @@
 
 button {
   width: 100%;
+  box-sizing: border-box;
   padding: 0.85rem;
   background: linear-gradient(120deg, #1c92ae, #5457e5);
   color: #fff;
@@ -225,4 +228,63 @@ button:disabled {
 .link-voltar:hover {
   text-decoration: underline;
   color: #5fd8ea;
+}
+
+.divisor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.1rem 0 0.9rem;
+  color: #9db3c4;
+  font-size: 0.75rem;
+}
+
+.divisor::before,
+.divisor::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.18) 0 6px,
+    transparent 6px 10px
+  );
+}
+
+.btn-google {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem;
+  background: #fff;
+  color: #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    filter 0.15s;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+.btn-google:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.03);
+}
+
+.btn-google:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-google:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { RawgService,DetalhesJogo } from '../../../core/services/rawg.service';
+import { RawgService, DetalhesJogo } from '../../../core/services/rawg.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
 
@@ -40,6 +40,7 @@ export class GodOfWarRagnarok implements OnInit {
   favorito: boolean = false;
   mensagemToast: string | null = null;
 
+  // Controle de Modal e Formulário de Avaliação
   exibirModalAvaliacao: boolean = false;
   novoNome: string = '';
   novoTexto: string = '';
@@ -57,7 +58,8 @@ export class GodOfWarRagnarok implements OnInit {
       autor: 'AtreusLoki',
       avatar: 'A',
       estrelas: 5,
-      texto: 'Uma conclusão monumental para a saga nórdica. A relação entre o Kratos e o Atreus atinge um nível emocional incrível!',
+      texto:
+        'Uma conclusão monumental para a saga nórdica. A relação entre o Kratos e o Atreus atinge um nível emocional incrível!',
       data: '22/08/2026',
       likes: 210,
       dislikes: 2,
@@ -76,6 +78,7 @@ export class GodOfWarRagnarok implements OnInit {
 
   readonly ID_PRODUTO = '8';
   readonly precoJogo = 249.90;
+  readonly precoOriginalFormatado = 'R$ 249,90';
   readonly precoFormatado = 'R$ 249,90';
 
   private cdr = inject(ChangeDetectorRef);
@@ -104,6 +107,7 @@ export class GodOfWarRagnarok implements OnInit {
 
   ngOnInit(): void {}
 
+  // Gerenciamento das Avaliações
   carregarAvaliacoes(): void {
     try {
       if (typeof localStorage !== 'undefined') {
@@ -230,9 +234,9 @@ export class GodOfWarRagnarok implements OnInit {
       nome: this.jogo.nome,
       imagem: this.galeriaImagens[0] || this.jogo.background_image || '',
       imagemPosicao: 'center',
-      precoOriginal: this.precoFormatado,
+      precoOriginal: this.precoOriginalFormatado,
       precoPromocional: this.precoFormatado,
-      desconto: 0,
+      desconto: '0%',
       genero: 'Ação / Aventura',
       plataforma: this.jogo.plataformas || 'PC / PS5',
       categorias: ['acao', 'aventura', 'rpg'],
@@ -248,29 +252,47 @@ export class GodOfWarRagnarok implements OnInit {
   }
 
   private carregarDadosDoJogo(): void {
-    this.jogo = {
-      id: 8,
-      nome: 'God of War Ragnarök',
-      descricao: `Embarque em uma jornada épica e comovente ao lado de Kratos e Atreus enquanto lutam para se segurar e deixar ir. Com o Fimbulwinter em pleno andamento, pai e filho devem viajar por cada um dos Nove Reinos em busca de respostas, enquanto as forças de Asgard se preparam para a batalha profetizada que acabará com o mundo. Explore paisagens míticas deslumbrantes, domine novos elementos de combate e enfrente deuses e monstros nórdicos em uma das narrativas mais marcantes dos videogames.`,
-      dataLancamento: '19/09/2024',
-      desenvolvedoras: 'Santa Monica Studio / Jetpack Interactive',
-      distribuidoras: 'PlayStation Publishing LLC',
-      classificacaoEtaria: '+18',
-      plataformas: 'PC / PS5',
-      background_image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/capsule_616x353.jpg',
-    };
+    this.rawgService.obterDetalhesJogo(this.jogoSlug).subscribe({
+      next: (res: any) => {
+        this.jogo = {
+          id: res.id,
+          nome: res.name || 'God of War Ragnarök',
+          descricao: `Embarque em uma jornada épica e comovente ao lado de Kratos e Atreus enquanto lutam para se segurar e deixar ir. Com o Fimbulwinter em pleno andamento, pai e filho devem viajar por cada um dos Nove Reinos em busca de respostas, enquanto as forças de Asgard se preparam para a batalha profetizada que acabará com o mundo. Explore paisagens míticas deslumbrantes, domine novos elementos de combate e enfrente deuses e monstros nórdicos em uma das narrativas mais marcantes dos videogames.`,
+          dataLancamento: res.released ? res.released.split('-').reverse().join('/') : '19/09/2024',
+          desenvolvedoras: res.developers?.[0]?.name || 'Santa Monica Studio / Jetpack Interactive',
+          distribuidoras: res.publishers?.[0]?.name || 'PlayStation Publishing LLC',
+          classificacaoEtaria: '+18',
+          plataformas: res.platforms?.map((p: any) => p.platform.name).join(' / ') || 'PC / PS5',
+          background_image: res.background_image,
+        };
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Erro ao buscar detalhes do jogo:', err);
+        this.erro = true;
+        this.cdr.markForCheck();
+      },
+    });
 
-    const capaSteam = `https://cdn.cloudflare.steamstatic.com/steam/apps/${this.steamAppId}/capsule_616x353.jpg`;
-    this.galeriaImagens = [
-      capaSteam,
-      'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/ss_1e11361cd35441865415785081b83d81b95603d3.1920x1080.jpg',
-      'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/ss_8440535e6c1e30954b04bf62580a5de62a70bf9d.1920x1080.jpg',
-      'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/ss_017b2b6348c414902b5db000109968a9b6c0e0b3.1920x1080.jpg'
-    ];
+    this.rawgService.obterScreenshots(this.jogoSlug).subscribe({
+      next: (res) => {
+        if (res.results && res.results.length > 0) {
+          const capaSteam = `https://cdn.cloudflare.steamstatic.com/steam/apps/${this.steamAppId}/capsule_616x353.jpg`;
+          const screenshots = res.results.map((item: any) => item.image);
 
-    this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
-    this.carregando = false;
-    this.cdr.markForCheck();
+          this.galeriaImagens = [capaSteam, ...screenshots];
+          this.salvarNoCache({ jogo: this.jogo, imagens: this.galeriaImagens });
+        }
+        this.carregando = false;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar screenshots:', err);
+        this.carregando = false;
+        this.erro = true;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   private carregarDoCache(): void {
@@ -294,7 +316,7 @@ export class GodOfWarRagnarok implements OnInit {
     } catch {}
   }
 
-  proximaFoto():void {
+  proximaFoto(): void {
     if (this.galeriaImagens.length === 0) return;
     this.indiceAtivo = this.indiceAtivo < this.galeriaImagens.length - 1 ? this.indiceAtivo + 1 : 0;
   }
