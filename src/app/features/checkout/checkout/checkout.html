@@ -13,7 +13,7 @@
       <p>Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.</p>
     </div>
   } @else if (!compraFinalizada()) {
-    <div class="checkout-container">
+    <div class="checkout-grid">
       <form class="checkout-form" [formGroup]="formulario">
         <h3>Dados de Conclusão</h3>
 
@@ -37,7 +37,7 @@
             [class.input-erro]="campoInvalido('email')"
           />
           @if (campoInvalido('email')) {
-            <small>Informe um endereço de e-mail válido (ex: nome@dominio.com).</small>
+            <small>Informe um e-mail válido com domínio (ex: usuario@gmail.com).</small>
           }
         </div>
 
@@ -74,7 +74,7 @@
           }
         </div>
         <div class="checkout-total-box">
-          <span class="total-label">Total: </span>
+          <span class="total-label">Total:</span>
           <strong class="checkout-total">R$ {{ carrinhoFacade.total().toFixed(2) }}</strong>
         </div>
       </section>
