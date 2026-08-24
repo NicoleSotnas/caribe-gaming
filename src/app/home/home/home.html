@@ -2,7 +2,7 @@
 
 <main class="main-container">
   <section class="hero-banner">
-    <div class="hero-slide">
+    <div class="hero-slide" (click)="irParaPaginaDoJogo(heroGames[activeHeroIndex])" style="cursor: pointer;">
       <img
         [src]="heroGames[activeHeroIndex].image"
         [alt]="heroGames[activeHeroIndex].title"
@@ -18,7 +18,7 @@
     <div class="hero-content">
       <div class="hero-details">
         <span class="badge">{{ heroGames[activeHeroIndex].badge }}</span>
-        <h1 class="hero-title">{{ heroGames[activeHeroIndex].title }}</h1>
+        <h1 class="hero-title" (click)="irParaPaginaDoJogo(heroGames[activeHeroIndex])" style="cursor: pointer;">{{ heroGames[activeHeroIndex].title }}</h1>
         <p class="hero-subtitle">{{ heroGames[activeHeroIndex].subtitle }}</p>
 
         <div class="price-action">
@@ -27,7 +27,7 @@
             <span class="old-price">{{ heroGames[activeHeroIndex].originalPrice }}</span>
             <span class="promo-price">{{ heroGames[activeHeroIndex].promoPrice }}</span>
           </div>
-          <button class="buy-btn" (click)="comprarAgora(heroGames[activeHeroIndex])">
+          <button class="buy-btn" (click)="$event.stopPropagation(); comprarAgora(heroGames[activeHeroIndex])">
             COMPRAR AGORA
           </button>
         </div>
@@ -59,7 +59,7 @@
 
     <div #cardsContainer class="offers-grid">
       @for (game of offerGames; track game.id) {
-        <div class="game-card" (click)="comprarAgora(game)">
+        <div class="game-card" (click)="irParaPaginaDoJogo(game)" style="cursor: pointer;">
           <div class="card-image-box">
             <img [src]="game.image" [alt]="game.title" loading="lazy" decoding="async" />
             <span class="card-discount">{{ game.discount }}</span>
