@@ -63,23 +63,27 @@ export class DetalheJogo implements OnInit {
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
 
+  // Cache dinâmico por jogo
   private get chaveCache(): string {
-    return `jogo_cache_${this.jogo?.id}`;
+    return `jogo_cache_${this.jogo?.id}_${this.jogo?.slug}`;
   }
 
+  // Avaliações isoladas por ID do jogo
   private get chaveAvaliacoes(): string {
     return `avaliacoes_jogo_${this.jogo?.id}`;
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.data['id'];
-    if (!id) {
+    // Captura o slug ou id da URL
+    const param = this.route.snapshot.paramMap.get('slug') || this.route.snapshot.paramMap.get('id');
+
+    if (!param) {
       this.erro = true;
       this.carregando = false;
       return;
     }
 
-    this.produtosService.obterPorId(id).subscribe({
+    this.produtosService.obterPorSlugOuId(param).subscribe({
       next: (produto) => {
         if (!produto) {
           this.erro = true;
@@ -89,7 +93,7 @@ export class DetalheJogo implements OnInit {
 
         this.jogo = produto;
         this.favorito = this.favoritosService.ehFavorito(produto.id);
-        this.carregarAvaliacoes();
+        this.carregarAvaliacoes(); // Busca APENAS as avaliações deste jogo especifico
 
         if (this.carregarDoCache()) {
           this.carregando = false;
@@ -108,7 +112,7 @@ export class DetalheJogo implements OnInit {
     this.rawgService.obterDetalhesJogo(produto.slug).subscribe({
       next: (res) => {
         this.info = {
-          descricao: res.description_raw || 'Descrição indisponível.',
+          descricao: produto.descricaoCustom || res.description_raw || 'Descrição indisponível.',
           dataLancamento: res.released ? res.released.split('-').reverse().join('/') : 'N/A',
           desenvolvedora: res.developers?.[0]?.name || 'N/A',
           distribuidora: res.publishers?.[0]?.name || 'N/A',
@@ -119,7 +123,7 @@ export class DetalheJogo implements OnInit {
       error: (err) => {
         console.error('Erro ao buscar detalhes do jogo:', err);
         this.info = {
-          descricao: 'Descrição indisponível no momento.',
+          descricao: produto.descricaoCustom || 'Descrição indisponível no momento.',
           dataLancamento: 'N/A',
           desenvolvedora: 'N/A',
           distribuidora: 'N/A',
@@ -133,10 +137,10 @@ export class DetalheJogo implements OnInit {
       next: (res) => {
         const capa = produto.steamAppId
           ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${produto.steamAppId}/capsule_616x353.jpg`
-          : produto.imagem;
+          : produto.imagem || '';
 
         const screenshots = res.results?.map((item) => item.image) ?? [];
-        this.galeriaImagens = [capa, ...screenshots];
+        this.galeriaImagens = [capa, ...screenshots].filter(img => !!img);
 
         this.salvarNoCache();
         this.carregando = false;
@@ -144,7 +148,7 @@ export class DetalheJogo implements OnInit {
       },
       error: (err) => {
         console.error('Erro ao carregar screenshots:', err);
-        this.galeriaImagens = [produto.imagem];
+        this.galeriaImagens = [produto.imagem || ''];
         this.carregando = false;
         this.cdr.markForCheck();
       },
@@ -239,7 +243,7 @@ export class DetalheJogo implements OnInit {
       nome: this.jogo.nome,
       preco,
       quantidade: 1,
-      imagemUrl: this.jogo.imagem,
+      imagemUrl: this.galeriaImagens[0] || this.jogo.imagem || '',
       plataforma: this.jogo.plataforma,
       categoria: this.jogo.genero,
     });
