@@ -1,69 +1,43 @@
 import { Component, inject, signal } from '@angular/core';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  FormControl,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms';
-
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 
 @Component({
   selector: 'app-checkout',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css',
 })
 export class Checkout {
   carrinhoFacade = inject(CarrinhoFacade);
+  private fb = inject(FormBuilder);
 
-  compraFinalizada = signal(false);
+  compraFinalizada = signal<boolean>(false);
 
-  formulario = new FormGroup({
-    nome: new FormControl('', [Validators.required, Validators.minLength(3), nomeSemNumeros]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    endereco: new FormControl('', [Validators.required, Validators.minLength(5)]),
+  // Regex estrita que exige algo@dominio.com (exige ponto e pelo menos 2 letras após o ponto)
+  private emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
+
+  formulario: FormGroup = this.fb.group({
+    nome: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+    endereco: ['', [Validators.required, Validators.minLength(5)]],
   });
 
+  /**
+   * Avalia se o campo está inválido e se já foi focado/modificado pelo usuário.
+   */
+  campoInvalido(nomeCampo: string): boolean {
+    const campo = this.formulario.get(nomeCampo);
+    return !!(campo && campo.invalid && (campo.dirty || campo.touched));
+  }
+
   finalizar() {
-    this.compraFinalizada.set(false);
-
-    if (this.carrinhoFacade.carrinhoVazio()) {
-      console.log('Não é possível finalizar uma compra com o carrinho vazio.');
-      return;
-    }
-
-    if (this.formulario.invalid) {
-      console.log('Formulário inválido');
+    if (this.formulario.valid) {
+      this.carrinhoFacade.limparCarrinho();
+      this.compraFinalizada.set(true);
+    } else {
       this.formulario.markAllAsTouched();
-      return;
     }
-
-    const dados = this.formulario.value;
-    const itens = this.carrinhoFacade.itens();
-    const total = this.carrinhoFacade.total();
-
-    console.log('Compra finalizada com sucesso!');
-    console.log('Dados do formulário:', dados);
-    console.log('Itens do carrinho:', itens);
-    console.log('Total da compra:', total);
-
-    this.carrinhoFacade.limparCarrinho();
-    this.formulario.reset();
-    this.compraFinalizada.set(true);
   }
-}
-
-function nomeSemNumeros(control: AbstractControl): ValidationErrors | null {
-  const valor = control.value;
-
-  if (!valor) return null;
-
-  if (/\d/.test(valor)) {
-    return { numeroInvalido: true };
-  }
-
-  return null;
 }

@@ -28,6 +28,7 @@ import { F1 } from './features/produtos/f1/f1';
 import { Cyberpunk2077 } from './features/produtos/cyberpunk-2077/cyberpunk-2077';
 import { MarvelRivals } from './features/produtos/marvel-rivals/marvel-rivals';
 import { TheLastOfUsPartii } from './features/produtos/the-last-of-us-part-ii/the-last-of-us-part-ii';
+import { DetalheJogo } from './features/produtos/detalhe-jogo/detalhe-jogo';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,10 @@ export const routes: Routes = [
   {
     path: 'jogos',
     component: Produtos,
+  },
+  {
+    path: 'produto/:id',
+    component: DetalheJogo,
   },
   {
     path: 'jogos/grand-theft-auto-v',
