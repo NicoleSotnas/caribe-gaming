@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Sekuya&display=swap');
+
+.site-footer {
+  background: linear-gradient(180deg, #162347 0%, #0d152d 100%);
+  color: #e2e8f0;
+  padding: 40px 20px 20px 20px;
+  border-top: 3px solid #346498;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    sans-serif;
+}
+
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.footer-column h3 {
+  font-family: 'Sekuya', system-ui, sans-serif;
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* Links de Navegação */
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-column ul li a i {
+  font-size: 0.75rem;
+  color: #3bafd4;
+  transition: transform 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+  color: #3bafd4;
+  transform: translateX(4px);
+}
+
+/* Estilos de Suporte, E-mail e Endereço */
+.footer-column p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+
+.email-link,
+.address-link,
+.support-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  word-break: break-word;
+}
+
+.email-link i,
+.address-link i,
+.support-info i {
+  color: #3bafd4;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.email-link:hover,
+.address-link:hover {
+  color: #3bafd4;
+  transform: translateX(3px);
+}
+
+/* Redes Sociais com Botões Clicáveis */
+.social-links {
+  display: flex;
+  gap: 12px;
+}
+
+.social-links a {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background-color: rgba(52, 100, 152, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.social-links a:hover {
+  background-color: #3bafd4;
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(59, 175, 212, 0.4);
+}
+
+/* Rodapé Inferior */
+.footer-bottom {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 20px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+/* Responsividade e Redimensionamento */
+@media (max-width: 767px) {
+  .site-footer {
+    padding: 30px 16px 16px 16px;
+  }
+
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .social-links a {
+    width: 38px;
+    height: 38px;
+    font-size: 1.05rem;
+  }
+
+  .email-link,
+  .address-link,
+  .support-info {
+    font-size: 0.9rem;
+  }
+}
