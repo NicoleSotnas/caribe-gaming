@@ -46,8 +46,6 @@
   width: auto;
   object-fit: contain;
   border-radius: 8px;
-  mix-blend-mode: multiply;
-  filter: contrast(110%) brightness(105%);
 }
 
 .brand-title {
@@ -59,6 +57,12 @@
   text-transform: uppercase;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Espaçamento entre Caribe's e Gaming */
+  line-height: 1;
+  text-align: left;
+  margin-left: -9px;
 }
 
 .hamburger-btn {
@@ -78,8 +82,9 @@
 }
 
 .botao {
-  font-family: 'Sekuya', system-ui;
-  font-weight: 400;
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -142,8 +147,11 @@
 }
 
 .nome-usuario-header {
-  font-family: 'Sekuya', system-ui;
-  font-weight: 400;
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+
   color: #ffffff;
   font-size: 0.85rem;
   white-space: nowrap;
