@@ -39,7 +39,6 @@
     linear-gradient(90deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.3) 60%, transparent 100%);
 }
 
-/* Setas de Navegação Sempre Visíveis */
 .nav-arrow {
   position: absolute;
   top: 50%;
@@ -72,7 +71,6 @@
   right: 0.8rem;
 }
 
-/* Conteúdo do Hero */
 .hero-content {
   position: relative;
   z-index: 5;
@@ -173,7 +171,6 @@
   box-shadow: 0 4px 15px rgba(59, 175, 212, 0.4);
 }
 
-/* Indicadores Diários (Desktop) */
 .hero-indicators {
   display: flex;
   flex-direction: column;
@@ -290,6 +287,7 @@
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+  cursor: pointer;
 }
 
 .game-card:hover {
@@ -361,81 +359,134 @@
 }
 
 /* ==========================================================================
-   REGRAS RESPONSIVAS (MOBILE E TABLET)
+   REGRAS RESPONSIVAS
    ========================================================================== */
 
-@media (max-width: 991px) {
+/* Tablet (768px até 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .main-container {
+    padding-top: 85px;
+  }
+
+  .hero-banner {
+    height: clamp(500px, 60vh, 580px);
+  }
+
+  .hero-content {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 2rem 2.5rem;
+    gap: 1.5rem;
+  }
+
+  .hero-details {
+    max-width: 60%;
+    text-align: left;
+  }
+
+  .price-action {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .buy-btn {
+    width: auto;
+    padding: 0.75rem 1.2rem;
+    font-size: 0.85rem;
+    margin-top: 0;
+  }
+
+  .hero-indicators {
+    flex-direction: column;
+    width: 200px;
+    margin: 0;
+    gap: 0.5rem;
+  }
+
+  .indicator-btn {
+    width: 100%;
+    height: 36px;
+  }
+
+  .nav-arrow {
+    display: flex;
+  }
+}
+
+/* Mobile (Até 767px) */
+@media (max-width: 767px) {
   .main-container {
     padding-top: 75px;
   }
 
   .hero-banner {
-    height: auto !important;
+    height: auto;
     min-height: 520px;
     display: flex;
     flex-direction: column;
   }
 
   .hero-content {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    justify-content: flex-end !important;
-    padding: 1.5rem 1rem 1rem 1rem !important;
-    margin-top: auto !important;
-    box-sizing: border-box !important;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    padding: 1.5rem 1rem 1rem 1rem;
+    margin-top: auto;
+    box-sizing: border-box;
   }
 
   .hero-details {
-    max-width: 100% !important;
+    max-width: 100%;
   }
 
   .buy-btn {
-    width: 100% !important;
-    padding: 0.6rem 1rem !important;
-    font-size: 0.85rem !important;
-    line-height: 1 !important;
-    margin-top: 0.5rem !important;
-    border-radius: 6px !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    line-height: 1;
+    margin-top: 0.5rem;
+    border-radius: 6px;
+    box-sizing: border-box;
+    text-align: center;
   }
 
   .hero-indicators {
-    flex-direction: column !important;
-    width: 100% !important;
-    margin: 0.5rem 0 0 0 !important;
-    gap: 0.35rem !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
+    flex-direction: column;
+    width: 100%;
+    margin: 0.5rem 0 0 0;
+    gap: 0.35rem;
+    padding: 0;
+    box-sizing: border-box;
   }
 
-  /* Botão compacto com corte de texto em '...' no mobile */
   .indicator-btn {
-    width: 70% !important;
-    height: 32px !important;
-    padding: 0 0.65rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 0.5rem !important;
-    border-radius: 6px !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    text-align: left !important;
-    box-sizing: border-box !important;
+    width: 100%;
+    height: 32px;
+    padding: 0 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: left;
+    box-sizing: border-box;
   }
 
   .indicator-btn span,
   .indicator-btn strong {
-    font-size: 0.75rem !important;
-    line-height: 1 !important;
-    font-weight: 600 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100% !important;
+    font-size: 0.75rem;
+    line-height: 1;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 
   .nav-arrow {
-    display: none !important;
+    display: none;
   }
 }

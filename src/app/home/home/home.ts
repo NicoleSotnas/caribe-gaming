@@ -29,7 +29,6 @@ export class Home implements OnInit, OnDestroy {
   activeHeroIndex = 0;
   private autoSlideTimer: any;
 
-  // Banner Principal (Homem-Aranha e Formula 1 25)
   heroGames: GameItem[] = [
     {
       id: 1,
@@ -53,7 +52,6 @@ export class Home implements OnInit, OnDestroy {
     },
   ];
 
-  // Carrossel com os 6 Jogos Solicitados
   offerGames: GameItem[] = [
     {
       id: 101,
@@ -119,10 +117,9 @@ export class Home implements OnInit, OnDestroy {
     this.stopAutoSlide();
   }
 
-  // Método ajustado para usar adicionarProduto
   comprarAgora(jogo: GameItem) {
     const precoNumerico = parseFloat(
-      jogo.promoPrice.replace('R$', '').replace('.', '').replace(',', '.').trim()
+      jogo.promoPrice.replace('R$', '').replace('.', '').replace(',', '.').trim(),
     );
 
     this.carrinhoFacade.adicionarProduto({

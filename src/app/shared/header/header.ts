@@ -9,7 +9,7 @@ import { AuthFacade } from '../../core/facades/auth.facade';
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './header.html',
   styleUrl: './header.css',
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class Header {
   authFacade = inject(AuthFacade);
@@ -30,7 +30,6 @@ export class Header {
     this.menuUsuarioAberto = !this.menuUsuarioAberto;
   }
 
-  // fecha o dropdown se a pessoa clicar em qualquer lugar fora dele
   @HostListener('document:click', ['$event'])
   aoClicarFora(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
