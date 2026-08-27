@@ -75,21 +75,27 @@ export class CarrinhoFacade {
     });
   }
 
-  private mesclarCarrinhos(nuvem: ItemCarrinho[], local: ItemCarrinho[]): ItemCarrinho[] {
-    const mapa = new Map<string, ItemCarrinho>();
+private mesclarCarrinhos(nuvem: ItemCarrinho[], local: ItemCarrinho[]): ItemCarrinho[] {
+  const mapa = new Map<number, ItemCarrinho>();
 
-    nuvem.forEach((item) => mapa.set(item.id, { ...item }));
-    local.forEach((item) => {
-      if (mapa.has(item.id)) {
-        const itemExistente = mapa.get(item.id)!;
-        itemExistente.quantidade += item.quantidade;
-      } else {
-        mapa.set(item.id, { ...item });
-      }
-    });
+  nuvem.forEach((item) => {
+    if (item.id === undefined) return;
+    mapa.set(item.id, { ...item });
+  });
 
-    return Array.from(mapa.values());
-  }
+  local.forEach((item) => {
+    if (item.id === undefined) return;
+
+    if (mapa.has(item.id)) {
+      const itemExistente = mapa.get(item.id)!;
+      itemExistente.quantidade = (itemExistente.quantidade ?? 0) + (item.quantidade ?? 0);
+    } else {
+      mapa.set(item.id, { ...item });
+    }
+  });
+
+  return Array.from(mapa.values());
+}
 
   private async salvarNoFirestore(uid: string, itens: ItemCarrinho[]): Promise<void> {
     const docRef = doc(this.firestore, `carrinhos/${uid}`);
