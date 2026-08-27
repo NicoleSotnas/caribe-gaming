@@ -39,9 +39,6 @@ export const routes: Routes = [
     path: 'jogos',
     component: Produtos,
   },
-
-
-
   {
     path: 'jogos/grand-theft-auto-v',
     component: GrandTheftAutoV,
