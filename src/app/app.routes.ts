@@ -40,10 +40,7 @@ export const routes: Routes = [
     component: Produtos,
   },
 
-  {
-    path: 'produto/:id',
-    component: DetalheJogo,
-  },
+
 
   {
     path: 'jogos/grand-theft-auto-v',
