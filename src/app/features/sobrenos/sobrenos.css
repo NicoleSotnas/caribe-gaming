@@ -1,10 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Sekuya&display=swap');
 
+/* Regra global da página */
 .about-page {
   background: linear-gradient(180deg, #090e1a 0%, #050811 100%);
   color: #e2e8f0;
   min-height: 100vh;
+  padding-top: 100px; /* Compensação da altura do Header Desktop */
   padding-bottom: 60px;
+  box-sizing: border-box;
   font-family:
     system-ui,
     -apple-system,
@@ -28,9 +31,10 @@
   font-family: 'Sekuya', system-ui, sans-serif;
   font-size: 2.8rem;
   color: #ffffff;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  letter-spacing: 2px;
   text-shadow: 0 0 15px rgba(59, 175, 212, 0.4);
-  letter-spacing: 1.5px;
 }
 
 .hero-subtitle {
@@ -46,18 +50,20 @@
   padding: 40px 20px;
 }
 
+/* Título de Seção (Ex: NOSSA TRIPULAÇÃO) */
 .section-title {
   font-family: 'Sekuya', system-ui, sans-serif;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: #ffffff;
   text-align: center;
-  margin: 50px 0 32px 0;
-  letter-spacing: 1px;
+  margin: 60px 0 36px 0;
+  line-height: 1.5; /* Evita o choque vertical entre as palavras */
+  letter-spacing: 3px; /* Espaçamento entre as letras da fonte Sekuya */
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(59, 175, 212, 0.3);
+  text-shadow: 0 0 12px rgba(59, 175, 212, 0.35);
 }
 
-/* Card Único sobre a Equipe */
+/* Card Único de Introdução da Equipe */
 .team-about-card {
   background: rgba(18, 28, 56, 0.6);
   border: 1px solid rgba(59, 175, 212, 0.2);
@@ -85,6 +91,8 @@
   color: #ffffff;
   font-size: 1.5rem;
   margin: 0;
+  line-height: 1.3;
+  letter-spacing: 1.5px;
 }
 
 .team-about-content p {
@@ -102,14 +110,14 @@
   color: #3bafd4;
 }
 
-/* Grid dos Cards Individuais */
+/* Grid dos Cards de Integrantes */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 28px;
 }
 
-/* Estilização dos Cards da Tripulação */
+/* Card Individual de Integrante */
 .team-card {
   background: linear-gradient(145deg, rgba(20, 31, 61, 0.7) 0%, rgba(13, 20, 39, 0.8) 100%);
   border: 1px solid rgba(59, 175, 212, 0.2);
@@ -130,7 +138,6 @@
   background: linear-gradient(145deg, rgba(25, 39, 77, 0.8) 0%, rgba(15, 24, 48, 0.9) 100%);
 }
 
-/* Cargo Pirata (Topo) */
 .team-card .role {
   font-size: 0.85rem;
   color: #3bafd4;
@@ -147,7 +154,6 @@
   border: 1px solid rgba(59, 175, 212, 0.2);
 }
 
-/* Container do Avatar/Foto */
 .team-avatar {
   width: 96px;
   height: 96px;
@@ -163,14 +169,12 @@
   box-shadow: 0 0 15px rgba(59, 175, 212, 0.25);
 }
 
-/* Ícone Padrão (Fica atrás da foto) */
 .team-avatar i {
   font-size: 2.2rem;
   color: #3bafd4;
   z-index: 1;
 }
 
-/* Estilo da Imagem */
 .team-avatar img {
   width: 100%;
   height: 100%;
@@ -182,7 +186,6 @@
   z-index: 2;
 }
 
-/* Nome do Integrante */
 .member-name {
   font-size: 1.2rem;
   color: #ffffff;
@@ -192,7 +195,6 @@
   line-height: 1.3;
 }
 
-/* Redes Sociais */
 .member-socials {
   display: flex;
   gap: 12px;
@@ -222,7 +224,7 @@
   box-shadow: 0 4px 12px rgba(59, 175, 212, 0.4);
 }
 
-/* Call to Action Banner */
+/* Call to Action Banner (Ex: PRONTO PARA INICIAR SUA PRÓXIMA AVENTURA?) */
 .about-cta {
   background: linear-gradient(135deg, #121c38 0%, #1e335e 100%);
   border: 1px solid rgba(59, 175, 212, 0.3);
@@ -237,7 +239,9 @@
   font-family: 'Sekuya', system-ui, sans-serif;
   color: #ffffff;
   font-size: 1.8rem;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
+  line-height: 1.6; /* Evita o choque entre as linhas de texto em bloco */
+  letter-spacing: 2px; /* Facilita a leitura das palavras em caixa alta */
 }
 
 .about-cta p {
@@ -267,14 +271,114 @@
   box-shadow: 0 6px 20px rgba(59, 175, 212, 0.6);
 }
 
-/* Adaptabilidade para Celulares */
-@media (max-width: 767px) {
+/* =================================================== */
+/* RESPONSIVIDADE DA PÁGINA SOBRE NOS                  */
+/* =================================================== */
+
+@media (max-width: 900px) {
+  .about-page {
+    padding-top: 75px; /* Ajuste para o header menor no mobile */
+  }
+
+  .about-hero {
+    padding: 40px 16px;
+  }
+
   .page-title {
-    font-size: 2.1rem;
+    font-size: 2.2rem;
+    line-height: 1.35;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .about-container {
+    padding: 24px 16px;
   }
 
   .team-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-title {
+    font-size: 1.7rem;
+    line-height: 1.3;
+    letter-spacing: 1.5px;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    letter-spacing: 2px;
+    margin: 36px 0 24px 0;
+  }
+
+  .team-about-card {
+    padding: 20px 16px;
+  }
+
+  .team-about-header h2 {
+    font-size: 1.2rem;
+    line-height: 1.4;
+  }
+
+  .team-about-content p {
+    font-size: 0.95rem;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 14px;
+  }
+
+  .team-card {
+    padding: 18px 12px;
+  }
+
+  .team-card .role {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+
+  .team-avatar {
+    width: 72px;
+    height: 72px;
+  }
+
+  .team-avatar i {
+    font-size: 1.6rem;
+  }
+
+  .member-name {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+
+  .member-socials a {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .about-cta {
+    padding: 32px 16px;
+    margin-top: 40px;
+  }
+
+  .about-cta h2 {
+    font-size: 1.3rem;
+    line-height: 1.5;
+    letter-spacing: 1.5px;
+  }
+
+  .cta-btn {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 12px 20px;
   }
 }

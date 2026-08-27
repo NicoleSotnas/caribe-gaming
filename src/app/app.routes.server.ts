@@ -4,7 +4,7 @@ export const serverRoutes: ServerRoute[] = [
   // ... outras rotas que já existem aí no seu projeto
 
   {
-    path: 'produto/:id',
+    path: 'jogos/:id',
     renderMode: RenderMode.Server,
   },
   {
@@ -12,7 +12,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender, // Ou RenderMode.Server
   },
   {
-    path: 'produto/:id',
+    path: 'jogos/:id',
     renderMode: RenderMode.Server,
   },
 
