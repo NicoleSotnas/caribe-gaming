@@ -1,18 +1,112 @@
 <header class="header-container">
+
+  <!-- LOGO -->
   <div class="logo-brand" routerLink="/" (click)="fecharMenu()">
     <img src="/img/logo-caribes.png" alt="Logo Caribe's Gaming" />
+
     <span class="brand-title">
       <span>Caribe's</span>
       <span>Gaming</span>
     </span>
   </div>
 
-  <button class="hamburger-btn" (click)="toggleMenu()" aria-label="Abrir Menu">
-    <i class="fa-solid" [ngClass]="menuAberto ? 'fa-xmark' : 'fa-bars'"></i>
+
+  <!-- ===== BARRA DE PESQUISA ===== -->
+  <div class="search-container">
+
+    <input
+      type="text"
+      placeholder="Pesquisar jogos..."
+      [(ngModel)]="termoPesquisa"
+      (input)="pesquisar()"
+      (focus)="pesquisar()"
+      autocomplete="off"
+    />
+
+    <button
+      type="button"
+      class="search-button"
+      (click)="pesquisar()"
+      aria-label="Pesquisar"
+    >
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+
+
+    <!-- ===== SUGESTÕES ===== -->
+    @if (mostrarSugestoes && termoPesquisa.trim() !== '') {
+
+      <div class="search-suggestions">
+
+        @if (produtosFiltrados.length > 0) {
+
+          @for (produto of produtosFiltrados; track produto.id) {
+
+            <button
+              type="button"
+              class="search-suggestion"
+              (click)="selecionarJogo(produto)"
+            >
+
+              <div class="suggestion-icon">
+                <i class="fa-solid fa-gamepad"></i>
+              </div>
+
+              <div class="suggestion-info">
+
+                <span class="suggestion-name">
+                  {{ produto.nome }}
+                </span>
+
+                <span class="suggestion-genre">
+                  {{ produto.genero }}
+                </span>
+
+              </div>
+
+            </button>
+
+          }
+
+        } @else {
+
+          <div class="no-results">
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <span>
+              Nenhum jogo encontrado
+            </span>
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+
+
+  <!-- BOTÃO HAMBÚRGUER -->
+  <button
+    class="hamburger-btn"
+    (click)="toggleMenu()"
+    aria-label="Abrir Menu"
+  >
+    <i
+      class="fa-solid"
+      [ngClass]="menuAberto ? 'fa-xmark' : 'fa-bars'"
+    ></i>
   </button>
 
+
+  <!-- MENU -->
   <nav [class.open]="menuAberto">
+
     <div class="button-row">
+
+
+      <!-- HOME -->
       <button
         class="botao"
         routerLink="/"
@@ -20,15 +114,34 @@
         [routerLinkActiveOptions]="{ exact: true }"
         (click)="fecharMenu()"
       >
-        <img src="/img/coqueiro.png" alt="Home" class="nav-icon" />
+        <img
+          src="/img/coqueiro.png"
+          alt="Home"
+          class="nav-icon"
+        />
+
         <span>HOME</span>
       </button>
 
-      <button class="botao" routerLink="/jogos" routerLinkActive="ativo" (click)="fecharMenu()">
-        <img src="/img/controle-de-video-game.png" alt="Produtos" class="nav-icon" />
+
+      <!-- JOGOS -->
+      <button
+        class="botao"
+        routerLink="/jogos"
+        routerLinkActive="ativo"
+        (click)="fecharMenu()"
+      >
+        <img
+          src="/img/controle-de-video-game.png"
+          alt="Produtos"
+          class="nav-icon"
+        />
+
         <span>JOGOS</span>
       </button>
 
+
+      <!-- CARRINHO -->
       <button
         class="botao"
         routerLink="/carrinho"
@@ -36,74 +149,166 @@
         #rlaCarrinho="routerLinkActive"
         (click)="fecharMenu()"
       >
+
         <img
           [src]="
-            rlaCarrinho.isActive ? '/img/bau-de-tesouro.png' : '/img/bau-de-tesouro-fechado.png'
+            rlaCarrinho.isActive
+              ? '/img/bau-de-tesouro.png'
+              : '/img/bau-de-tesouro-fechado.png'
           "
           alt="Carrinho"
           class="nav-icon"
         />
+
         <span>CARRINHO</span>
+
       </button>
 
+
+      <!-- SOBRE -->
+      <button
+        class="botao"
+        routerLink="/"
+        routerLinkActive="ativo"
+        (click)="fecharMenu()"
+      >
+        <img
+          src="/img/criminal.png"
+          alt="Produtos"
+          class="nav-icon"
+        />
+
+        <span>SOBRE</span>
+      </button>
+
+
+      <!-- ===== USUÁRIO LOGADO ===== -->
       @if (authFacade.estaLogado()) {
+
         <div class="conta-container">
-          <button class="conta-trigger" (click)="toggleMenuUsuario()">
-            <img src="/img/caveira-de-pirata.png" alt="Avatar Usuário" class="avatar-usuario" />
-            <span class="nome-usuario-header">{{ authFacade.nomeExibicao() }}</span>
-            <i class="fa-solid fa-chevron-down seta" [class.rotacionada]="menuUsuarioAberto"></i>
+
+          <button
+            class="conta-trigger"
+            (click)="toggleMenuUsuario()"
+          >
+
+            <img
+              src="/img/caveira-de-pirata.png"
+              alt="Avatar Usuário"
+              class="avatar-usuario"
+            />
+
+            <span class="nome-usuario-header">
+              {{ authFacade.nomeExibicao() }}
+            </span>
+
+            <i
+              class="fa-solid fa-chevron-down seta"
+              [class.rotacionada]="menuUsuarioAberto"
+            ></i>
+
           </button>
+
+
+          <!-- DROPDOWN DA CONTA -->
           @if (menuUsuarioAberto) {
+
             <div class="conta-dropdown">
+
               <div class="conta-dropdown-header">
+
                 <img
                   src="/img/caveira-de-pirata.png"
                   alt="Avatar Usuário"
                   class="avatar-usuario-grande"
                 />
-                <span class="email">{{ authFacade.nomeExibicao() }}</span>
+
+                <span class="email">
+                  {{ authFacade.nomeExibicao() }}
+                </span>
+
               </div>
+
 
               <hr class="dropdown-divisor" />
 
+
+              <!-- MEU PERFIL -->
               <button
                 class="dropdown-item"
                 routerLink="/perfil"
                 (click)="menuUsuarioAberto = false; fecharMenu()"
               >
+
                 <i class="fa-solid fa-id-card"></i>
+
                 Meu Perfil
+
               </button>
 
+
+              <!-- PAINEL ADMIN -->
               @if (authFacade.ehAdmin()) {
+
                 <button
                   class="dropdown-item"
                   routerLink="/admin"
                   (click)="menuUsuarioAberto = false; fecharMenu()"
                 >
+
                   <i class="fa-solid fa-user-shield"></i>
+
                   Painel Admin
+
                 </button>
+
               }
 
-              <button class="dropdown-item sair" (click)="sair()">
+
+              <!-- SAIR -->
+              <button
+                class="dropdown-item sair"
+                (click)="sair()"
+              >
+
                 <i class="fa-solid fa-right-from-bracket"></i>
+
                 Sair
+
               </button>
+
             </div>
+
           }
+
         </div>
+
+
       } @else {
+
+
+        <!-- LOGIN -->
         <button
           class="botao btn-login"
           routerLink="/login"
           routerLinkActive="ativo"
           (click)="fecharMenu()"
         >
-          <img src="/img/ancora-de-navio.png" alt="Login" class="nav-icon" />
+
+          <img
+            src="/img/ancora-de-navio.png"
+            alt="Login"
+            class="nav-icon"
+          />
+
           <span>LOGIN</span>
+
         </button>
+
       }
+
     </div>
+
   </nav>
+
 </header>
