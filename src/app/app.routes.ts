@@ -41,6 +41,11 @@ export const routes: Routes = [
   },
 
   {
+    path: 'produto/:id',
+    component: DetalheJogo,
+  },
+
+  {
     path: 'jogos/grand-theft-auto-v',
     component: GrandTheftAutoV,
   },
