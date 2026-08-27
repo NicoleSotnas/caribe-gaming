@@ -34,14 +34,18 @@ import { DetalheJogo } from './features/produtos/detalhe-jogo/detalhe-jogo';
 export const serverRoutes: ServerRoute[] = [
   // ... outras rotas que já existem aí no seu projeto
 
-  
   {
     path: 'produto/:id',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Server,
   },
- 
-    
+  {
+    path: 'sobre-nos',
+    renderMode: RenderMode.Prerender, // Ou RenderMode.Server
+  },
+  {
+    path: 'produto/:id',
+    renderMode: RenderMode.Server,
+  },
 
-    { path: '**', renderMode: RenderMode.Server },
-
+  { path: '**', renderMode: RenderMode.Server },
 ];
