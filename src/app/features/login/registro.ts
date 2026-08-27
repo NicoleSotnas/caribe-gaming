@@ -14,7 +14,7 @@ import { AuthService } from '../../core/services/auth';
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],  
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
@@ -30,6 +30,7 @@ export class Registro {
   ) {
     this.registroForm = this.fb.group(
       {
+        nome: ['', [Validators.required, Validators.minLength(3)]],
         email: ['', [Validators.required, Validators.email]],
         senha: ['', [Validators.required, Validators.minLength(6)]],
         confirmarSenha: ['', [Validators.required]],
@@ -53,9 +54,9 @@ export class Registro {
     this.carregando = true;
     this.mensagemErro = '';
 
-    const { email, senha } = this.registroForm.value;
+    const { nome, email, senha } = this.registroForm.value;
 
-    this.authService.registrar(email, senha).subscribe({
+    this.authService.registrar(email, senha, nome).subscribe({
       next: () => {
         this.carregando = false;
         this.router.navigate(['/']);

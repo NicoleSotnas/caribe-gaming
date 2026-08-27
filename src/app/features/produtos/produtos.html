@@ -1,6 +1,10 @@
+  <div class="toast-notificacao" *ngIf="mensagemToast">{{ mensagemToast }}</div>
+
 <div class="pagina-produtos">
 
-  <!-- Sidebar de Filtros -->
+
+
+  <!-- 1. Sidebar de Filtros -->
   <aside class="sidebar-filtros">
     <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
 
@@ -38,98 +42,137 @@
       </label>
     </div>
 
-    <div class="filtro-grupo">
-      <h4>Categoria</h4>
-      <label *ngFor="let cat of categorias">
-        <input
-          type="checkbox"
-          [checked]="categoriaAtiva === cat.id"
-          (change)="selecionarCategoria(cat.id)">
-        {{ cat.icone }} {{ cat.nome }}
-      </label>
-    </div>
+   
   </aside>
 
-  <!-- Conteúdo Principal -->
+  <!-- 2. Conteúdo Principal -->
   <div class="conteudo-produtos">
 
-    <!-- Barra de categorias estilo "mapa do tesouro" -->
-    <div class="barra-categorias">
-      <button
-        class="pill-categoria"
-        [class.ativa]="categoriaAtiva === null"
-        (click)="selecionarCategoria('')">
-        🏝️ Todas
-      </button>
-      <button
-        *ngFor="let cat of categorias"
-        class="pill-categoria"
-        [class.ativa]="categoriaAtiva === cat.id"
-        (click)="selecionarCategoria(cat.id)">
-        {{ cat.icone }} {{ cat.nome }}
-      </button>
-    </div>
+    <div class="topo-e-categorias">
 
-    <div class="produtos-topo">
-      <div>
-        <h2>Todos os Jogos</h2>
-        <span class="produtos-subtitulo">Encontre sua próxima aventura</span>
-      </div>
-      <span class="produtos-contador">{{ produtosFiltrados.length }} jogos encontrados</span>
-    </div>
+      <div class="linha-controles-topo">
+        <!-- Abas -->
+        <div class="abas-produtos">
+          <button
+            class="aba-btn"
+            [class.ativa]="abaAtiva === 'todos'"
+            (click)="selecionarAba('todos')">
+            🎮 Todos os Jogos
+          </button>
+          <button
+            class="aba-btn"
+            [class.ativa]="abaAtiva === 'favoritos'"
+            (click)="selecionarAba('favoritos')">
+            🤍 Favoritos
+            <span class="badge-contador-fav" *ngIf="quantidadeFavoritos > 0">
+              {{ quantidadeFavoritos }}
+            </span>
+          </button>
+        </div>
 
-    <div class="container-produtos">
-      <div class="grid-produtos">
-        <div *ngFor="let produto of produtosFiltrados" class="card-produto">
-
-          <div class="card-badges">
-            <span class="badge-desconto" *ngIf="produto.desconto > 0">-{{ produto.desconto }}%</span>
-            <span class="badge-plataforma">{{ produto.plataforma }}</span>
-          </div>
-
-          <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
-            <img [src]="produto.imagem" [alt]="produto.nome" />
-          </div>
-
-          <div class="card-conteudo">
-            <h3 class="produto-nome" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
-              {{ produto.nome }}
-            </h3>
-            <span class="produto-genero">{{ produto.genero }}</span>
-
-            <div class="produto-precos">
-              <span class="preco-original" *ngIf="produto.desconto > 0">{{ produto.precoOriginal }}</span>
-              <span class="preco-promocional">{{ produto.precoPromocional }}</span>
-            </div>
-
-            <div class="card-actions">
-              <button class="btn-carrinho" (click)="adicionarAoCarrinho(produto)">
-                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
-              </button>
-
-              <button
-                class="btn-favorito"
-                [class.favoritado]="produto.favorito"
-                (click)="toggleFavorito(produto)"
-                title="Favoritar">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  [attr.fill]="produto.favorito ? '#ff4757' : 'none'"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="icon-heart">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
-              </button>
-            </div>
-
+        <!-- Botão de Categoria -->
+        <div class="dropdown-categorias" *ngIf="abaAtiva === 'todos'">
+          <button class="btn-dropdown-categoria" (click)="toggleMenuCategorias()">
+            {{ obterNomeCategoriaAtiva() }}
+            <span class="seta-icone" [class.aberto]="menuCategoriasAberto">▼</span>
+          </button>
+          
+          <div class="menu-categorias-conteudo" [class.mostrar]="menuCategoriasAberto">
+            <button
+              class="item-categoria"
+              [class.ativo]="categoriaAtiva === null"
+              (click)="selecionarCategoria('')">
+              🏝️ Todas
+            </button>
+            <button
+              *ngFor="let cat of categorias"
+              class="item-categoria"
+              [class.ativo]="categoriaAtiva === cat.id"
+              (click)="selecionarCategoria(cat.id)">
+              {{ cat.icone }} {{ cat.nome }}
+            </button>
           </div>
         </div>
       </div>
+
+      <div class="produtos-topo">
+        <div class="bloco-titulo-pagina">
+          <h2>{{ abaAtiva === 'favoritos' ? 'Meus Favoritos' : 'Todos os Jogos' }}</h2>
+          <span class="produtos-subtitulo">
+            {{ abaAtiva === 'favoritos' ? 'Jogos que você salvou pra depois' : 'Encontre sua próxima aventura' }}
+          </span>
+        </div>
+
+        <div class="acoes-direita-topo">
+          <button 
+            class="btn-limpar-favoritos" 
+            *ngIf="abaAtiva === 'favoritos' && produtosExibidos.length > 0"
+            (click)="limparFavoritos()">
+            🗑️ Limpar Favoritos
+          </button>
+          <span class="produtos-contador">{{ produtosExibidos.length }} jogos encontrados</span>
+        </div>
+      </div>
     </div>
+
+    <!-- 3. Cards de Produtos -->
+    <div class="grid-produtos" *ngIf="produtosExibidos.length > 0">
+      <div *ngFor="let produto of produtosExibidos" class="card-produto">
+
+        <div class="card-badges">
+          <span class="badge-desconto" *ngIf="produto.desconto > 0">-{{ produto.desconto }}%</span>
+          <span class="badge-plataforma">{{ produto.plataforma }}</span>
+        </div>
+
+        <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
+          <img [src]="produto.imagem" [alt]="produto.nome" [style.object-position]="produto.imagemPosicao" />
+        </div>
+
+        <div class="card-conteudo">
+          <h3 class="produto-nome" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
+            {{ produto.nome }}
+          </h3>
+          <span class="produto-genero">{{ produto.genero }}</span>
+
+          <div class="produto-precos">
+            <span class="preco-original" *ngIf="produto.desconto > 0">{{ produto.precoOriginal }}</span>
+            <span class="preco-promocional">{{ produto.precoPromocional }}</span>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-carrinho" (click)="adicionarAoCarrinho(produto)">
+              <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+            </button>
+
+            <button
+              class="btn-favorito"
+              [class.favoritado]="produto.favorito"
+              (click)="toggleFavorito(produto)"
+              title="Favoritar">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                [attr.fill]="produto.favorito ? '#ff4757' : 'none'"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon-heart">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado vazio -->
+    <div class="favoritos-vazio" *ngIf="abaAtiva === 'favoritos' && produtosExibidos.length === 0">
+      <p>Você ainda não favoritou nenhum jogo.</p>
+      <button class="btn-carrinho" (click)="selecionarAba('todos')">Ver Jogos</button>
+    </div>
+
   </div>
 
 </div>

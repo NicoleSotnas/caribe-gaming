@@ -1,7 +1,10 @@
 <header class="header-container">
   <div class="logo-brand" routerLink="/" (click)="fecharMenu()">
-    <img src="/img/logo.png" alt="Logo Caribe's Gaming" />
-    <span class="brand-title">Caribe's Gaming</span>
+    <img src="/img/logo-caribes.png" alt="Logo Caribe's Gaming" />
+    <span class="brand-title">
+      <span>Caribe's</span>
+      <span>Gaming</span>
+    </span>
   </div>
 
   <button class="hamburger-btn" (click)="toggleMenu()" aria-label="Abrir Menu">
@@ -23,7 +26,7 @@
 
       <button class="botao" routerLink="/jogos" routerLinkActive="ativo" (click)="fecharMenu()">
         <img src="/img/controle-de-video-game.png" alt="Produtos" class="nav-icon" />
-        <span>PRODUTOS</span>
+        <span>JOGOS</span>
       </button>
 
       <button
@@ -46,18 +49,31 @@
       @if (authFacade.estaLogado()) {
         <div class="conta-container">
           <button class="conta-trigger" (click)="toggleMenuUsuario()">
-            <i class="fa-solid fa-circle-user avatar-usuario"></i>
+            <img src="/img/caveira-de-pirata.png" alt="Avatar Usuário" class="avatar-usuario" />
+            <span class="nome-usuario-header">{{ authFacade.nomeExibicao() }}</span>
             <i class="fa-solid fa-chevron-down seta" [class.rotacionada]="menuUsuarioAberto"></i>
           </button>
-
           @if (menuUsuarioAberto) {
             <div class="conta-dropdown">
               <div class="conta-dropdown-header">
-                <i class="fa-solid fa-circle-user avatar-usuario-grande"></i>
-                <span class="email">{{ authFacade.usuarioAtual()?.email }}</span>
+                <img
+                  src="/img/caveira-de-pirata.png"
+                  alt="Avatar Usuário"
+                  class="avatar-usuario-grande"
+                />
+                <span class="email">{{ authFacade.nomeExibicao() }}</span>
               </div>
 
               <hr class="dropdown-divisor" />
+
+              <button
+                class="dropdown-item"
+                routerLink="/perfil"
+                (click)="menuUsuarioAberto = false; fecharMenu()"
+              >
+                <i class="fa-solid fa-id-card"></i>
+                Meu Perfil
+              </button>
 
               @if (authFacade.ehAdmin()) {
                 <button

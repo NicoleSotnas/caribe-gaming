@@ -5,7 +5,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  sendPasswordResetEmail,
   signOut,
   updateProfile,
   user,
@@ -33,25 +32,14 @@ export class AuthService {
     });
   }
 
-  recuperarSenha(email: string): Observable<void> {
-    return runInInjectionContext(this.injector, () =>
-      from(sendPasswordResetEmail(this.auth, email)),
-    );
-  }
-
-  registrar(email: string, senha: string, nome?: string): Observable<any> {
+  registrar(email: string, senha: string, nome: string): Observable<any> {
     return runInInjectionContext(this.injector, () =>
       from(createUserWithEmailAndPassword(this.auth, email, senha)).pipe(
-        switchMap((credencial) => {
-          if (!nome) {
-            return from(Promise.resolve(credencial));
-          }
-          return runInInjectionContext(this.injector, () =>
-            from(updateProfile(credencial.user, { displayName: nome })).pipe(
-              switchMap(() => from(Promise.resolve(credencial))),
-            ),
-          );
-        }),
+        switchMap((credencial) =>
+          runInInjectionContext(this.injector, () =>
+            from(updateProfile(credencial.user, { displayName: nome })),
+          ),
+        ),
       ),
     );
   }
