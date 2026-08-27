@@ -260,6 +260,194 @@
   background-color: rgba(220, 38, 38, 0.15);
 }
 
+
+
+
+/* ===== Barra de pesquisa ===== */
+
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 280px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: 25px;
+}
+
+.search-container input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  padding: 0 15px;
+
+  border: 2px solid #346498;
+  border-right: none;
+  border-radius: 20px 0 0 20px;
+
+  background: transparent;
+
+  color: white;
+  outline: none;
+
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.search-container input::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.search-container input:focus {
+  background-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.search-container .search-button {
+  height: 100%;
+  width: 48px;
+  border: 2px solid #346498;
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+  background-color: rgba(52, 100, 152, 0.35);
+  color: #ffffff;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: background-color 0.2s;
+}
+
+.search-container .search-button:hover {
+  background-color: rgba(29, 58, 95, 0.55);
+}
+
+.search-container button i {
+  font-size: 16px;
+}
+
+/* ===== SUGESTÕES DA PESQUISA ===== */
+
+.search-container {
+  position: relative;
+}
+
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  min-width: 280px;
+  background: #1d3a5f;
+  border: 2px solid #346498;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  z-index: 1000001;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Cada sugestão fica em uma linha */
+.search-suggestion {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}
+
+/* Remove a borda da última sugestão */
+.search-suggestion:last-child {
+  border-bottom: none;
+}
+
+/* Efeito ao passar o mouse */
+.search-suggestion:hover {
+  background-color: rgba(59, 175, 212, 0.25);
+}
+
+/* Ícone do jogo */
+.suggestion-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-right: 12px;
+
+  background-color: rgba(59, 175, 212, 0.2);
+  border-radius: 8px;
+
+  flex-shrink: 0;
+}
+
+.suggestion-icon i {
+  color: #3bafd4;
+  font-size: 18px;
+}
+
+/* Área das informações */
+.suggestion-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Nome do jogo */
+.suggestion-name {
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #ffffff;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Gênero */
+.suggestion-genre {
+  margin-top: 3px;
+
+  font-family: sans-serif;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Nenhum resultado */
+.no-results {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 18px;
+
+  color: rgba(255, 255, 255, 0.8);
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
+.no-results i {
+  color: #3bafd4;
+}
+
 /* ===== Responsividade Mobile ===== */
 @media (max-width: 900px) {
   .header-container {
@@ -329,4 +517,19 @@
   .nome-usuario-header {
     max-width: 100px;
   }
+
+  .search-container {
+  width: 180px;
+  height: 35px;
+  margin-right: 15px;
+}
+
+.search-container input {
+  font-size: 12px;
+  padding: 0 10px;
+}
+
+.search-container button {
+  width: 40px;
+}
 }
