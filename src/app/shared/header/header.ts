@@ -36,9 +36,7 @@ export class Header {
   menuUsuarioAberto = false;
 
   termoPesquisa = '';
-
   mostrarSugestoes = false;
-
   produtosFiltrados: any[] = [];
 
   constructor(private elementRef: ElementRef) {}
@@ -55,13 +53,16 @@ export class Header {
     this.menuUsuarioAberto = !this.menuUsuarioAberto;
   }
 
+
   // ==========================
   // PESQUISA
   // ==========================
 
   pesquisar() {
 
-    const termo = this.termoPesquisa.trim().toLowerCase();
+    const termo = this.termoPesquisa
+      .trim()
+      .toLowerCase();
 
     if (!termo) {
       this.produtosFiltrados = [];
@@ -69,24 +70,48 @@ export class Header {
       return;
     }
 
-    this.produtosFiltrados = this.produtosService.listaProdutos
-      .filter(produto =>
-        produto.nome.toLowerCase().includes(termo)
-      )
-      .slice(0, 6);
+    this.produtosFiltrados =
+      this.produtosService.listaProdutos
+        .filter(produto => {
 
-    this.mostrarSugestoes = true;
+          const nome =
+            produto.nome?.toLowerCase() || '';
+
+          const slug =
+            produto.slug?.toLowerCase() || '';
+
+          return (
+            nome.includes(termo) ||
+            slug.includes(termo)
+          );
+        })
+        .slice(0, 6);
+
+    this.mostrarSugestoes =
+      this.produtosFiltrados.length > 0;
   }
+
+
+  // ==========================
+  // SELECIONAR JOGO
+  // ==========================
 
   selecionarJogo(produto: any) {
 
     this.termoPesquisa = produto.nome;
+
     this.mostrarSugestoes = false;
 
-    this.router.navigateByUrl(this.obterRotaJogo(produto));
+    const rota = this.obterRotaJogo(produto);
+
+    this.router.navigateByUrl(rota);
   }
 
-  // Define a rota correta de cada jogo
+
+  // ==========================
+  // ROTAS DOS JOGOS
+  // ==========================
+
   obterRotaJogo(produto: any): string {
 
     const rotas: { [slug: string]: string } = {
@@ -121,6 +146,7 @@ export class Header {
       'the-last-of-us-part-ii-remastered':
         '/jogos/the-last-of-us-II',
 
+      // RED DEAD
       'red-dead-redemption-2':
         '/jogos/red-dead-redemption-2',
 
@@ -152,14 +178,22 @@ export class Header {
         '/jogos/marvel-rivals'
     };
 
-    // Se tiver uma rota específica, usa ela
-    if (rotas[produto.slug]) {
-      return rotas[produto.slug];
+
+    const slug =
+      produto.slug?.toLowerCase();
+
+
+    // Se existir uma rota específica
+    if (slug && rotas[slug]) {
+      return rotas[slug];
     }
 
-    // Para os outros jogos, usa sua página de detalhe
+
+    // Caso não exista rota específica,
+    // abre a página genérica do produto
     return `/produto/${produto.id}`;
   }
+
 
   // ==========================
   // CLIQUE FORA
@@ -168,13 +202,18 @@ export class Header {
   @HostListener('document:click', ['$event'])
   aoClicarFora(event: Event) {
 
-    if (!this.elementRef.nativeElement.contains(event.target)) {
+    if (
+      !this.elementRef.nativeElement.contains(
+        event.target
+      )
+    ) {
 
       this.menuUsuarioAberto = false;
 
       this.mostrarSugestoes = false;
     }
   }
+
 
   // ==========================
   // SAIR
