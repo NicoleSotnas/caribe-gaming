@@ -1,10 +1,8 @@
 <app-header></app-header>
 
 <main class="main-container">
-  <!-- Banner Principal -->
   <section class="hero-banner">
-    <div class="hero-slide">
-      <!-- Image principal do Banner com Prioridade de Carregamento -->
+    <div class="hero-slide" (click)="irParaPaginaDoJogo(heroGames[activeHeroIndex])" style="cursor: pointer;">
       <img
         [src]="heroGames[activeHeroIndex].image"
         [alt]="heroGames[activeHeroIndex].title"
@@ -20,7 +18,7 @@
     <div class="hero-content">
       <div class="hero-details">
         <span class="badge">{{ heroGames[activeHeroIndex].badge }}</span>
-        <h1 class="hero-title">{{ heroGames[activeHeroIndex].title }}</h1>
+        <h1 class="hero-title" (click)="irParaPaginaDoJogo(heroGames[activeHeroIndex])" style="cursor: pointer;">{{ heroGames[activeHeroIndex].title }}</h1>
         <p class="hero-subtitle">{{ heroGames[activeHeroIndex].subtitle }}</p>
 
         <div class="price-action">
@@ -29,7 +27,9 @@
             <span class="old-price">{{ heroGames[activeHeroIndex].originalPrice }}</span>
             <span class="promo-price">{{ heroGames[activeHeroIndex].promoPrice }}</span>
           </div>
-          <button class="buy-btn">COMPRAR AGORA</button>
+          <button class="buy-btn" (click)="$event.stopPropagation(); comprarAgora(heroGames[activeHeroIndex])">
+            COMPRAR AGORA
+          </button>
         </div>
       </div>
 
@@ -48,7 +48,6 @@
     </div>
   </section>
 
-  <!-- Seção de Ofertas Especiais -->
   <section class="offers-section">
     <div class="offers-header">
       <h2>🔥 Ofertas Especiais</h2>
@@ -60,9 +59,8 @@
 
     <div #cardsContainer class="offers-grid">
       @for (game of offerGames; track game.id) {
-        <div class="game-card">
+        <div class="game-card" (click)="irParaPaginaDoJogo(game)" style="cursor: pointer;">
           <div class="card-image-box">
-            <!-- Imagens dos Cards com Lazy Loading Nativo -->
             <img [src]="game.image" [alt]="game.title" loading="lazy" decoding="async" />
             <span class="card-discount">{{ game.discount }}</span>
           </div>

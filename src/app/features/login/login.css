@@ -162,32 +162,7 @@
   font-size: 0.85rem;
 }
 
-/* Link Esqueceu a senha */
-.link-esqueci {
-  background: transparent;
-  border: none;
-  color: #5fd8ea;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 600;
-  text-align: center;
-  margin: 0.4rem 0 1.2rem;
-  padding: 0;
-  cursor: pointer;
-  box-shadow: none;
-  width: 100%;
-  display: block;
-}
-
-.link-esqueci:hover {
-  text-decoration: underline;
-  transform: none;
-  box-shadow: none;
-  filter: brightness(1.15);
-}
-
-/* Botão principal de envio (Cor Original) */
-button[type='submit'] {
+button {
   width: 100%;
   box-sizing: border-box;
   padding: 0.85rem;
@@ -207,17 +182,17 @@ button[type='submit'] {
     filter 0.15s;
 }
 
-button[type='submit']:hover:not(:disabled) {
+button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 14px 32px rgba(84, 87, 229, 0.5);
   filter: brightness(1.08);
 }
 
-button[type='submit']:active:not(:disabled) {
+button:active:not(:disabled) {
   transform: translateY(0);
 }
 
-button[type='submit']:disabled {
+button:disabled {
   background: #3a4a5c;
   opacity: 0.6;
   cursor: not-allowed;
@@ -241,32 +216,18 @@ button[type='submit']:disabled {
   text-decoration: underline;
 }
 
-/* Estilo unificado para os botões e links de voltar */
-.link-voltar,
-.link-voltar-login {
+.link-voltar {
   display: block;
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  box-shadow: none;
   text-align: center;
   margin-top: 0.9rem;
-  padding: 0;
   font-size: 0.82rem;
-  font-family: 'Inter', sans-serif;
   color: #9db3c4;
   text-decoration: none;
-  cursor: pointer;
 }
 
-.link-voltar:hover,
-.link-voltar-login:hover {
+.link-voltar:hover {
   text-decoration: underline;
   color: #5fd8ea;
-  transform: none;
-  filter: none;
-  box-shadow: none;
 }
 
 .divisor {
@@ -327,3 +288,4 @@ button[type='submit']:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+55

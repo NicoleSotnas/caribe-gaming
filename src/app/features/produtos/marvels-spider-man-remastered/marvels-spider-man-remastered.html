@@ -1,0 +1,329 @@
+<!-- Mensagem Flutuante (Toast) -->
+<div class="toast-notificacao" *ngIf="mensagemToast">
+  {{ mensagemToast }}
+</div>
+
+<div class="pagina-detalhes" *ngIf="jogo; else estadoAlternativo">
+  <!-- Breadcrumb com Botão Voltar -->
+  <div class="cabecalho-navegacao">
+    <button class="btn-voltar" (click)="voltarPagina()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="icon-pirata"
+      >
+        <circle cx="12" cy="12" r="9"></circle>
+        <circle cx="12" cy="12" r="3"></circle>
+        <line x1="12" y1="1" x2="12" y2="23"></line>
+        <line x1="1" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="4.22" x2="19.78" y2="19.78"></line>
+        <line x1="4.22" y1="19.78" x2="19.78" y2="4.22"></line>
+      </svg>
+      Voltar
+    </button>
+    <div class="breadcrumb">
+      <span class="breadcrumb-link" (click)="irParaHome()">HOME</span> &gt;
+      <span class="breadcrumb-link" (click)="irParaJogos()">JOGOS</span> &gt;
+      <strong>{{ jogo.nome }}</strong>
+    </div>
+  </div>
+
+  <!-- GRID PRINCIPAL -->
+  <div class="grid-principal">
+    <!-- Mídia com Carrossel Nativo -->
+    <div class="secao-midia">
+      <div class="container-imagem-destaque">
+        <span class="badge-desconto">-42%</span>
+        <span class="badge-classificacao badge-12">12+</span>
+
+        <!-- Botões de Setas -->
+        <button
+          class="btn-seta btn-prev"
+          (click)="fotoAnterior()"
+          *ngIf="galeriaImagens.length > 1"
+        >
+          ❮
+        </button>
+
+        <!-- Imagem Principal -->
+        <img
+          *ngIf="galeriaImagens.length > 0"
+          [src]="galeriaImagens[indiceAtivo]"
+          [alt]="jogo.nome"
+          class="img-destaque"
+        />
+
+        <button class="btn-seta btn-next" (click)="proximaFoto()" *ngIf="galeriaImagens.length > 1">
+          ❯
+        </button>
+      </div>
+
+      <!-- Fila de Miniaturas -->
+      <div class="fila-miniaturas" *ngIf="galeriaImagens.length > 0">
+        <button
+          *ngFor="let img of galeriaImagens; let i = index"
+          class="thumb-item"
+          [class.ativo]="i === indiceAtivo"
+          (click)="selecionarIndice(i)"
+        >
+          <img [src]="img" alt="Thumbnail gameplay" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Painel Lateral de Informações -->
+    <div class="secao-info">
+      <h1 class="titulo-jogo">{{ jogo.nome }}</h1>
+
+      <div class="subtitulos">
+        <span>Insomniac Games</span> • <span>{{ jogo.plataformas }}</span> •
+        <span class="categoria-tag">Ação, Aventura, Mundo Aberto</span>
+      </div>
+
+      <div class="avaliacao-container">
+        <div class="estrelas">★★★★★</div>
+        <span class="nota-numero">{{ mediaNotasDinamica }}</span>
+        <span class="total-avaliacoes">({{ totalVotosGeral }} avaliações)</span>
+      </div>
+
+      <ul class="destaques-lista">
+        <li>
+          <i class="fas fa-spider"></i> <strong>Seja o Herói:</strong> Viva a história de um Peter Parker experiente em Nova York.
+        </li>
+        <li>
+          <i class="fas fa-wind"></i> <strong>Balanço Fluido:</strong> Acrobacias incríveis e teias dinâmicas pela cidade.
+        </li>
+        <li>
+          <i class="fas fa-bolt"></i> <strong>Combate Dinâmico:</strong> Use melhorias de trajes e golpes acrobáticos.
+        </li>
+      </ul>
+
+      <!-- Card de Preço e Compra -->
+      <div class="card-compra">
+        <div class="precos-linha">
+       
+          <span class="preco-original">R$ 349,90</span>
+          <span class="preco-promo">R$ 199,90</span>
+        </div>
+
+        <div class="acoes-botoes">
+          <button class="btn-adicionar" (click)="adicionarAoCarrinho()">
+            <i class="fas fa-shopping-cart"></i> Adicionar ao carrinho
+          </button>
+
+          <button
+            class="btn-favorito"
+            [class.favoritado]="favorito"
+            (click)="toggleFavorito()"
+            type="button"
+            title="Favoritar"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              [attr.fill]="favorito ? '#ff4757' : 'none'"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon-heart"
+            >
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <button class="btn-comprar" (click)="comprarAgora()">Comprar agora</button>
+        <div class="compra-segura"><i class="fas fa-lock"></i> Compra 100% segura</div>
+      </div>
+
+      <!-- Fatos do Jogo -->
+      <div class="tabela-fatos">
+        <div class="fato-linha">
+          <span>Plataforma:</span> <strong>{{ jogo.plataformas }}</strong>
+        </div>
+        <div class="fato-linha"><span>Gênero:</span> <strong>Ação, Aventura</strong></div>
+        <div class="fato-linha">
+          <span>Lançamento:</span> <strong>{{ jogo.dataLancamento }}</strong>
+        </div>
+        <div class="fato-linha">
+          <span>Desenvolvedor:</span> <strong>{{ jogo.desenvolvedoras }}</strong>
+        </div>
+        <div class="fato-linha">
+          <span>Distribuidora:</span> <strong>{{ jogo.distribuidoras }}</strong>
+        </div>
+        <div class="fato-linha">
+          <span>Idioma:</span> <strong>Português (Brasil) e mais</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO SOBRE O JOGO -->
+  <div class="secao-detalhada">
+    <h2>SOBRE O JOGO</h2>
+    <p class="descricao-paragrafo">{{ jogo.descricao }}</p>
+  </div>
+
+ <!-- SEÇÃO REQUISITOS DE SISTEMA - SPIDER-MAN REMASTERED -->
+  <div class="secao-detalhada secao-requisitos">
+    <h2>REQUISITOS DE SISTEMA (PC)</h2>
+    <div class="grid-requisitos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+      <div class="req-coluna">
+        <h3 style="color: #4feaf5; font-size: 0.95rem; margin-bottom: 10px;">Mínimos:</h3>
+        <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: rgba(255,255,255,0.8); display: flex; flex-direction: column; gap: 6px;">
+          <li><strong>Sistema Operacional:</strong> Windows 10 (64-bit)</li>
+          <li><strong>Processador:</strong> Intel Core i3-4160 ou AMD equivalente</li>
+          <li><strong>Memória:</strong> 8 GB de RAM</li>
+          <li><strong>Placa de Vídeo:</strong> NVIDIA GTX 950 ou AMD equivalente</li>
+          <li><strong>Armazenamento:</strong> 75 GB de espaço disponível</li>
+        </ul>
+      </div>
+      <div class="req-coluna">
+        <h3 style="color: #4feaf5; font-size: 0.95rem; margin-bottom: 10px;">Recomendados:</h3>
+        <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: rgba(255,255,255,0.8); display: flex; flex-direction: column; gap: 6px;">
+          <li><strong>Sistema Operacional:</strong> Windows 10/11 (64-bit)</li>
+          <li><strong>Processador:</strong> Intel Core i7-4770 ou AMD Ryzen 5 1500X</li>
+          <li><strong>Memória:</strong> 16 GB de RAM</li>
+          <li><strong>Placa de Vídeo:</strong> NVIDIA GTX 1060 (6 GB) ou AMD RX 580</li>
+          <li><strong>Armazenamento:</strong> 75 GB (SSD recomendado)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Escrever Avaliação -->
+  <div class="modal-overlay" *ngIf="exibirModalAvaliacao">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>ESCREVER AVALIAÇÃO</h3>
+        <button class="btn-fechar-modal" (click)="fecharModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="campo-grupo">
+          <label>Seu Nome ou GamerTag</label>
+          <input type="text" [(ngModel)]="novoNome" placeholder="Ex: PeterParker_BR" />
+        </div>
+
+        <!-- Seleção interativa por Botões de Estrelas -->
+        <div class="campo-grupo">
+          <label>Sua Nota</label>
+          <div class="seletor-estrelas-botoes">
+            <button
+              type="button"
+              *ngFor="let nota of [1, 2, 3, 4, 5]"
+              class="btn-estrela-opcao"
+              [class.selecionado]="novaNota >= nota"
+              (click)="novaNota = nota"
+            >
+              ★
+            </button>
+            <span class="texto-nota-selecionada">{{ novaNota }} de 5</span>
+          </div>
+        </div>
+
+        <div class="campo-grupo">
+          <label>Sua Opinião</label>
+          <textarea
+            [(ngModel)]="novoTexto"
+            rows="4"
+            placeholder="O que você achou do jogo?"
+          ></textarea>
+        </div>
+
+        <div class="modal-acoes">
+          <button class="btn-cancelar" (click)="fecharModal()">Cancelar</button>
+          <button class="btn-enviar" (click)="enviarAvaliacao()">Publicar Avaliação</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO AVALIAÇÕES DOS JOGADORES -->
+  <div class="secao-avaliacoes" *ngIf="jogo">
+    <h2>AVALIAÇÕES DOS JOGADORES</h2>
+
+    <div class="grid-avaliacoes">
+      <!-- Lado Esquerdo: Resumo com Nota, Estrelas e Gráfico de Barras Dinâmico -->
+      <div class="resumo-avaliacoes-card">
+        <div class="nota-gigante">{{ mediaNotasDinamica }}</div>
+        <div class="estrelas">★★★★★</div>
+        <span class="total-votos">{{ totalVotosGeral }} avaliações</span>
+
+        <div class="barras-avaliacao">
+          <div class="linha-barra">
+            <span>5 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" [style.width.%]="getPorcentagemEstrelas(5)"></div></div>
+            <span class="votos-num">24.700</span>
+          </div>
+          <div class="linha-barra">
+            <span>4 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" [style.width.%]="getPorcentagemEstrelas(4)"></div></div>
+            <span class="votos-num">3.200</span>
+          </div>
+          <div class="linha-barra">
+            <span>3 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" [style.width.%]="getPorcentagemEstrelas(3)"></div></div>
+            <span class="votos-num">900</span>
+          </div>
+          <div class="linha-barra">
+            <span>2 estrelas</span>
+            <div class="barra-fundo"><div class="barra-progresso" [style.width.%]="getPorcentagemEstrelas(2)"></div></div>
+            <span class="votos-num">450</span>
+          </div>
+          <div class="linha-barra">
+            <span>1 estrela</span>
+            <div class="barra-fundo"><div class="barra-progresso" [style.width.%]="getPorcentagemEstrelas(1)"></div></div>
+            <span class="votos-num">150</span>
+          </div>
+        </div>
+
+        <button class="btn-escrever-avaliacao" (click)="abrirModal()">Escrever avaliação</button>
+      </div>
+
+      <!-- Lado Direito: Lista Dinâmica de Avaliações -->
+      <div class="lista-comentarios">
+        <div class="comentario-card" *ngFor="let c of listaComentarios">
+          <div class="autor-cabecalho">
+            <div class="avatar-autor">{{ c.avatar }}</div>
+            <div class="info-autor">
+              <strong>{{ c.autor }}</strong>
+              <div class="estrelas-mini">{{ getEstrelasTexto(c.estrelas) }}</div>
+            </div>
+            <span class="data-comentario">{{ c.data }}</span>
+          </div>
+
+          <p class="texto-comentario">{{ c.texto }}</p>
+
+          <div class="reacoes-comentario">
+            <span>Isso foi útil?</span>
+            <button class="btn-reacao" [class.ativo]="c.votouLike" (click)="darLike(c)">
+              👍 {{ c.likes }}
+            </button>
+            <button class="btn-reacao" [class.ativo]="c.votouDislike" (click)="darDislike(c)">
+              👎 {{ c.dislikes }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Estado de Carregamento / Erro -->
+<ng-template #estadoAlternativo>
+  <div class="estado-alternativo">
+    <p *ngIf="carregando">Carregando informações do jogo...</p>
+    <p *ngIf="!carregando && erro">
+      Não foi possível carregar os dados do jogo agora. Tente novamente em instantes.
+    </p>
+  </div>
+</ng-template>

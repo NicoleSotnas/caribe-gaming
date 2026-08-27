@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Fortnite } from './fortnite';
+import {GodOfWarRagnarok} from './god-of-war-ragnarok';
 
-describe('Fortnite', () => {
-  let component: Fortnite;
-  let fixture: ComponentFixture<Fortnite>;
+describe('Ragnarok', () => {
+  let component: GodOfWarRagnarok;
+  let fixture: ComponentFixture<GodOfWarRagnarok>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Fortnite],
+      imports: [GodOfWarRagnarok],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Fortnite);
+    fixture = TestBed.createComponent(GodOfWarRagnarok);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
