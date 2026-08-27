@@ -75,4 +75,43 @@ export class Login {
       },
     });
   }
+
+  abrirRecuperacao(): void {
+    this.modoRecuperacao = true;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+    this.recuperarForm.reset();
+  }
+
+  voltarParaLogin(): void {
+    this.modoRecuperacao = false;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+  }
+
+  onRecuperarSenha(): void {
+    if (this.recuperarForm.invalid) {
+      this.recuperarForm.markAllAsTouched();
+      return;
+    }
+
+    this.carregando = true;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+
+    const { email } = this.recuperarForm.value;
+
+    this.authService.recuperarSenha(email).subscribe({
+      next: () => {
+        this.carregando = false;
+        this.mensagemSucesso = 'Link de recuperação enviado com sucesso! Verifique seu email.';
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.mensagemErro =
+          'Não foi possível enviar o email de recuperação. Verifique o endereço e tente novamente.';
+        console.error(erro);
+      },
+    });
+  }
 }
