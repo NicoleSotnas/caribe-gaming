@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Sekuya&display=swap');
+
+.about-page {
+  background: linear-gradient(180deg, #090e1a 0%, #050811 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  padding-bottom: 60px;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Banner Hero */
+.about-hero {
+  background: linear-gradient(180deg, #121c38 0%, rgba(9, 14, 26, 0.9) 100%);
+  border-bottom: 2px solid rgba(59, 175, 212, 0.3);
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-family: 'Sekuya', system-ui, sans-serif;
+  font-size: 2.8rem;
+  color: #ffffff;
+  margin-bottom: 12px;
+  text-shadow: 0 0 15px rgba(59, 175, 212, 0.4);
+  letter-spacing: 1.5px;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* Container Principal */
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.section-title {
+  font-family: 'Sekuya', system-ui, sans-serif;
+  font-size: 2rem;
+  color: #ffffff;
+  text-align: center;
+  margin: 50px 0 32px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(59, 175, 212, 0.3);
+}
+
+/* Card Único sobre a Equipe */
+.team-about-card {
+  background: rgba(18, 28, 56, 0.6);
+  border: 1px solid rgba(59, 175, 212, 0.2);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  margin-bottom: 30px;
+}
+
+.team-about-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.team-about-header i {
+  font-size: 1.8rem;
+  color: #3bafd4;
+}
+
+.team-about-header h2 {
+  font-family: 'Sekuya', system-ui, sans-serif;
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.team-about-content p {
+  color: #cbd5e1;
+  line-height: 1.7;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.team-about-content p:last-child {
+  margin-bottom: 0;
+}
+
+.team-about-content strong {
+  color: #3bafd4;
+}
+
+/* Grid dos Cards Individuais */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 28px;
+}
+
+/* Estilização dos Cards da Tripulação */
+.team-card {
+  background: linear-gradient(145deg, rgba(20, 31, 61, 0.7) 0%, rgba(13, 20, 39, 0.8) 100%);
+  border: 1px solid rgba(59, 175, 212, 0.2);
+  border-radius: 16px;
+  padding: 28px 20px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+  border-color: #3bafd4;
+  box-shadow: 0 12px 28px rgba(59, 175, 212, 0.25);
+  background: linear-gradient(145deg, rgba(25, 39, 77, 0.8) 0%, rgba(15, 24, 48, 0.9) 100%);
+}
+
+/* Cargo Pirata (Topo) */
+.team-card .role {
+  font-size: 0.85rem;
+  color: #3bafd4;
+  font-weight: 600;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(59, 175, 212, 0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(59, 175, 212, 0.2);
+}
+
+/* Container do Avatar/Foto */
+.team-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 175, 212, 0.2) 0%, rgba(13, 20, 39, 0.8) 100%);
+  border: 2px solid #3bafd4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(59, 175, 212, 0.25);
+}
+
+/* Ícone Padrão (Fica atrás da foto) */
+.team-avatar i {
+  font-size: 2.2rem;
+  color: #3bafd4;
+  z-index: 1;
+}
+
+/* Estilo da Imagem */
+.team-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* Nome do Integrante */
+.member-name {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+}
+
+/* Redes Sociais */
+.member-socials {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.member-socials a {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.member-socials a:hover {
+  background-color: #3bafd4;
+  border-color: #3bafd4;
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(59, 175, 212, 0.4);
+}
+
+/* Call to Action Banner */
+.about-cta {
+  background: linear-gradient(135deg, #121c38 0%, #1e335e 100%);
+  border: 1px solid rgba(59, 175, 212, 0.3);
+  border-radius: 20px;
+  padding: 48px 24px;
+  text-align: center;
+  margin-top: 60px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.about-cta h2 {
+  font-family: 'Sekuya', system-ui, sans-serif;
+  color: #ffffff;
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.about-cta p {
+  color: #cbd5e1;
+  margin-bottom: 28px;
+  font-size: 1.05rem;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #3bafd4;
+  color: #ffffff;
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.05rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(59, 175, 212, 0.4);
+}
+
+.cta-btn:hover {
+  background-color: #2c97ba;
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(59, 175, 212, 0.6);
+}
+
+/* Adaptabilidade para Celulares */
+@media (max-width: 767px) {
+  .page-title {
+    font-size: 2.1rem;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+  }
+}
