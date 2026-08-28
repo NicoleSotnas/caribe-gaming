@@ -13,8 +13,12 @@ import { AuthService } from '../../core/services/auth';
 })
 export class Login {
   loginForm: FormGroup;
+  recuperarForm: FormGroup;
+
   mensagemErro: string = '';
+  mensagemSucesso: string = '';
   carregando: boolean = false;
+  modoRecuperacao: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -24,6 +28,10 @@ export class Login {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
+    });
+
+    this.recuperarForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -63,6 +71,45 @@ export class Login {
       error: (erro) => {
         this.carregando = false;
         this.mensagemErro = 'Não foi possível entrar com o Google. Tente novamente.';
+        console.error(erro);
+      },
+    });
+  }
+
+  abrirRecuperacao(): void {
+    this.modoRecuperacao = true;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+    this.recuperarForm.reset();
+  }
+
+  voltarParaLogin(): void {
+    this.modoRecuperacao = false;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+  }
+
+  onRecuperarSenha(): void {
+    if (this.recuperarForm.invalid) {
+      this.recuperarForm.markAllAsTouched();
+      return;
+    }
+
+    this.carregando = true;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+
+    const { email } = this.recuperarForm.value;
+
+    this.authService.recuperarSenha(email).subscribe({
+      next: () => {
+        this.carregando = false;
+        this.mensagemSucesso = 'Link de recuperação enviado com sucesso! Verifique seu email.';
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.mensagemErro =
+          'Não foi possível enviar o email de recuperação. Verifique o endereço e tente novamente.';
         console.error(erro);
       },
     });
