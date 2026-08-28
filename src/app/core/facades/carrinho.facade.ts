@@ -60,13 +60,21 @@ export class CarrinhoFacade {
     });
   }
 
-  // Adiciona produto: atualiza LocalStorage e envia para a Nuvem (se logado)
   adicionarProduto(produto: ItemCarrinho): void {
     this.carrinhoService.adicionar(produto);
     this.salvarSeLogado();
   }
 
-  // Remove produto: atualiza LocalStorage e envia para a Nuvem (se logado)
+  aumentarQuantidade(indice: number): void {
+    this.carrinhoService.aumentarQuantidade(indice);
+    this.salvarSeLogado();
+  }
+
+  diminuirQuantidade(indice: number): void {
+    this.carrinhoService.diminuirQuantidade(indice);
+    this.salvarSeLogado();
+  }
+
   removerItem(indice: number): void {
     this.carrinhoService.removerPorIndice(indice);
     this.salvarSeLogado();
