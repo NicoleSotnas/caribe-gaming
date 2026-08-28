@@ -62,6 +62,16 @@ export class CarrinhoFacade {
     this.salvarSeLogado();
   }
 
+  aumentarQuantidade(indice: number): void {
+    this.carrinhoService.aumentarQuantidade(indice);
+    this.salvarSeLogado();
+  }
+
+  diminuirQuantidade(indice: number): void {
+    this.carrinhoService.diminuirQuantidade(indice);
+    this.salvarSeLogado();
+  }
+
   removerItem(indice: number): void {
     this.carrinhoService.removerPorIndice(indice);
     this.salvarSeLogado();
