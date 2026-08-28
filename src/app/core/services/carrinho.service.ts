@@ -55,6 +55,37 @@ export class CarrinhoService {
     });
   }
 
+  aumentarQuantidade(indice: number) {
+  this.carrinho.update((lista) => {
+    const novaLista = [...lista];
+
+    novaLista[indice] = {
+      ...novaLista[indice],
+      quantidade: (novaLista[indice].quantidade || 1) + 1,
+    };
+
+    return novaLista;
+  });
+}
+
+diminuirQuantidade(indice: number) {
+  this.carrinho.update((lista) => {
+    const novaLista = [...lista];
+    const quantidadeAtual = novaLista[indice].quantidade || 1;
+
+    if (quantidadeAtual <= 1) {
+      return lista;
+    }
+
+    novaLista[indice] = {
+      ...novaLista[indice],
+      quantidade: quantidadeAtual - 1,
+    };
+
+    return novaLista;
+  });
+}
+
   // Remove um produto pelo índice
   removerPorIndice(indice: number) {
     this.carrinho.update((listaAtual) => listaAtual.filter((_, index) => index !== indice));
