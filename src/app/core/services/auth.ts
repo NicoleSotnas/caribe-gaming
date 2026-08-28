@@ -1,4 +1,4 @@
-import { Injectable, Injector, runInInjectionContext } from '@angular/core';
+import { Injectable, inject, runInInjectionContext, EnvironmentInjector } from '@angular/core';
 import {
   Auth,
   signInWithEmailAndPassword,
@@ -10,59 +10,80 @@ import {
   updateProfile,
   user,
 } from '@angular/fire/auth';
-import { from, Observable } from 'rxjs';
+import { defer, from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(
-    private auth: Auth,
-    private injector: Injector,
-  ) {}
+  private auth = inject(Auth);
+  private injector = inject(EnvironmentInjector);
 
-  login(email: string, senha: string): Observable<any> {
-    return runInInjectionContext(this.injector, () =>
-      from(signInWithEmailAndPassword(this.auth, email, senha)),
-    );
-  }
-
-  loginComGoogle(): Observable<any> {
+  async loginAsync(email: string, senha: string): Promise<any> {
     return runInInjectionContext(this.injector, () => {
-      const provider = new GoogleAuthProvider();
-      return from(signInWithPopup(this.auth, provider));
+      return signInWithEmailAndPassword(this.auth, email, senha);
     });
   }
 
-  // Certifique-se de incluir esta função:
-  recuperarSenha(email: string): Observable<void> {
-    return runInInjectionContext(this.injector, () =>
-      from(sendPasswordResetEmail(this.auth, email)),
-    );
+  async loginComGoogleAsync(): Promise<any> {
+    return runInInjectionContext(this.injector, () => {
+      const provider = new GoogleAuthProvider();
+      return signInWithPopup(this.auth, provider);
+    });
   }
 
-  registrar(email: string, senha: string, nome: string): Observable<any> {
-    return runInInjectionContext(this.injector, () =>
-      from(createUserWithEmailAndPassword(this.auth, email, senha)).pipe(
-        switchMap((credencial) =>
-          runInInjectionContext(this.injector, () =>
-            from(updateProfile(credencial.user, { displayName: nome })),
-          ),
+  async recuperarSenhaAsync(email: string): Promise<void> {
+    return runInInjectionContext(this.injector, () => {
+      return sendPasswordResetEmail(this.auth, email);
+    });
+  }
+
+  // Métodos em Observable mantidos por compatibilidade
+  login(email: string, senha: string): Observable<any> {
+    return defer(() => from(this.loginAsync(email, senha)));
+  }
+
+  loginComGoogle(): Observable<any> {
+    return defer(() => from(this.loginComGoogleAsync()));
+  }
+
+  recuperarSenha(email: string): Observable<void> {
+    return defer(() => from(this.recuperarSenhaAsync(email)));
+  }
+
+  registrar(email: string, senha: string, nome?: string): Observable<any> {
+    return defer(() =>
+      from(
+        runInInjectionContext(this.injector, () =>
+          createUserWithEmailAndPassword(this.auth, email, senha),
         ),
       ),
+    ).pipe(
+      switchMap((credencial) => {
+        if (!nome) {
+          return from(Promise.resolve(credencial));
+        }
+        return defer(() => from(updateProfile(credencial.user, { displayName: nome }))).pipe(
+          switchMap(() => from(Promise.resolve(credencial))),
+        );
+      }),
     );
   }
 
   logout(): Observable<void> {
-    return runInInjectionContext(this.injector, () => from(signOut(this.auth)));
+    return defer(() => from(runInInjectionContext(this.injector, () => signOut(this.auth))));
   }
 
   atualizarNomeUsuario(nome: string): Observable<void> {
-    return runInInjectionContext(this.injector, () => {
+    return defer(() => {
       const usuarioAtual = this.auth.currentUser;
       if (!usuarioAtual) {
         throw new Error('Nenhum usuário autenticado.');
       }
-      return from(updateProfile(usuarioAtual, { displayName: nome }));
+      return from(
+        runInInjectionContext(this.injector, () =>
+          updateProfile(usuarioAtual, { displayName: nome }),
+        ),
+      );
     });
   }
 
