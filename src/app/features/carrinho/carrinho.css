@@ -7,11 +7,55 @@
   color: var(--text-light, #f8fafc);
 }
 
+.cabecalho-carrinho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
 .titulo-pagina {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   font-weight: 800;
   color: var(--gold, #f4c95d);
-  margin-bottom: 24px;
+  margin: 0;
+}
+
+.status-nuvem {
+  display: flex;
+  align-items: center;
+}
+
+.badge-nuvem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+}
+
+.badge-nuvem.logado {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #4ade80;
+}
+
+.badge-nuvem.visitante {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+
+.link-login-nuvem {
+  color: var(--gold, #f4c95d);
+  text-decoration: underline;
+  margin-left: 3px;
+  font-weight: 700;
 }
 
 .lista-carrinho,
@@ -50,9 +94,7 @@
   font-size: 1.05rem;
 }
 
-/* ==========================================================================
-   ESTILO DOS BOTÕES E ÍCONES (PADRÃO CHECKOUT)
-   ========================================================================== */
+/* Botões */
 .btn-acao {
   display: inline-flex;
   align-items: center;
@@ -67,7 +109,10 @@
   font-size: 0.95rem;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
 }
 
 .btn-acao:not(:disabled):hover {
@@ -83,7 +128,6 @@
   box-shadow: none;
 }
 
-/* Uniformiza botões de ação específicos (Principal, Secundário, Perigo e Explorar) */
 .btn-acao.btn-primary,
 .btn-acao.btn-secondary,
 .btn-acao.btn-danger,
@@ -92,7 +136,6 @@
   color: #ffffff;
 }
 
-/* Tamanho reduzido para os botões da lista de itens */
 .btn-acao.btn-sm {
   height: 36px;
   padding: 0 14px;
@@ -100,16 +143,12 @@
   border-radius: 8px;
 }
 
-/* Tamanho do SVG interno dos botões */
 .btn-icon-svg {
   width: 18px;
   height: 18px;
   display: block;
 }
 
-/* ==========================================================================
-   RESUMO & VAZIO
-   ========================================================================== */
 .resumo-carrinho {
   border-left: 4px solid var(--gold, #f4c95d);
 }
@@ -118,7 +157,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* Permite a quebra dos textos em telas menores */
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -199,7 +238,6 @@
 }
 
 @media (max-width: 768px) {
-  /* Empilha o Resumo no celular para não espremer os textos */
   .resumo-detalhes {
     flex-direction: column;
     align-items: flex-start;
@@ -213,7 +251,6 @@
     justify-content: space-between;
   }
 
-  /* Faz os botões ocuparem 100% da largura no celular */
   .acoes-carrinho {
     flex-direction: column;
     width: 100%;
@@ -225,13 +262,5 @@
 
   .item-carrinho {
     gap: 12px;
-  }
-}
-@media (max-width: 768px) {
-  .acoes-carrinho {
-    flex-direction: column-reverse;
-  }
-  .btn-acao {
-    width: 100%;
   }
 }
