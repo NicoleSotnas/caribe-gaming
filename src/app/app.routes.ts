@@ -139,6 +139,7 @@ export const routes: Routes = [
   {
     path: 'checkout',
     component: Checkout,
+    canActivate: [authGuard],
   },
   {
     path: 'admin',
