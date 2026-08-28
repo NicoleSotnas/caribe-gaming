@@ -49,7 +49,22 @@
       </div>
     </div>
   } @else {
-    <h1 class="titulo-pagina">Seu Carrinho</h1>
+    <div class="cabecalho-carrinho">
+      <h1 class="titulo-pagina">Seu Carrinho</h1>
+
+      <div class="status-nuvem">
+        @if (authFacade.estaLogado()) {
+          <span class="badge-nuvem logado">
+            <i class="fa-solid fa-cloud"></i> Sincronizado com sua conta
+          </span>
+        } @else {
+          <span class="badge-nuvem visitante">
+            <i class="fa-solid fa-hard-drive"></i> Salvo neste aparelho ·
+            <a routerLink="/login" class="link-login-nuvem">Faça login</a> para sincronizar na nuvem
+          </span>
+        }
+      </div>
+    </div>
 
     <section class="lista-carrinho">
       @for (item of carrinhoFacade.itens(); track $index) {
