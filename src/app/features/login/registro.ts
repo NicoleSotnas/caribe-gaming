@@ -11,6 +11,13 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 
+function emailValidoValidator(control: AbstractControl): ValidationErrors | null {
+  const valor = control.value;
+  if (!valor) return null;
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(valor) ? null : { emailInvalido: true };
+}
+
 @Component({
   selector: 'app-registro',
   standalone: true,
@@ -31,7 +38,7 @@ export class Registro {
     this.registroForm = this.fb.group(
       {
         nome: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, Validators.email]],
+        email: ['', [Validators.required, emailValidoValidator]],
         senha: ['', [Validators.required, Validators.minLength(6)]],
         confirmarSenha: ['', [Validators.required]],
       },
