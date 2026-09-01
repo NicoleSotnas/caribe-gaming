@@ -10,6 +10,7 @@ export class CarrinhoService {
   private readonly chaveStorage = 'caribe-gaming-carrinho';
   private carrinho = signal<ItemCarrinho[]>(this.carregarCarrinhoSalvo());
 
+  // Propriedades reativas computadas para os componentes
   itens = computed(() => this.carrinho());
   quantidade = computed(() =>
     this.carrinho().reduce((acc, item) => acc + (item.quantidade || 1), 0),
@@ -20,21 +21,82 @@ export class CarrinhoService {
   carrinhoVazio = computed(() => this.carrinho().length === 0);
 
   constructor() {
+    // Garante que qualquer alteração seja sempre salva no LocalStorage do dispositivo atual
     effect(() => {
       this.salvarCarrinho(this.carrinho());
     });
   }
 
-  adicionar(produto: ItemCarrinho) {
-    this.carrinho.update((lista) => [...lista, produto]);
+  // Define os itens do carrinho (usado quando a nuvem carrega ou sincroniza)
+  definirItens(itens: ItemCarrinho[]) {
+    this.carrinho.set(itens);
   }
 
+  // Adiciona o produto ou aumenta a quantidade se já estiver no carrinho
+  adicionar(produto: ItemCarrinho) {
+    this.carrinho.update((lista) => {
+      const id = produto.id;
+      const indexExistente =
+        id !== undefined && id !== null
+          ? lista.findIndex((item) => String(item.id) === String(id))
+          : lista.findIndex((item) => item.nome === produto.nome);
+
+      if (indexExistente > -1) {
+        const novaLista = [...lista];
+        const itemExistente = novaLista[indexExistente];
+        novaLista[indexExistente] = {
+          ...itemExistente,
+          quantidade: (itemExistente.quantidade || 1) + (produto.quantidade || 1),
+        };
+        return novaLista;
+      }
+
+      return [...lista, { ...produto, quantidade: produto.quantidade || 1 }];
+    });
+  }
+
+  aumentarQuantidade(indice: number) {
+  this.carrinho.update((lista) => {
+    const novaLista = [...lista];
+
+    novaLista[indice] = {
+      ...novaLista[indice],
+      quantidade: (novaLista[indice].quantidade || 1) + 1,
+    };
+
+    return novaLista;
+  });
+}
+
+diminuirQuantidade(indice: number) {
+  this.carrinho.update((lista) => {
+    const novaLista = [...lista];
+    const quantidadeAtual = novaLista[indice].quantidade || 1;
+
+    if (quantidadeAtual <= 1) {
+      return lista;
+    }
+
+    novaLista[indice] = {
+      ...novaLista[indice],
+      quantidade: quantidadeAtual - 1,
+    };
+
+    return novaLista;
+  });
+}
+
+  // Remove um produto pelo índice
   removerPorIndice(indice: number) {
     this.carrinho.update((listaAtual) => listaAtual.filter((_, index) => index !== indice));
   }
 
+  // Limpa o carrinho e remove a chave do LocalStorage
   limpar() {
     this.carrinho.set([]);
+    if (this.estaNoNavegador()) {
+      localStorage.removeItem(this.chaveStorage);
+    }
   }
 
   private estaNoNavegador(): boolean {

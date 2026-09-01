@@ -1,27 +1,34 @@
 <div class="pagina-checkout">
-  <h2 class="checkout-titulo">Checkout</h2>
+  <h2 class="checkout-titulo">Checkout dos Mares</h2>
 
   @if (compraFinalizada()) {
     <div class="checkout-sucesso">
-      <h3>✓ Compra finalizada com sucesso!</h3>
-      <p>Seu pedido foi processado. Aproveite seus jogos!</p>
+      <div class="sucesso-icon">⚓ ✓</div>
+      <h3>Tesouros adquiridos com sucesso!</h3>
+      <p>Seu pedido foi processado com sucesso e os jogos foram liberados para sua tripulação.</p>
+      <button class="btn-acao btn-primary btn-voltar-jogos" routerLink="/jogos">
+        Continuar Navegando
+      </button>
     </div>
   }
 
   @if (carrinhoFacade.carrinhoVazio() && !compraFinalizada()) {
     <div class="checkout-vazio">
-      <p>Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.</p>
+      <p>Seu porão de tesouros está vazio. Adicione jogos antes de finalizar a compra.</p>
+      <button class="btn-acao btn-primary" routerLink="/jogos">Explorar Catálogo</button>
     </div>
   } @else if (!compraFinalizada()) {
     <div class="checkout-grid">
+      <!-- FORMULÁRIO DE DADOS E PAGAMENTO -->
       <form class="checkout-form" [formGroup]="formulario">
-        <h3>Dados de Conclusão</h3>
+        <h3>1. Dados do Aventureiro</h3>
 
         <div class="field-group">
+          <label class="field-label">Nome Completo</label>
           <input
             type="text"
             formControlName="nome"
-            placeholder="Nome Completo"
+            placeholder="Ex: Edward Kenway"
             [class.input-erro]="campoInvalido('nome')"
           />
           @if (campoInvalido('nome')) {
@@ -30,27 +37,71 @@
         </div>
 
         <div class="field-group">
+          <label class="field-label">E-mail para Envio das Chaves</label>
           <input
             type="email"
             formControlName="email"
-            placeholder="E-mail"
+            placeholder="Ex: capitao@caribe.com"
             [class.input-erro]="campoInvalido('email')"
           />
           @if (campoInvalido('email')) {
-            <small>Informe um e-mail válido com domínio (ex: usuario@gmail.com).</small>
+            <small>Informe um e-mail válido para receber as chaves de ativação.</small>
           }
         </div>
 
         <div class="field-group">
+          <label class="field-label">Endereço de Cobrança</label>
           <input
             type="text"
             formControlName="endereco"
-            placeholder="Endereço de Entrega"
+            placeholder="Rua, Número, Bairro, Cidade - UF"
             [class.input-erro]="campoInvalido('endereco')"
           />
           @if (campoInvalido('endereco')) {
-            <small>Por favor, informe um endereço completo para entrega.</small>
+            <small>Por favor, informe seu endereço para emissão do recibo.</small>
           }
+        </div>
+
+        <h3>2. Forma de Pagamento</h3>
+        <div class="metodos-pagamento">
+          <button
+            type="button"
+            class="metodo-card"
+            [class.selecionado]="metodoPagamento() === 'pix'"
+            (click)="selecionarPagamento('pix')"
+          >
+            <span class="metodo-icon">⚡</span>
+            <div class="metodo-info">
+              <strong>PIX</strong>
+              <span>Aprovação instantânea</span>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            class="metodo-card"
+            [class.selecionado]="metodoPagamento() === 'cartao'"
+            (click)="selecionarPagamento('cartao')"
+          >
+            <span class="metodo-icon">💳</span>
+            <div class="metodo-info">
+              <strong>Cartão de Crédito</strong>
+              <span>Até 12x sem juros</span>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            class="metodo-card"
+            [class.selecionado]="metodoPagamento() === 'boleto'"
+            (click)="selecionarPagamento('boleto')"
+          >
+            <span class="metodo-icon">📄</span>
+            <div class="metodo-info">
+              <strong>Boleto Bancário</strong>
+              <span>Compensação em até 2 dias</span>
+            </div>
+          </button>
         </div>
 
         <button
@@ -59,25 +110,75 @@
           (click)="finalizar()"
           [disabled]="formulario.invalid"
         >
-          Finalizar Compra
+          <i class="fa-solid fa-lock"></i> Finalizar Compra Segura
         </button>
       </form>
 
-      <section class="checkout-resumo">
-        <h3>Resumo do Pedido</h3>
-        <div class="resumo-itens">
-          @for (item of carrinhoFacade.itens(); track $index) {
-            <div class="checkout-item">
-              <span>{{ item.nome }}</span>
-              <strong>R$ {{ item.preco.toFixed(2) }}</strong>
+      <!-- RESUMO DETALHADO DO PEDIDO -->
+      <div class="checkout-lateral">
+        <section class="checkout-resumo">
+          <h3>🏴‍☠️ Resumo do Pedido</h3>
+
+          <div class="resumo-itens">
+            @for (item of carrinhoFacade.itens(); track $index) {
+              <div class="checkout-item-detalhado">
+                @if (item.imagemUrl) {
+                  <img [src]="item.imagemUrl" [alt]="item.nome" class="item-thumb" />
+                }
+                <div class="item-detalhes">
+                  <span class="item-nome">{{ item.nome }}</span>
+                  <span class="item-meta"
+                    >{{ item.plataforma || 'PC' }} · Qtd: {{ item.quantidade || 1 }}</span
+                  >
+                </div>
+                <strong class="item-preco">
+                  R$ {{ (item.preco * (item.quantidade || 1)).toFixed(2) }}
+                </strong>
+              </div>
+            }
+          </div>
+
+          <!-- DISCRIMINAÇÃO DE TOTAIS -->
+          <div class="checkout-calculo">
+            <div class="linha-calculo">
+              <span>Subtotal ({{ carrinhoFacade.quantidade() }} itens)</span>
+              <span>R$ {{ carrinhoFacade.total().toFixed(2) }}</span>
+            </div>
+            <div class="linha-calculo">
+              <span>Entrega Digital</span>
+              <span class="badge-gratis">GRÁTIS (Instantânea)</span>
+            </div>
+            <div class="checkout-total-box">
+              <span class="total-label">Total a pagar:</span>
+              <strong class="checkout-total">R$ {{ carrinhoFacade.total().toFixed(2) }}</strong>
+            </div>
+          </div>
+        </section>
+
+        <!-- BLOCO DE SEGURANÇA E PRIVACIDADE PIRATA -->
+        <section class="pirate-security" [class.aberto]="segurancaAberta()">
+          <div class="security-header" (click)="toggleSeguranca()">
+            <div class="security-title">
+              <span class="pirate-icon">⚓</span>
+              <div>
+                <h4>Segurança e Privacidade</h4>
+                <p>🏴‍☠️ Pagamentos seguros · Chaves 100% originais</p>
+              </div>
+            </div>
+            <span class="arrow" [class.rotacionada]="segurancaAberta()">›</span>
+          </div>
+
+          @if (segurancaAberta()) {
+            <div class="payment-security">
+              <p>
+                ⚓ Navegue com tranquilidade! Seus dados pessoais e transações são protegidos com
+                criptografia de ponta a ponta.
+              </p>
+              <div class="security-badge">🛡️ Sua tripulação está protegida</div>
             </div>
           }
-        </div>
-        <div class="checkout-total-box">
-          <span class="total-label">Total:</span>
-          <strong class="checkout-total">R$ {{ carrinhoFacade.total().toFixed(2) }}</strong>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   }
 </div>
