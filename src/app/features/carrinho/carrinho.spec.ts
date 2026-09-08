@@ -1,121 +1,77 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
 import { provideRouter, Router } from '@angular/router';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { Carrinho } from './carrinho';
-import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
 import { AuthFacade } from '../../core/facades/auth.facade';
+import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
+import { Carrinho } from './carrinho';
 
-@Component({
-  standalone: true,
-  template: '<h1>Checkout</h1>',
-})
+@Component({ standalone: true, template: '<h1>Checkout</h1>' })
 class CheckoutFake {}
 
 describe('Carrinho', () => {
   let component: Carrinho;
   let fixture: ComponentFixture<Carrinho>;
-
+  const carrinhoVazio = signal(false);
   const carrinhoFacadeMock = {
-    itens: vi.fn().mockReturnValue([
-      {
-        id: 1,
-        nome: 'Jogo Teste',
-        preco: 50,
-        quantidade: 1,
-        imagemUrl: '',
-        plataforma: 'PC',
-      },
-    ]),
-
-    quantidade: vi.fn().mockReturnValue(1),
-
-    total: vi.fn().mockReturnValue(50),
-
-    carrinhoVazio: vi.fn().mockReturnValue(false),
-
+    carrinhoVazio,
+    itens: signal([{ id: 1, nome: 'Jogo Teste', preco: 50, quantidade: 1, imagemUrl: '', plataforma: 'PC' }]),
+    quantidade: signal(1),
+    total: signal(50),
     aumentarQuantidade: vi.fn(),
-
     diminuirQuantidade: vi.fn(),
-
     removerItem: vi.fn(),
-
     limparCarrinho: vi.fn(),
-
     adicionarProduto: vi.fn(),
   };
-
-  const authFacadeMock = {
-    estaLogado: vi.fn().mockReturnValue(false),
-  };
+  const authFacadeMock = { estaLogado: vi.fn().mockReturnValue(false) };
 
   beforeEach(async () => {
-    carrinhoFacadeMock.carrinhoVazio.mockReturnValue(false);
-
+    carrinhoVazio.set(false);
     await TestBed.configureTestingModule({
       imports: [Carrinho],
-
       providers: [
-        provideRouter([
-          {
-            path: 'checkout',
-            component: CheckoutFake,
-          },
-        ]),
-
-        {
-          provide: CarrinhoFacade,
-          useValue: carrinhoFacadeMock,
-        },
-
-        {
-          provide: AuthFacade,
-          useValue: authFacadeMock,
-        },
+        provideRouter([{ path: 'checkout', component: CheckoutFake }, { path: 'jogos', component: CheckoutFake }]),
+        { provide: CarrinhoFacade, useValue: carrinhoFacadeMock },
+        { provide: AuthFacade, useValue: authFacadeMock },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Carrinho);
-
     component = fixture.componentInstance;
-
     fixture.detectChanges();
   });
 
-  // ==========================================
-  // TESTE DE CAIXA PRETA
-  // ==========================================
-
   it('deve levar o usuário para o checkout ao clicar em Finalizar compra', async () => {
     const router = TestBed.inject(Router);
-
-    /*
-     * O botão REAL do seu carrinho usa:
-     *
-     * class="btn-acao btn-primary"
-     *
-     * Por isso não usamos .btn-finalizar.
-     */
-
-    const botao = fixture.nativeElement.querySelector('.btn-acao.btn-primary') as HTMLButtonElement;
-
+    const botao = fixture.nativeElement.querySelector('.btn-finalizar') as HTMLButtonElement;
     expect(botao).toBeTruthy();
-
     botao.click();
-
     await fixture.whenStable();
-
     expect(router.url).toBe('/checkout');
   });
 
-  // ==========================================
-  // TESTE DE CAIXA BRANCA
-  // ==========================================
+  it('caixa preta: deve navegar para jogos ao clicar em Explorar Jogos', async () => {
+    carrinhoVazio.set(true);
+    fixture.detectChanges();
+    const botao = fixture.nativeElement.querySelector('.btn-explorar') as HTMLButtonElement;
+    const router = TestBed.inject(Router);
+    expect(botao).toBeTruthy();
+    botao.click();
+    await fixture.whenStable();
+    expect(router.url).toBe('/jogos');
+  });
+
+  it('caixa branca: deve renderizar Explorar Jogos somente no ramo de carrinho vazio', () => {
+    carrinhoVazio.set(false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.btn-explorar')).toBeNull();
+  });
 
   it('deve chamar removerItem da facade com o índice correto', () => {
     component.removerItem(0);
-
     expect(carrinhoFacadeMock.removerItem).toHaveBeenCalledWith(0);
   });
 });
