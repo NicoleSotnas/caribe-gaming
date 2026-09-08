@@ -10,7 +10,15 @@ export default defineConfig({
     setupFiles: 'src/test.ts',
     server: {
       deps: {
-        inline: ['rxfire', '@angular/fire'],
+        inline: [
+          'rxfire',
+          '@angular/fire',
+          '@angular/core',
+          '@angular/common',
+          '@angular/platform-browser',
+          '@angular/router',
+          '@angular/forms',
+        ],
       },
     },
   },
