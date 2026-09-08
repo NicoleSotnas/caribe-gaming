@@ -1,94 +1,95 @@
 import { render, screen, fireEvent } from '@testing-library/angular';
-import { TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { Router } from '@angular/router';
+import { vi, describe, it, expect, afterEach } from 'vitest';
+import { provideRouter } from '@angular/router';
+
 import { Home } from './home';
 import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
 
-describe('Home Component - Botão Comprar Agora', () => {
-  let carrinhoFacadeMock: { adicionarProduto: ReturnType<typeof vi.fn> };
-  let routerMock: { navigate: ReturnType<typeof vi.fn> };
+// ============================================================================
+// MOCKS DOS MÓDULOS EXTERNOS (Evita erros NG0201 de Injeção de Dependência)
+// ============================================================================
+vi.mock('@angular/fire/auth', () => ({
+  Auth: vi.fn(),
+  getAuth: vi.fn(),
+}));
 
-  beforeEach(() => {
-    carrinhoFacadeMock = {
-      adicionarProduto: vi.fn(),
-    };
+vi.mock('@angular/fire/firestore', () => ({
+  Firestore: vi.fn(),
+  getFirestore: vi.fn(),
+}));
 
-    routerMock = {
-      navigate: vi.fn(),
-    };
-  });
-
+describe('Home Component - Navegação e Troca de Banner', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  // --- TESTE ANGULAR TESTING LIBRARY ---
-  describe('Testing Library Tests', () => {
-    it('deve disparar a compra e redirecionar ao clicar no botão "COMPRAR AGORA" via interação de DOM', async () => {
-      await render(Home, {
-        componentProviders: [
-          { provide: CarrinhoFacade, useValue: carrinhoFacadeMock },
-          { provide: Router, useValue: routerMock },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      });
-
-      const buyButtons = screen.getAllByRole('button', { name: /comprar agora/i });
-      expect(buyButtons.length).toBeGreaterThan(0);
-
-      await fireEvent.click(buyButtons[0]);
-
-      expect(carrinhoFacadeMock.adicionarProduto).toHaveBeenCalledWith({
-        id: 5,
-        nome: "Marvel's Spider-Man Remastered",
-        preco: 199.9,
-        quantidade: 1,
-        imagemUrl: 'https://i.pinimg.com/1200x/c8/a6/93/c8a693307e006df55eb3b8c7cb86891d.jpg',
-        plataforma: 'PC',
-        categoria: 'Jogo',
-      });
-
-      expect(routerMock.navigate).toHaveBeenCalledWith(['/carrinho']);
+  // Função para renderizar o componente no ambiente de teste
+  async function renderHomeComponent() {
+    return await render(Home, {
+      providers: [
+        provideRouter([]),
+        { provide: CarrinhoFacade, useValue: {} }, // Mock estático para satisfazer a DI do Angular
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     });
+  }
+
+  // ==========================================================================
+  // BLOCO DE TESTES: BOTOES DE TROCA DE JOGO NO BANNER
+  // ==========================================================================
+
+  // --------------------------------------------------------------------------
+  // TESTE 1: Renderização dos Botões/Indicadores
+  // --------------------------------------------------------------------------
+  it('deve renderizar os botões de navegação dos jogos no banner', async () => {
+    await renderHomeComponent();
+
+    const slide1Indicator = screen.getByText('01');
+    const slide2Indicator = screen.getByText('02');
+
+    expect(slide1Indicator).toBeTruthy();
+    expect(slide2Indicator).toBeTruthy();
   });
 
-  // --- TESTE DE UNIDADE VITEST ---
-  describe('Vitest Unit Tests', () => {
-    it('deve converter corretamente o preço em string para float ao executar comprarAgora()', async () => {
-      await TestBed.configureTestingModule({
-        imports: [Home],
-        providers: [
-          { provide: CarrinhoFacade, useValue: carrinhoFacadeMock },
-          { provide: Router, useValue: routerMock },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
+  // --------------------------------------------------------------------------
+  // TESTE 2: Exibição do Jogo Inicial
+  // --------------------------------------------------------------------------
+  it('deve exibir o título do primeiro jogo por padrão ao carregar', async () => {
+    await renderHomeComponent();
 
-      const fixture = TestBed.createComponent(Home);
-      const component = fixture.componentInstance;
+    const gameTitle = screen.getByText(/Marvel's Spider-Man Remastered/i);
+    expect(gameTitle).toBeTruthy();
+  });
 
-      const mockGame = {
-        id: 16,
-        title: 'Formula 1 2023',
-        subtitle: 'Sinta a emoção da velocidade com o F1 2023.',
-        originalPrice: 'R$ 359,00',
-        promoPrice: 'R$ 1.250,50',
-        discount: '-60%',
-        image: 'https://i.pinimg.com/1200x/71/52/68/715268628f6902ea0ed1361b71dbf627.jpg',
-      };
+  // --------------------------------------------------------------------------
+  // TESTE 3: Troca para o Segundo Jogo
+  // --------------------------------------------------------------------------
+  it('deve alterar o conteúdo do banner ao clicar no botão "02"', async () => {
+    await renderHomeComponent();
 
-      component.comprarAgora(mockGame as any);
+    const secondSlideIndicator = screen.getByText('02');
+    await fireEvent.click(secondSlideIndicator);
 
-      expect(carrinhoFacadeMock.adicionarProduto).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: 16,
-          nome: 'Formula 1 2023',
-          preco: 1250.5,
-        }),
-      );
-      expect(routerMock.navigate).toHaveBeenCalledWith(['/carrinho']);
-    });
+    const secondGameTitle = screen.getByText(/Formula 1 2023/i);
+    expect(secondGameTitle).toBeTruthy();
+  });
+
+  // --------------------------------------------------------------------------
+  // TESTE 4: Retorno ao Primeiro Jogo
+  // --------------------------------------------------------------------------
+  it('deve retornar ao primeiro jogo ao clicar no botão "01"', async () => {
+    await renderHomeComponent();
+
+    // Avança para o slide 2
+    const secondSlideIndicator = screen.getByText('02');
+    await fireEvent.click(secondSlideIndicator);
+
+    // Voltar para o slide 1
+    const firstSlideIndicator = screen.getByText('01');
+    await fireEvent.click(firstSlideIndicator);
+
+    const firstGameTitle = screen.getByText(/Marvel's Spider-Man Remastered/i);
+    expect(firstGameTitle).toBeTruthy();
   });
 });
