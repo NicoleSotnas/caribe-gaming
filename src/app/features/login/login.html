@@ -1,5 +1,10 @@
 <div class="tela-login">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="card-login">
+  <form
+    *ngIf="!modoRecuperacao"
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+    class="card-login"
+  >
     <h1>Entrar</h1>
 
     <div class="campo">
@@ -19,6 +24,10 @@
         A senha deve ter no mínimo 6 caracteres
       </span>
     </div>
+
+    <button type="button" class="link-esqueci" (click)="abrirRecuperacao()">
+      Esqueceu a senha?
+    </button>
 
     <p class="erro-geral" *ngIf="mensagemErro">{{ mensagemErro }}</p>
 
@@ -53,5 +62,43 @@
     <p class="link-registro">Não tem uma conta? <a routerLink="/registro">Criar conta</a></p>
 
     <a routerLink="/" class="link-voltar">← Voltar para a Home</a>
+  </form>
+
+  <form
+    *ngIf="modoRecuperacao"
+    [formGroup]="recuperarForm"
+    (ngSubmit)="onRecuperarSenha()"
+    class="card-login"
+  >
+    <h1>Recuperar senha</h1>
+    <p class="subtitulo">Informe seu email e enviaremos um link para redefinir sua senha.</p>
+
+    <div class="campo">
+      <label for="emailRecuperacao">Email</label>
+      <input
+        id="emailRecuperacao"
+        type="email"
+        formControlName="email"
+        placeholder="seu@email.com"
+      />
+
+      <span
+        class="erro"
+        *ngIf="recuperarForm.get('email')?.touched && recuperarForm.get('email')?.invalid"
+      >
+        Digite um email válido
+      </span>
+    </div>
+
+    <p class="erro-geral" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+    <p class="sucesso" *ngIf="mensagemSucesso">{{ mensagemSucesso }}</p>
+
+    <button type="submit" [disabled]="carregando">
+      {{ carregando ? 'Enviando...' : 'Enviar link de recuperação' }}
+    </button>
+
+    <button type="button" class="link-voltar-login" (click)="voltarParaLogin()">
+      ← Voltar para o login
+    </button>
   </form>
 </div>

@@ -162,7 +162,30 @@
   font-size: 0.85rem;
 }
 
-button {
+.link-esqueci {
+  background: transparent;
+  border: none;
+  color: #5fd8ea;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0.4rem 0 1.2rem;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: none;
+  width: 100%;
+  display: block;
+}
+
+.link-esqueci:hover {
+  text-decoration: underline;
+  transform: none;
+  box-shadow: none;
+  filter: brightness(1.15);
+}
+
+button[type='submit'] {
   width: 100%;
   box-sizing: border-box;
   padding: 0.85rem;
@@ -182,17 +205,17 @@ button {
     filter 0.15s;
 }
 
-button:hover:not(:disabled) {
+button[type='submit']:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 14px 32px rgba(84, 87, 229, 0.5);
   filter: brightness(1.08);
 }
 
-button:active:not(:disabled) {
+button[type='submit']:active:not(:disabled) {
   transform: translateY(0);
 }
 
-button:disabled {
+button[type='submit']:disabled {
   background: #3a4a5c;
   opacity: 0.6;
   cursor: not-allowed;
@@ -287,4 +310,31 @@ button:disabled {
 .btn-google:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.link-voltar,
+.link-voltar-login {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  text-align: center;
+  margin-top: 0.9rem;
+  padding: 0;
+  font-size: 0.82rem;
+  font-family: 'Inter', sans-serif;
+  color: #9db3c4;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link-voltar:hover,
+.link-voltar-login:hover {
+  text-decoration: underline;
+  color: #5fd8ea;
+  transform: none;
+  filter: none;
+  box-shadow: none;
 }

@@ -10,20 +10,27 @@
 }
 
 .checkout-titulo {
-  max-width: 1050px;
+  max-width: 1100px;
   margin: 0 auto 24px;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
   color: var(--gold, #f4c95d);
   font-weight: 800;
 }
 
-/* Container principal com fluxo vertical (empilhado) */
+/* Grid principal em 2 colunas no Desktop */
 .checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.checkout-lateral {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  max-width: 1050px;
-  margin: 0 auto;
+  gap: 20px;
 }
 
 .checkout-resumo,
@@ -35,6 +42,7 @@
   border-radius: 12px;
   background: linear-gradient(145deg, #12243b, #0b1425);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
 }
 
 .checkout-form h3,
@@ -42,12 +50,23 @@
   margin-top: 0;
   margin-bottom: 20px;
   color: var(--cyan, #3bafd4);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* Grupos e Campos de Entrada com Tratamento Visual de Erro */
+/* Labels e Campos de Formulário */
 .field-group {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 6px;
 }
 
 .checkout-form input {
@@ -82,26 +101,136 @@
   font-size: 0.85rem;
 }
 
-/* Área de Resumo e Valores */
-.checkout-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+/* Métodos de Pagamento */
+.metodos-pagamento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
-.checkout-item strong,
-.checkout-total {
+.metodo-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #081321;
+  border: 2px solid #233e5b;
+  border-radius: 9px;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.metodo-card:hover {
+  border-color: var(--cyan, #3bafd4);
+  background: rgba(59, 175, 212, 0.08);
+}
+
+.metodo-card.selecionado {
+  border-color: var(--gold, #f4c95d);
+  background: rgba(244, 201, 93, 0.12);
+  box-shadow: 0 0 12px rgba(244, 201, 93, 0.2);
+}
+
+.metodo-icon {
+  font-size: 1.6rem;
+}
+
+.metodo-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.metodo-info strong {
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.metodo-info span {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* Resumo de Itens Detalhado */
+.resumo-itens {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-bottom: 18px;
+}
+
+.checkout-item-detalhado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.item-thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(59, 175, 212, 0.3);
+}
+
+.item-detalhes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-nome {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.item-meta {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.item-preco {
   color: var(--gold, #f4c95d);
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Cálculo de Totais */
+.checkout-calculo {
+  border-top: 1px solid rgba(59, 175, 212, 0.2);
+  padding-top: 14px;
+}
+
+.linha-calculo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.badge-gratis {
+  color: #4ade80;
+  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .checkout-total-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
-  padding-top: 16px;
+  margin-top: 14px;
+  padding-top: 14px;
   border-top: 2px solid rgba(59, 175, 212, 0.35);
   font-size: 1.25rem;
   font-weight: 700;
@@ -111,10 +240,117 @@
   color: #ffffff;
 }
 
+.checkout-total {
+  color: var(--gold, #f4c95d);
+  font-size: 1.35rem;
+}
+
+/* Bloco de Segurança Pirata */
+.pirate-security {
+  background: rgba(8, 14, 26, 0.75);
+  border: 1px solid rgba(59, 175, 212, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.pirate-security:hover {
+  border-color: rgba(244, 201, 93, 0.5);
+}
+
+.security-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.security-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pirate-icon {
+  font-size: 1.5rem;
+}
+
+.security-title h4 {
+  margin: 0 0 2px 0;
+  font-size: 0.95rem;
+  color: var(--gold, #f4c95d);
+  font-weight: 700;
+}
+
+.security-title p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.arrow {
+  font-size: 1.5rem;
+  color: var(--cyan, #3bafd4);
+  transition: transform 0.3s ease;
+}
+
+.arrow.rotacionada {
+  transform: rotate(90deg);
+}
+
+.payment-security {
+  padding: 0 18px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.payment-security p {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 10px 0 12px;
+}
+
+.security-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(59, 175, 212, 0.12);
+  border: 1px solid rgba(59, 175, 212, 0.4);
+  color: #38bdf8;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 /* Botões */
 .btn-finalizar {
   width: 100% !important;
-  margin-top: 12px !important;
+  margin-top: 14px !important;
+  font-size: 1.05rem !important;
+  padding: 15px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 7px;
+  background: linear-gradient(135deg, var(--ocean-blue, #0088ff), var(--cyan, #3bafd4));
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.btn-finalizar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(59, 175, 212, 0.35);
 }
 
 .btn-finalizar:disabled {
@@ -124,73 +360,66 @@
   box-shadow: none !important;
 }
 
-/* Estado de Sucesso / Vazio */
+/* Sucesso e Vazio */
 .checkout-sucesso,
 .checkout-vazio {
-  max-width: 1050px;
+  max-width: 600px;
   box-sizing: border-box;
-  margin: 0 auto 20px;
-  padding: 20px;
-  border-radius: 12px;
+  margin: 40px auto;
+  padding: 36px 28px;
+  border-radius: 16px;
+  text-align: center;
+  background: rgba(8, 14, 26, 0.85);
+  border: 1px solid rgba(59, 175, 212, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
 }
 
 .checkout-sucesso {
   border-left: 4px solid #4ade80;
-  background: rgba(74, 222, 128, 0.12);
-  color: #86efac;
+}
+
+.sucesso-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
 }
 
 .checkout-sucesso h3 {
-  margin: 0 0 8px 0;
+  color: var(--gold, #f4c95d);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
 }
 
 .checkout-sucesso p {
-  margin: 0;
+  color: #cbd5e1;
+  margin-bottom: 24px;
+  line-height: 1.6;
 }
 
 .checkout-vazio {
   border-left: 4px solid var(--danger, #ef4444);
-  background: rgba(248, 113, 113, 0.12);
-  color: #fca5a5;
 }
 
 .checkout-vazio p {
-  margin: 0;
+  color: #fca5a5;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
 }
 
 /* Responsividade */
-@media (max-width: 900px) {
-  :host {
-    padding: 107px 20px 32px;
-  }
-
-  .checkout-resumo,
-  .checkout-form {
-    padding: 20px;
+@media (max-width: 960px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 600px) {
   :host {
-    padding: 107px 12px 24px;
+    padding: 107px 16px 24px;
   }
 
   .checkout-resumo,
   .checkout-form {
-    padding: 16px;
-    border-radius: 8px;
-  }
-
-  .checkout-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .checkout-form input,
-  .btn-acao {
-    transition: none !important;
+    padding: 18px;
   }
 }
