@@ -30,13 +30,19 @@ describe('Carrinho', () => {
     ]),
 
     quantidade: vi.fn().mockReturnValue(1),
+
     total: vi.fn().mockReturnValue(50),
+
     carrinhoVazio: vi.fn().mockReturnValue(false),
 
     aumentarQuantidade: vi.fn(),
+
     diminuirQuantidade: vi.fn(),
+
     removerItem: vi.fn(),
+
     limparCarrinho: vi.fn(),
+
     adicionarProduto: vi.fn(),
   };
 
@@ -45,42 +51,54 @@ describe('Carrinho', () => {
   };
 
   beforeEach(async () => {
-  carrinhoFacadeMock.carrinhoVazio.mockReturnValue(false);
+    carrinhoFacadeMock.carrinhoVazio.mockReturnValue(false);
 
-  await TestBed.configureTestingModule({
-    imports: [Carrinho],
+    await TestBed.configureTestingModule({
+      imports: [Carrinho],
 
-    providers: [
-      provideRouter([
+      providers: [
+        provideRouter([
+          {
+            path: 'checkout',
+            component: CheckoutFake,
+          },
+        ]),
+
         {
-          path: 'checkout',
-          component: CheckoutFake,
+          provide: CarrinhoFacade,
+          useValue: carrinhoFacadeMock,
         },
-      ]),
 
-      {
-        provide: CarrinhoFacade,
-        useValue: carrinhoFacadeMock,
-      },
+        {
+          provide: AuthFacade,
+          useValue: authFacadeMock,
+        },
+      ],
+    }).compileComponents();
 
-      {
-        provide: AuthFacade,
-        useValue: authFacadeMock,
-      },
-    ],
-  }).compileComponents();
+    fixture = TestBed.createComponent(Carrinho);
 
-  fixture = TestBed.createComponent(Carrinho);
-  component = fixture.componentInstance;
+    component = fixture.componentInstance;
 
-  fixture.detectChanges();
-});
+    fixture.detectChanges();
+  });
 
+  // ==========================================
   // TESTE DE CAIXA PRETA
+  // ==========================================
+
   it('deve levar o usuário para o checkout ao clicar em Finalizar compra', async () => {
     const router = TestBed.inject(Router);
 
-    const botao = fixture.nativeElement.querySelector('.btn-finalizar') as HTMLButtonElement;
+    /*
+     * O botão REAL do seu carrinho usa:
+     *
+     * class="btn-acao btn-primary"
+     *
+     * Por isso não usamos .btn-finalizar.
+     */
+
+    const botao = fixture.nativeElement.querySelector('.btn-acao.btn-primary') as HTMLButtonElement;
 
     expect(botao).toBeTruthy();
 
@@ -91,7 +109,10 @@ describe('Carrinho', () => {
     expect(router.url).toBe('/checkout');
   });
 
+  // ==========================================
   // TESTE DE CAIXA BRANCA
+  // ==========================================
+
   it('deve chamar removerItem da facade com o índice correto', () => {
     component.removerItem(0);
 
