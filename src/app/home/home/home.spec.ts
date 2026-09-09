@@ -29,13 +29,10 @@ describe('Home Component - Navegação e Troca de Banner', () => {
     });
   }
 
-  // ==========================================================================
   // BLOCO DE TESTES: BOTÕES DE TROCA DE JOGO NO BANNER
-  // ==========================================================================
 
-  // --------------------------------------------------------------------------
   // TESTE 1: Renderização dos Botões/Indicadores
-  // --------------------------------------------------------------------------
+
   it('deve renderizar os botões de navegação dos jogos no banner', async () => {
     await renderHomeComponent();
 
@@ -46,9 +43,8 @@ describe('Home Component - Navegação e Troca de Banner', () => {
     expect(slide2Indicator).toBeTruthy();
   });
 
-  // --------------------------------------------------------------------------
   // TESTE 2: Exibição do Jogo Inicial
-  // --------------------------------------------------------------------------
+
   it('deve exibir o título do primeiro jogo por padrão ao carregar', async () => {
     await renderHomeComponent();
 
@@ -56,9 +52,8 @@ describe('Home Component - Navegação e Troca de Banner', () => {
     expect(gameTitle).toBeTruthy();
   });
 
-  // --------------------------------------------------------------------------
   // TESTE 3: Troca para o Segundo Jogo
-  // --------------------------------------------------------------------------
+
   it('deve alterar o conteúdo do banner ao clicar no botão "02"', async () => {
     await renderHomeComponent();
 
@@ -69,9 +64,8 @@ describe('Home Component - Navegação e Troca de Banner', () => {
     expect(secondGameTitle).toBeTruthy();
   });
 
-  // --------------------------------------------------------------------------
   // TESTE 4: Retorno ao Primeiro Jogo
-  // --------------------------------------------------------------------------
+
   it('deve retornar ao primeiro jogo ao clicar no botão "01"', async () => {
     await renderHomeComponent();
 
