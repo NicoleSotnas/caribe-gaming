@@ -3,6 +3,9 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [angular()],
+  ssr: {
+    noExternal: ['rxfire', '@angular/fire'],
+  },
   test: {
     globals: true,
     environment: 'jsdom',
@@ -10,7 +13,15 @@ export default defineConfig({
     setupFiles: 'src/test.ts',
     server: {
       deps: {
-        inline: ['rxfire', '@angular/fire'],
+        inline: [
+          'rxfire',
+          '@angular/fire',
+          '@angular/core',
+          '@angular/common',
+          '@angular/platform-browser',
+          '@angular/router',
+          '@angular/forms',
+        ],
       },
     },
   },
