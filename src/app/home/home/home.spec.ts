@@ -1,42 +1,36 @@
 import { render, screen, fireEvent } from '@testing-library/angular';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { vi, describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { provideRouter } from '@angular/router';
 
+// Imports do Angular e Firebase (Tokens reais para a Injeção de Dependência)
+import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
+
+// Componente e Facade
 import { Home } from './home';
 import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
-
-// ============================================================================
-// MOCKS DOS MÓDULOS EXTERNOS (Evita erros NG0201 de Injeção de Dependência)
-// ============================================================================
-vi.mock('@angular/fire/auth', () => ({
-  Auth: vi.fn(),
-  getAuth: vi.fn(),
-}));
-
-vi.mock('@angular/fire/firestore', () => ({
-  Firestore: vi.fn(),
-  getFirestore: vi.fn(),
-}));
 
 describe('Home Component - Navegação e Troca de Banner', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  // Função para renderizar o componente no ambiente de teste
   async function renderHomeComponent() {
     return await render(Home, {
       providers: [
         provideRouter([]),
-        { provide: CarrinhoFacade, useValue: {} }, // Mock estático para satisfazer a DI do Angular
+        { provide: CarrinhoFacade, useValue: {} },
+        // Provê os tokens reais do Firebase como objetos vazios
+        { provide: Auth, useValue: {} },
+        { provide: Firestore, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
   }
 
   // ==========================================================================
-  // BLOCO DE TESTES: BOTOES DE TROCA DE JOGO NO BANNER
+  // BLOCO DE TESTES: BOTÕES DE TROCA DE JOGO NO BANNER
   // ==========================================================================
 
   // --------------------------------------------------------------------------
@@ -71,7 +65,7 @@ describe('Home Component - Navegação e Troca de Banner', () => {
     const secondSlideIndicator = screen.getByText('02');
     await fireEvent.click(secondSlideIndicator);
 
-    const secondGameTitle = screen.getByText(/Formula 1 2023/i);
+    const secondGameTitle = screen.getByRole('heading', { name: /Formula 1 2023/i, level: 1 });
     expect(secondGameTitle).toBeTruthy();
   });
 
@@ -89,7 +83,10 @@ describe('Home Component - Navegação e Troca de Banner', () => {
     const firstSlideIndicator = screen.getByText('01');
     await fireEvent.click(firstSlideIndicator);
 
-    const firstGameTitle = screen.getByText(/Marvel's Spider-Man Remastered/i);
+    const firstGameTitle = screen.getByRole('heading', {
+      name: /Marvel's Spider-Man Remastered/i,
+      level: 1,
+    });
     expect(firstGameTitle).toBeTruthy();
   });
 });
