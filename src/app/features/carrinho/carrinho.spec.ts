@@ -11,13 +11,16 @@ import { Carrinho } from './carrinho';
 @Component({ standalone: true, template: '<h1>Checkout</h1>' })
 class CheckoutFake {}
 
+//Nessa parte do teste, é uma representação de como se o carrinho estivesse cheio.
 describe('Carrinho', () => {
   let component: Carrinho;
   let fixture: ComponentFixture<Carrinho>;
   const carrinhoVazio = signal(false);
   const carrinhoFacadeMock = {
     carrinhoVazio,
-    itens: signal([{ id: 1, nome: 'Jogo Teste', preco: 50, quantidade: 1, imagemUrl: '', plataforma: 'PC' }]),
+    itens: signal([
+      { id: 1, nome: 'Jogo Teste', preco: 50, quantidade: 1, imagemUrl: '', plataforma: 'PC' },
+    ]),
     quantidade: signal(1),
     total: signal(50),
     aumentarQuantidade: vi.fn(),
@@ -26,6 +29,8 @@ describe('Carrinho', () => {
     limparCarrinho: vi.fn(),
     adicionarProduto: vi.fn(),
   };
+
+  //É uma versão falsa para ser usada somente durante o teste. Em vez de usar o facade real, é usado uma versão controlada pelo programador.
   const authFacadeMock = { estaLogado: vi.fn().mockReturnValue(false) };
 
   beforeEach(async () => {
@@ -33,16 +38,23 @@ describe('Carrinho', () => {
     await TestBed.configureTestingModule({
       imports: [Carrinho],
       providers: [
-        provideRouter([{ path: 'checkout', component: CheckoutFake }, { path: 'jogos', component: CheckoutFake }]),
+        provideRouter([
+          { path: 'checkout', component: CheckoutFake },
+          { path: 'jogos', component: CheckoutFake },
+        ]),
         { provide: CarrinhoFacade, useValue: carrinhoFacadeMock },
         { provide: AuthFacade, useValue: authFacadeMock },
       ],
     }).compileComponents();
 
+    //Rpresenta o componente que está sendo testado.
     fixture = TestBed.createComponent(Carrinho);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
+
+  // await fixture.whenStable(); O clique pode gerar uma opção que o angular ainda precisa processar,
+  // basicamente é como se pedisse para esperar o angular terminar as operações pendentes antes de verificar os resultados.
 
   it('deve levar o usuário para o checkout ao clicar em Finalizar compra', async () => {
     const router = TestBed.inject(Router);
@@ -53,6 +65,7 @@ describe('Carrinho', () => {
     expect(router.url).toBe('/checkout');
   });
 
+  //Testa o sistema pelo olhar do usuário.
   it('caixa preta: deve navegar para jogos ao clicar em Explorar Jogos', async () => {
     carrinhoVazio.set(true);
     fixture.detectChanges();
@@ -64,6 +77,7 @@ describe('Carrinho', () => {
     expect(router.url).toBe('/jogos');
   });
 
+  //Testa a lógica através do código.
   it('caixa branca: deve renderizar Explorar Jogos somente no ramo de carrinho vazio', () => {
     carrinhoVazio.set(false);
     fixture.detectChanges();
