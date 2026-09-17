@@ -70,3 +70,5 @@ export class AuthService {
     return user(this.auth);
   }
 }
+
+export { Auth };
