@@ -1,11 +1,5 @@
-import angular from '@analogjs/vite-plugin-angular';
 import { defineConfig } from 'vitest/config';
-
 export default defineConfig({
-  plugins: [angular()],
-  ssr: {
-    noExternal: ['rxfire', '@angular/fire'],
-  },
   test: {
     globals: true,
     environment: 'jsdom',
@@ -14,14 +8,20 @@ export default defineConfig({
     server: {
       deps: {
         inline: [
-          'rxfire',
-          '@angular/fire',
           '@angular/core',
           '@angular/common',
           '@angular/platform-browser',
+          '@angular/platform-browser-dynamic',
           '@angular/router',
           '@angular/forms',
         ],
+      },
+      coverage: {
+        provider: 'v8',
+        reporter: ['text', 'html'],
+        all: true,
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: ['src/**/*.spec.ts'],
       },
     },
   },
