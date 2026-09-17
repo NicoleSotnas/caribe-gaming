@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {Edelr}
+import { EldenRing } from './elden-ring';
 
-describe('WatchDogs2', () => {
-  let component: WatchDogs2;
-  let fixture: ComponentFixture<WatchDogs2>;
+describe('EldenRing', () => {
+  let component: EldenRing;
+  let fixture: ComponentFixture<EldenRing>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WatchDogs2],
+      imports: [EldenRing],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(WatchDogs2);
+    fixture = TestBed.createComponent(EldenRing);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Grandtheftautov } from './grandtheftautov';
+import { GrandTheftAutoV} from './grandtheftautov';
 
-describe('Grandtheftautov', () => {
-  let component: Grandtheftautov;
-  let fixture: ComponentFixture<Grandtheftautov>;
+describe('GrandTheftAutoV', () => {
+  let component: GrandTheftAutoV;
+  let fixture: ComponentFixture<GrandTheftAutoV>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Grandtheftautov],
+      imports: [GrandTheftAutoV],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Grandtheftautov);
+    fixture = TestBed.createComponent(GrandTheftAutoV);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
