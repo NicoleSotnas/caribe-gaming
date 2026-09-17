@@ -14,6 +14,7 @@ import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
+
 export class AuthService {
   constructor(
     private auth: Auth,
