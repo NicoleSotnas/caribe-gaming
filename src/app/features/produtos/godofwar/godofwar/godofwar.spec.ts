@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Godofwar } from './godofwar';
+import { GodOfWar } from './godofwar';
 
 describe('Godofwar', () => {
-  let component: Godofwar;
-  let fixture: ComponentFixture<Godofwar>;
+  let component: GodOfWar;
+  let fixture: ComponentFixture<GodOfWar>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Godofwar],
+      imports: [GodOfWar],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Godofwar);
+    fixture = TestBed.createComponent(GodOfWar);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

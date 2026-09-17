@@ -64,7 +64,7 @@ export class Produtos implements OnInit {
   get quantidadeFavoritos(): number {
     return this.produtos.filter((p) => p.favorito).length;
   }
-
+  // Esta sendo testado -categirias
   toggleMenuCategorias(): void {
     this.menuCategoriasAberto = !this.menuCategoriasAberto;
   }
@@ -80,7 +80,7 @@ export class Produtos implements OnInit {
   selecionarAba(aba: 'todos' | 'favoritos'): void {
     this.abaAtiva = aba;
   }
-
+// esta sendo testado - exibir favoritos
   get produtosExibidos(): ProdutoComFavorito[] {
     if (this.abaAtiva === 'favoritos') {
       return this.produtosFiltrados.filter((p) => p.favorito);
@@ -141,7 +141,7 @@ export class Produtos implements OnInit {
         return true;
     }
   }
-
+  // Esta sendo testado - preço
   private converterPreco(preco: string): number {
     if (!preco || preco.toLowerCase().includes('grátis')) return 0;
     return Number(preco.replace('R$', '').replace(',', '.').trim());
