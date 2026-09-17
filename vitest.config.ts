@@ -3,6 +3,9 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [angular()],
+  ssr: {
+    noExternal: ['rxfire', '@angular/fire'],
+  },
   test: {
     globals: true,
     environment: 'jsdom',
