@@ -75,6 +75,8 @@ describe('ProdutosComponent - Lógica do Código (Vitest)', () => {
     component = fixture.componentInstance;
   });
 
+  // Testando o Menu categorias 
+
   it('deve alternar o estado do menu de categorias', () => {
     // Arrange: Menu começa fechado
     expect(component.menuCategoriasAberto).toBe(false);
@@ -85,7 +87,7 @@ describe('ProdutosComponent - Lógica do Código (Vitest)', () => {
     // Assert: O valor deve ter invertido para true
     expect(component.menuCategoriasAberto).toBe(true);
   });
-
+// Testa o converter preço 
   it('deve converter strings de preço no formato correto', () => {
     // Act & Assert: Chama o método de conversão
     const precoFormatado = (component as any).converterPreco('R$ 50,00');
