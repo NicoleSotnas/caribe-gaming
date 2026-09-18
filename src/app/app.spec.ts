@@ -50,7 +50,8 @@ describe('App', () => {
 
   it('should have as title "caribe-gaming"', () => {
     const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect((app as any).title).toEqual('caribe-gaming');
+    const app = fixture.componentInstance as any;
+    const titleValue = typeof app.title === 'function' ? app.title() : app.title;
+    expect(titleValue).toEqual('caribe-gaming');
   });
 });
