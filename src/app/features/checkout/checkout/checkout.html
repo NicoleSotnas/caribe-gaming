@@ -108,10 +108,14 @@
           type="button"
           class="btn-acao btn-primary btn-finalizar"
           (click)="finalizar()"
-          [disabled]="formulario.invalid"
+          [disabled]="formulario.invalid || processandoPagamento()"
         >
-          <i class="fa-solid fa-lock"></i> Finalizar Compra Segura
+          <i class="fa-solid fa-lock"></i>
+          {{ processandoPagamento() ? 'Abrindo pagamento...' : 'Pagar com Mercado Pago' }}
         </button>
+        @if (erroPagamento()) {
+          <p class="erro-pagamento" role="alert">{{ erroPagamento() }}</p>
+        }
       </form>
 
       <!-- RESUMO DETALHADO DO PEDIDO -->
