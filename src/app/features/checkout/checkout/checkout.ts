@@ -1,9 +1,12 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { AuthFacade } from '../../../core/facades/auth.facade';
+import { MercadoPagoService } from '../../../core/services/mercado-pago.service';
 
 @Component({
   selector: 'app-checkout',
@@ -15,11 +18,16 @@ import { AuthFacade } from '../../../core/facades/auth.facade';
 export class Checkout implements OnInit {
   carrinhoFacade = inject(CarrinhoFacade);
   authFacade = inject(AuthFacade);
+  private mercadoPagoService = inject(MercadoPagoService);
+  private activatedRoute = inject(ActivatedRoute);
+  private platformId = inject(PLATFORM_ID);
   private fb = inject(FormBuilder);
 
   compraFinalizada = signal<boolean>(false);
   metodoPagamento = signal<'pix' | 'cartao' | 'boleto'>('pix');
   segurancaAberta = signal<boolean>(false);
+  processandoPagamento = signal<boolean>(false);
+  erroPagamento = signal<string | null>(null);
 
   // Regex estrita para validação de e-mail
   private emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
@@ -31,6 +39,30 @@ export class Checkout implements OnInit {
   });
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.activatedRoute.queryParamMap.subscribe((params) => {
+        const paymentId = params.get('payment_id');
+        if (paymentId) {
+          this.processandoPagamento.set(true);
+          this.mercadoPagoService.consultarPagamento(paymentId).subscribe({
+            next: (pagamento) => {
+              this.processandoPagamento.set(false);
+              if (pagamento.status === 'approved') {
+                this.carrinhoFacade.limparCarrinho();
+                this.compraFinalizada.set(true);
+              } else {
+                this.erroPagamento.set(`Pagamento não aprovado: ${pagamento.status}.`);
+              }
+            },
+            error: () => {
+              this.processandoPagamento.set(false);
+              this.erroPagamento.set('Não foi possível confirmar o status do pagamento.');
+            },
+          });
+        }
+      });
+    }
+
     const usuario = this.authFacade.usuarioAtual();
     if (usuario) {
       if (usuario.displayName) {
@@ -56,11 +88,29 @@ export class Checkout implements OnInit {
   }
 
   finalizar() {
-    if (this.formulario.valid) {
-      this.carrinhoFacade.limparCarrinho();
-      this.compraFinalizada.set(true);
-    } else {
+    if (!this.formulario.valid) {
       this.formulario.markAllAsTouched();
+      return;
     }
+
+    const email = this.formulario.get('email')?.value as string;
+    this.processandoPagamento.set(true);
+    this.erroPagamento.set(null);
+
+    this.mercadoPagoService
+      .criarPreferencia(this.carrinhoFacade.itens(), email, `caribe-${Date.now()}`)
+      .subscribe({
+        next: (preferencia) => {
+          if (isPlatformBrowser(this.platformId)) {
+            window.location.assign(preferencia.initPoint);
+          }
+        },
+        error: (error) => {
+          this.processandoPagamento.set(false);
+          this.erroPagamento.set(
+            error?.error?.error || 'Não foi possível iniciar o pagamento. Tente novamente.',
+          );
+        },
+      });
   }
 }
