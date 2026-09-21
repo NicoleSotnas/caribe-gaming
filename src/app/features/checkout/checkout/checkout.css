@@ -101,6 +101,12 @@
   font-size: 0.85rem;
 }
 
+.erro-pagamento {
+  margin: 12px 0 0;
+  color: #fca5a5;
+  font-size: 0.9rem;
+}
+
 /* Métodos de Pagamento */
 .metodos-pagamento {
   display: grid;
