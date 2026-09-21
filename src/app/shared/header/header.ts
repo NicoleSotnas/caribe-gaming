@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { AuthFacade } from '../../core/facades/auth.facade';
-import { ProdutosService } from '../../core/services/produtos.service';
+import { ProdutosService, Produto } from '../../core/services/produtos.service';
 
 @Component({
   selector: 'app-header',
@@ -58,27 +58,27 @@ export class Header {
   // PESQUISA
   // ==========================
 
+
+
+   
   pesquisar() {
+  const termo = this.termoPesquisa
+    .trim()
+    .toLowerCase();
 
-    const termo = this.termoPesquisa
-      .trim()
-      .toLowerCase();
+  if (!termo) {
+    this.produtosFiltrados = [];
+    this.mostrarSugestoes = false;
+    return;
+  }
 
-    if (!termo) {
-      this.produtosFiltrados = [];
-      this.mostrarSugestoes = false;
-      return;
-    }
-
-    this.produtosFiltrados =
-      this.produtosService.listaProdutos
-        .filter(produto => {
-
-          const nome =
-            produto.nome?.toLowerCase() || '';
-
-          const slug =
-            produto.slug?.toLowerCase() || '';
+  // Consome o Observable da API em vez do antigo array estático
+  this.produtosService.obterProdutos().subscribe({
+    next: (produtos: Produto[]) => {
+      this.produtosFiltrados = produtos
+        .filter((produto: Produto) => {
+          const nome = produto.nome?.toLowerCase() || '';
+          const slug = produto.slug?.toLowerCase() || '';
 
           return (
             nome.includes(termo) ||
@@ -87,9 +87,14 @@ export class Header {
         })
         .slice(0, 6);
 
-    this.mostrarSugestoes =
-      this.produtosFiltrados.length > 0;
-  }
+      this.mostrarSugestoes = this.produtosFiltrados.length > 0;
+    },
+    error: (err) => {
+      console.error('Erro ao pesquisar produtos:', err);
+      this.mostrarSugestoes = false;
+    }
+  });
+}
 
 
   // ==========================
