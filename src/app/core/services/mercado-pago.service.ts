@@ -7,31 +7,27 @@ export interface PreferenciaMercadoPago {
   id: string;
   initPoint: string;
   sandboxInitPoint?: string;
+  externalReference: string;
 }
 
 export interface PagamentoMercadoPago {
   id: number;
   status: string;
-  externalReference?: string;
+  externalReference: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class MercadoPagoService {
   private http = inject(HttpClient);
 
-  criarPreferencia(
-    itens: ItemCarrinho[],
-    email: string,
-    externalReference: string,
-  ): Observable<PreferenciaMercadoPago> {
+  // O navegador manda SÓ id e quantidade. Nome e preço vêm do servidor (catalogo-precos.ts).
+  criarPreferencia(itens: ItemCarrinho[], email: string): Observable<PreferenciaMercadoPago> {
     return this.http.post<PreferenciaMercadoPago>('/api/mercado-pago/preference', {
       items: itens.map((item) => ({
-        title: item.nome,
+        id: item.id,
         quantity: item.quantidade || 1,
-        unit_price: item.preco,
       })),
       payer: { email },
-      externalReference,
     });
   }
 

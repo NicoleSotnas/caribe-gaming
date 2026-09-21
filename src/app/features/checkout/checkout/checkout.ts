@@ -47,9 +47,15 @@ export class Checkout implements OnInit {
           this.mercadoPagoService.consultarPagamento(paymentId).subscribe({
             next: (pagamento) => {
               this.processandoPagamento.set(false);
-              if (pagamento.status === 'approved') {
+              const minhaRef = sessionStorage.getItem('caribe-ref');
+              if (pagamento.status === 'approved' && pagamento.externalReference === minhaRef) {
                 this.carrinhoFacade.limparCarrinho();
+                sessionStorage.removeItem('caribe-ref');
                 this.compraFinalizada.set(true);
+              } else if (pagamento.status === 'pending' || pagamento.status === 'in_process') {
+                this.erroPagamento.set(
+                  'Pagamento pendente (Pix/boleto). Ele será confirmado assim que for compensado.',
+                );
               } else {
                 this.erroPagamento.set(`Pagamento não aprovado: ${pagamento.status}.`);
               }
@@ -97,20 +103,19 @@ export class Checkout implements OnInit {
     this.processandoPagamento.set(true);
     this.erroPagamento.set(null);
 
-    this.mercadoPagoService
-      .criarPreferencia(this.carrinhoFacade.itens(), email, `caribe-${Date.now()}`)
-      .subscribe({
-        next: (preferencia) => {
-          if (isPlatformBrowser(this.platformId)) {
-            window.location.assign(preferencia.initPoint);
-          }
-        },
-        error: (error) => {
-          this.processandoPagamento.set(false);
-          this.erroPagamento.set(
-            error?.error?.error || 'Não foi possível iniciar o pagamento. Tente novamente.',
-          );
-        },
-      });
+    this.mercadoPagoService.criarPreferencia(this.carrinhoFacade.itens(), email).subscribe({
+      next: (preferencia) => {
+        if (isPlatformBrowser(this.platformId)) {
+          sessionStorage.setItem('caribe-ref', preferencia.externalReference); // liga este navegador ao pedido
+          window.location.assign(preferencia.initPoint);
+        }
+      },
+      error: (error) => {
+        this.processandoPagamento.set(false);
+        this.erroPagamento.set(
+          error?.error?.error || 'Não foi possível iniciar o pagamento. Tente novamente.',
+        );
+      },
+    });
   }
 }
