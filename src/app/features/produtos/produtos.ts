@@ -13,6 +13,7 @@ interface Categoria {
   id: string;
   nome: string;
   icone: string;
+  slugsRawg: string[]; // Slugs correspondentes retornados pela RAWG API
 }
 
 @Component({
@@ -36,12 +37,13 @@ export class Produtos implements OnInit {
   menuCategoriasAberto: boolean = false;
   mensagemToast: string | null = null;
 
+  // Mapeamento das categorias para os slugs em inglês da RAWG API
   readonly categorias: Categoria[] = [
-    { id: 'acao', nome: 'Ação', icone: '⚔️' },
-    { id: 'aventura', nome: 'Aventura', icone: '🧭' },
-    { id: 'rpg', nome: 'RPG', icone: '🧙' },
-    { id: 'simulacao', nome: 'Simulação', icone: '🎮' },
-    { id: 'mundo-aberto', nome: 'Mundo Aberto', icone: '🌎' },
+    { id: 'acao', nome: 'Ação', icone: '⚔️', slugsRawg: ['action'] },
+    { id: 'aventura', nome: 'Aventura', icone: '🧭', slugsRawg: ['adventure'] },
+    { id: 'rpg', nome: 'RPG', icone: '🧙', slugsRawg: ['role-playing-games-rpg', 'rpg'] },
+    { id: 'simulacao', nome: 'Simulação', icone: '🎮', slugsRawg: ['simulation'] },
+    { id: 'mundo-aberto', nome: 'Mundo Aberto', icone: '🌎', slugsRawg: ['open-world'] },
   ];
 
   categoriaAtiva: string | null = null;
@@ -110,13 +112,25 @@ export class Produtos implements OnInit {
 
   private aplicarFiltros(): void {
     this.produtosFiltrados = this.produtos.filter((produto) => {
-      const passaCategoria =
-        !this.categoriaAtiva || produto.categorias.includes(this.categoriaAtiva);
+      // Filtro de Categoria com suporte aos slugs da RAWG
+      let passaCategoria = true;
+      if (this.categoriaAtiva) {
+        const catConfig = this.categorias.find((c) => c.id === this.categoriaAtiva);
+        const slugsAceitos = catConfig ? [catConfig.id, ...catConfig.slugsRawg] : [this.categoriaAtiva];
+        
+        passaCategoria = produto.categorias.some((catSlug) =>
+          slugsAceitos.includes(catSlug.toLowerCase())
+        );
+      }
 
+      // Filtro de Plataforma
       const passaPlataforma =
         this.plataformasAtivas.size === 0 ||
-        [...this.plataformasAtivas].some((plat) => produto.plataforma.includes(plat));
+        [...this.plataformasAtivas].some((plat) =>
+          produto.plataforma.toLowerCase().includes(plat.toLowerCase())
+        );
 
+      // Filtro de Preço
       const passaPreco = this.passaFiltroPreco(produto);
 
       return passaCategoria && passaPlataforma && passaPreco;
@@ -160,7 +174,7 @@ export class Produtos implements OnInit {
   toggleFavorito(produto: ProdutoComFavorito): void {
     this.favoritosService.toggleFavorito(produto);
     produto.favorito = !produto.favorito;
-    
+
     const msg = produto.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
     this.exibirToast(msg);
   }
@@ -174,9 +188,8 @@ export class Produtos implements OnInit {
   adicionarAoCarrinho(produto: ProdutoComFavorito): void {
     const preco = this.converterPreco(produto.precoPromocional);
 
-    // Adiciona ao carrinho independente de ser 0 (grátis) ou pago
     this.carrinhoFacade.adicionarProduto({
-      id: Number(produto.id),
+      id: Number(produto.id) || Date.now(),
       nome: produto.nome,
       preco: preco,
       quantidade: 1,
@@ -185,47 +198,14 @@ export class Produtos implements OnInit {
       categoria: produto.genero,
     });
 
-    const mensagem = preco === 0 ? '🎁 Jogo gratuito adicionado ao carrinho!' : '🛒 Jogo adicionado ao carrinho!';
+    const mensagem =
+      preco === 0
+        ? '🎁 Jogo gratuito adicionado ao carrinho!'
+        : '🛒 Jogo adicionado ao carrinho!';
     this.exibirToast(mensagem);
   }
 
   irParaPaginaDoJogo(produto: ProdutoComFavorito): void {
-  const idNum = Number(produto.id);
-
-  // Se for um dos jogos novos (IDs 21 em diante), usa a Rota Dinâmica
-if (idNum >= 21) {
-    this.router.navigate(['/produto', produto.slug]);
-    return;
-  }
-
-  // Se for um dos jogos antigos individuais, mantém a rota antiga
-  this.router.navigate(['/produto', produto.slug]);
-
-  // Se for um dos jogos antigos (IDs 1 ao 20), usa o switch
-  switch (String(produto.id)) {
-    case '1': this.router.navigate(['/jogos/grand-theft-auto-v']); break;
-    case '2': this.router.navigate(['/jogos/the-witcher-3']); break;
-    case '3': this.router.navigate(['/jogos/the-sims-4']); break;
-    case '4': this.router.navigate(['/jogos/god-of-war']); break;
-    case '5': this.router.navigate(['/jogos/marvels-spider-man-remastered']); break;
-    case '6': this.router.navigate(['/jogos/call-of-duty-modern-warfare-ii']); break;
-    case '7': this.router.navigate(['/jogos/a-plague-tale']); break;
-    case '8': this.router.navigate(['/jogos/god-of-war-ragnarök']); break;
-    case '9': this.router.navigate(['/jogos/hollow-knight']); break;
-    case '10': this.router.navigate(['/jogos/red-dead-redemption-2']); break;
-    case '11': this.router.navigate(['/jogos/assassins-creed-iv-black-flag']); break;
-    case '12': this.router.navigate(['/jogos/yakuza-0']); break;
-    case '13': this.router.navigate(['/jogos/ea-sports-fc-24']); break;
-    case '14': this.router.navigate(['/jogos/life-is-strange']); break;
-    case '15': this.router.navigate(['/jogos/the-last-of-Us']); break;
-    case '16': this.router.navigate(['/jogos/f1-23']); break;
-    case '17': this.router.navigate(['/jogos/elden-ring']); break;
-    case '18': this.router.navigate(['/jogos/cyberpunk-2077']); break;
-    case '19': this.router.navigate(['/jogos/marvel-rivals']); break;
-    case '20': this.router.navigate(['/jogos/the-last-of-us-II']); break;
-    default:
-      this.router.navigate(['/produto', produto.id]);
-      break;
+    this.router.navigate(['/produto', produto.id]);
   }
 }
- } 
