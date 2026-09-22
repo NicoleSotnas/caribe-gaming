@@ -1,22 +1,25 @@
-import { inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CanActivateFn, Router } from '@angular/router';
-import { Auth, user } from '@angular/fire/auth';
-import { map, take } from 'rxjs';
+import { AuthService } from '../services/auth';
 
-const EMAIL_ADMIN = 'admin@email.com';
-
-export const adminGuard: CanActivateFn = () => {
-  const auth = inject(Auth);
+export const adminGuard: CanActivateFn = async () => {
+  const navegador = isPlatformBrowser(inject(PLATFORM_ID));
+  const auth = inject(AuthService);
   const router = inject(Router);
 
-  return user(auth).pipe(
-    take(1),
-    map((usuario) => {
-      if (usuario?.email === EMAIL_ADMIN) {
-        return true;
-      }
-      router.navigate(['/']);
-      return false;
-    }),
-  );
+  if (!navegador) return true;
+
+  await auth.pronto;
+  const usuario = auth.usuarioAtualSnapshot;
+  if (!usuario) {
+    router.navigate(['/login']);
+    return false;
+  }
+
+  const papel = await auth.buscarPapel(usuario.uid);
+  if (papel === 'admin') return true;
+
+  router.navigate(['/']);
+  return false;
 };
