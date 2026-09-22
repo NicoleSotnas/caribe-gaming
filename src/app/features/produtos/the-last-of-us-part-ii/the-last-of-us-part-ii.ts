@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { RawgService,DetalhesJogo } from '../../../core/services/rawg.service';
+import { RawgService, DetalhesJogo } from '../../../core/services/rawg.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
 
