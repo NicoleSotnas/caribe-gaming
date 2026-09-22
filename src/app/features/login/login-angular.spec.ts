@@ -1,44 +1,48 @@
-import { render, screen, fireEvent } from '@testing-library/angular';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Login } from './login';
 import { provideRouter } from '@angular/router';
+import { By } from '@angular/platform-browser';
 import { AuthService } from '../../core/services/auth';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-// Simula o serviço de login para não depender do banco/Firebase real
 const mockAuthService = {
   loginAsync: vi.fn().mockResolvedValue({}),
   loginComGoogleAsync: vi.fn().mockResolvedValue({}),
   recuperarSenhaAsync: vi.fn().mockResolvedValue({}),
 };
 
-describe('Login - Caixa Preta (Comportamental)', () => {
-  // Teste 1: Simula o usuário procurando e clicando no botão de entrar
-  it('deve encontrar e clicar no botão de login', async () => {
-    await render(Login, {
+describe('Login - Caixa Branca (Estrutural)', () => {
+  let fixture: ComponentFixture<Login>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [Login],
       providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthService }],
-    });
+    }).compileComponents();
 
-    // Procura o botão pelo que o usuário lê na tela
-    const loginButton = screen.getByRole('button', { name: /^entrar$/i });
-    expect(loginButton).toBeTruthy(); // Confirma que ele existe
-
-    // Simula o clique real do mouse
-    fireEvent.click(loginButton);
-    expect(loginButton).toBeDefined();
+    fixture = TestBed.createComponent(Login);
+    fixture.detectChanges();
   });
 
-  // Teste 2: Simula o usuário interagindo com o botão de recuperar senha
-  it('deve encontrar e interagir com o botão de esqueci a senha', async () => {
-    await render(Login, {
-      providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthService }],
-    });
+  it('deve conter a tag de envio (submit) no DOM', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const loginButton = compiled.querySelector('button[type="submit"]');
 
-    // Procura o texto do link de recuperação
-    const forgotPasswordLink = screen.getByRole('button', { name: /esqueceu a senha/i });
-    expect(forgotPasswordLink).toBeTruthy();
-
-    // Simula o clique
-    fireEvent.click(forgotPasswordLink);
-    expect(forgotPasswordLink).toBeDefined();
+    expect(loginButton).toBeTruthy();
   });
-});
+
+  it('deve conter a classe CSS correta para o botão de recuperar senha', () => {
+    const forgotPasswordEl = fixture.debugElement.query(By.css('button.link-esqueci'));
+
+    expect(forgotPasswordEl).toBeTruthy();
+  });
+
+  it('deve possuir um input de senha estruturado com o tipo password', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const passwordInput = compiled.querySelector('input#senha') as HTMLInputElement;
+
+    expect(passwordInput).toBeTruthy();
+    expect(passwordInput.type).toBe('password');
+    expect(passwordInput.placeholder).toBe('••••••••');
+  });
+}); // Fim do describe
