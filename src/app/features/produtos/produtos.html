@@ -1,48 +1,97 @@
-  <div class="toast-notificacao" *ngIf="mensagemToast">{{ mensagemToast }}</div>
+<div
+  class="toast-notificacao"
+  *ngIf="mensagemToast"
+>
+  {{ mensagemToast }}
+</div>
 
 <div class="pagina-produtos">
 
-
-
   <!-- 1. Sidebar de Filtros -->
   <aside class="sidebar-filtros">
-    <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
+
+    <h3 class="filtros-titulo">
+      🏴‍☠️ FILTROS
+    </h3>
 
     <div class="filtro-grupo">
+
       <h4>Preço</h4>
+
       <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'todos'" (change)="definirFaixaPreco('todos')">
+        <input
+          type="radio"
+          name="preco"
+          [checked]="faixaPrecoAtiva === 'todos'"
+          (change)="definirFaixaPreco('todos')"
+        >
         Todos os preços
       </label>
+
       <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'gratis'" (change)="definirFaixaPreco('gratis')">
+        <input
+          type="radio"
+          name="preco"
+          [checked]="faixaPrecoAtiva === 'gratis'"
+          (change)="definirFaixaPreco('gratis')"
+        >
         Grátis
       </label>
+
       <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === '0-50'" (change)="definirFaixaPreco('0-50')">
+        <input
+          type="radio"
+          name="preco"
+          [checked]="faixaPrecoAtiva === '0-50'"
+          (change)="definirFaixaPreco('0-50')"
+        >
         R$0 - R$50
       </label>
+
       <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === '50-100'" (change)="definirFaixaPreco('50-100')">
+        <input
+          type="radio"
+          name="preco"
+          [checked]="faixaPrecoAtiva === '50-100'"
+          (change)="definirFaixaPreco('50-100')"
+        >
         R$50 - R$100
       </label>
+
       <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'acima-100'" (change)="definirFaixaPreco('acima-100')">
+        <input
+          type="radio"
+          name="preco"
+          [checked]="faixaPrecoAtiva === 'acima-100'"
+          (change)="definirFaixaPreco('acima-100')"
+        >
         Acima de R$100
       </label>
+
     </div>
 
     <div class="filtro-grupo">
+
       <h4>Plataforma</h4>
+
       <label>
-        <input type="checkbox" (change)="togglePlataforma('PC')"> PC
+        <input
+          type="checkbox"
+          (change)="togglePlataforma('PC')"
+        >
+        PC
       </label>
+
       <label>
-        <input type="checkbox" (change)="togglePlataforma('PS5')"> PlayStation
+        <input
+          type="checkbox"
+          (change)="togglePlataforma('PS5')"
+        >
+        PlayStation
       </label>
+
     </div>
 
-   
   </aside>
 
   <!-- 2. Conteúdo Principal -->
@@ -51,126 +100,338 @@
     <div class="topo-e-categorias">
 
       <div class="linha-controles-topo">
+
         <!-- Abas -->
         <div class="abas-produtos">
+
           <button
             class="aba-btn"
             [class.ativa]="abaAtiva === 'todos'"
-            (click)="selecionarAba('todos')">
+            (click)="selecionarAba('todos')"
+          >
             🎮 Todos os Jogos
           </button>
+
           <button
             class="aba-btn"
             [class.ativa]="abaAtiva === 'favoritos'"
-            (click)="selecionarAba('favoritos')">
+            (click)="selecionarAba('favoritos')"
+          >
             🤍 Favoritos
-            <span class="badge-contador-fav" *ngIf="quantidadeFavoritos > 0">
+
+            <span
+              class="badge-contador-fav"
+              *ngIf="quantidadeFavoritos > 0"
+            >
               {{ quantidadeFavoritos }}
             </span>
+
           </button>
+
         </div>
 
         <!-- Botão de Categoria -->
-        <div class="dropdown-categorias" *ngIf="abaAtiva === 'todos'">
-          <button class="btn-dropdown-categoria" (click)="toggleMenuCategorias()">
+        <div
+          class="dropdown-categorias"
+          *ngIf="abaAtiva === 'todos'"
+        >
+
+          <button
+            class="btn-dropdown-categoria"
+            (click)="toggleMenuCategorias()"
+          >
             {{ obterNomeCategoriaAtiva() }}
-            <span class="seta-icone" [class.aberto]="menuCategoriasAberto">▼</span>
+
+            <span
+              class="seta-icone"
+              [class.aberto]="menuCategoriasAberto"
+            >
+              ▼
+            </span>
           </button>
-          
-          <div class="menu-categorias-conteudo" [class.mostrar]="menuCategoriasAberto">
+
+          <div
+            class="menu-categorias-conteudo"
+            [class.mostrar]="menuCategoriasAberto"
+          >
+
             <button
               class="item-categoria"
               [class.ativo]="categoriaAtiva === null"
-              (click)="selecionarCategoria('')">
+              (click)="selecionarCategoria('')"
+            >
               🏝️ Todas
             </button>
+
             <button
               *ngFor="let cat of categorias"
               class="item-categoria"
               [class.ativo]="categoriaAtiva === cat.id"
-              (click)="selecionarCategoria(cat.id)">
-              {{ cat.icone }} {{ cat.nome }}
+              (click)="selecionarCategoria(cat.id)"
+            >
+              {{ cat.icone }}
+              {{ cat.nome }}
             </button>
+
           </div>
+
         </div>
+
       </div>
 
       <div class="produtos-topo">
+
         <div class="bloco-titulo-pagina">
-          <h2>{{ abaAtiva === 'favoritos' ? 'Meus Favoritos' : 'Todos os Jogos' }}</h2>
+
+          <h2>
+            {{
+              abaAtiva === 'favoritos'
+                ? 'Meus Favoritos'
+                : 'Todos os Jogos'
+            }}
+          </h2>
+
           <span class="produtos-subtitulo">
-            {{ abaAtiva === 'favoritos' ? 'Jogos que você salvou pra depois' : 'Encontre sua próxima aventura' }}
+            {{
+              abaAtiva === 'favoritos'
+                ? 'Jogos que você salvou pra depois'
+                : 'Encontre sua próxima aventura'
+            }}
           </span>
+
         </div>
 
         <div class="acoes-direita-topo">
-          <button 
-            class="btn-limpar-favoritos" 
-            *ngIf="abaAtiva === 'favoritos' && produtosExibidos.length > 0"
-            (click)="limparFavoritos()">
+
+          <button
+            class="btn-limpar-favoritos"
+            *ngIf="
+              abaAtiva === 'favoritos' &&
+              produtosExibidos.length > 0
+            "
+            (click)="limparFavoritos()"
+          >
             🗑️ Limpar Favoritos
           </button>
-          <span class="produtos-contador">{{ produtosExibidos.length }} jogos encontrados</span>
+
+          <span class="produtos-contador">
+            {{ produtosExibidos.length }} jogos encontrados
+          </span>
+
         </div>
+
       </div>
+
+      <!-- Cotação da Frankfurter -->
+      <div class="cotacao-container">
+
+        <div
+          class="cotacao-info"
+          *ngIf="cotacaoBrlUsd !== null"
+        >
+
+          <span class="cotacao-icone">
+            💱
+          </span>
+
+          <span class="cotacao-texto">
+            Cotação atual:
+          </span>
+
+          <strong>
+            1 BRL ≈
+            {{ obterCotacaoFormatada() }}
+            USD
+          </strong>
+
+        </div>
+
+        <div
+          class="cotacao-carregando"
+          *ngIf="carregandoCotacao"
+        >
+          💱 Atualizando cotação...
+        </div>
+
+        <div
+          class="cotacao-erro"
+          *ngIf="erroCotacao"
+        >
+          ⚠️ {{ erroCotacao }}
+        </div>
+
+      </div>
+
     </div>
 
     <!-- 3. Cards de Produtos -->
-    <div class="grid-produtos" *ngIf="produtosExibidos.length > 0">
-      <div *ngFor="let produto of produtosExibidos" class="card-produto">
+    <div
+      class="grid-produtos"
+      *ngIf="produtosExibidos.length > 0"
+    >
 
+      <div
+        *ngFor="let produto of produtosExibidos"
+        class="card-produto"
+      >
+
+        <!-- Badges -->
         <div class="card-badges">
-          <span class="badge-desconto" *ngIf="produto.desconto > 0">-{{ produto.desconto }}%</span>
-          <span class="badge-plataforma">{{ produto.plataforma }}</span>
+
+          <span
+            class="badge-desconto"
+            *ngIf="produto.desconto > 0"
+          >
+            -{{ produto.desconto }}%
+          </span>
+
+          <span class="badge-plataforma">
+            {{ produto.plataforma }}
+          </span>
+
         </div>
 
-        <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
-          <img [src]="produto.imagem" [alt]="produto.nome" [style.object-position]="produto.imagemPosicao" />
+        <!-- Imagem -->
+        <div
+          class="card-imagem"
+          (click)="irParaPaginaDoJogo(produto)"
+          style="cursor: pointer;"
+        >
+
+          <img
+            [src]="produto.imagem"
+            [alt]="produto.nome"
+            [style.object-position]="produto.imagemPosicao"
+          />
+
         </div>
 
+        <!-- Conteúdo -->
         <div class="card-conteudo">
-          <h3 class="produto-nome" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
+
+          <h3
+            class="produto-nome"
+            (click)="irParaPaginaDoJogo(produto)"
+            style="cursor: pointer;"
+          >
             {{ produto.nome }}
           </h3>
-          <span class="produto-genero">{{ produto.genero }}</span>
 
+          <span class="produto-genero">
+            {{ produto.genero }}
+          </span>
+
+          <!-- PREÇOS -->
           <div class="produto-precos">
-            <span class="preco-original" *ngIf="produto.desconto > 0">{{ produto.precoOriginal }}</span>
-            <span class="preco-promocional">{{ produto.precoPromocional }}</span>
+
+            <!-- Preço original -->
+            <span
+              class="preco-original"
+              *ngIf="produto.desconto > 0"
+            >
+              {{ produto.precoOriginal }}
+            </span>
+
+            <!-- Preço oficial em reais -->
+            <span class="preco-promocional">
+              {{ produto.precoPromocional }}
+            </span>
+
+            <!-- Conversão informativa -->
+            <span
+              class="preco-convertido"
+              *ngIf="
+                produto.precoUsd !== null &&
+                produto.precoUsd !== undefined &&
+                produto.precoUsd > 0
+              "
+            >
+              ≈ {{ formatarUsd(produto.precoUsd) }}
+            </span>
+
           </div>
 
+          <!-- Informação adicional para jogos gratuitos -->
+          <span
+            class="produto-moeda-info"
+            *ngIf="
+              produto.precoUsd === 0 &&
+              produto.precoUsd !== null &&
+              produto.precoUsd !== undefined
+            "
+          >
+            Gratuito
+          </span>
+
+          <!-- Ações -->
           <div class="card-actions">
-            <button class="btn-carrinho" (click)="adicionarAoCarrinho(produto)">
-              <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+
+            <button
+              class="btn-carrinho"
+              (click)="adicionarAoCarrinho(produto)"
+            >
+              <i class="fas fa-shopping-cart"></i>
+              Adicionar ao Carrinho
             </button>
 
             <button
               class="btn-favorito"
               [class.favoritado]="produto.favorito"
               (click)="toggleFavorito(produto)"
-              title="Favoritar">
+              title="Favoritar"
+            >
+
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                [attr.fill]="produto.favorito ? '#ff4757' : 'none'"
+                [attr.fill]="
+                  produto.favorito
+                    ? '#ff4757'
+                    : 'none'
+                "
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="icon-heart">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                class="icon-heart"
+              >
+
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                ></path>
+
               </svg>
+
             </button>
+
           </div>
 
         </div>
+
       </div>
+
     </div>
 
     <!-- Estado vazio -->
-    <div class="favoritos-vazio" *ngIf="abaAtiva === 'favoritos' && produtosExibidos.length === 0">
-      <p>Você ainda não favoritou nenhum jogo.</p>
-      <button class="btn-carrinho" (click)="selecionarAba('todos')">Ver Jogos</button>
+    <div
+      class="favoritos-vazio"
+      *ngIf="
+        abaAtiva === 'favoritos' &&
+        produtosExibidos.length === 0
+      "
+    >
+
+      <p>
+        Você ainda não favoritou nenhum jogo.
+      </p>
+
+      <button
+        class="btn-carrinho"
+        (click)="selecionarAba('todos')"
+      >
+        Ver Jogos
+      </button>
+
     </div>
 
   </div>
