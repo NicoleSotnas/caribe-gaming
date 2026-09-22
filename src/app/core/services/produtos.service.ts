@@ -1,22 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-
-export interface Produto {
-  id: string;
-  nome: string;
-  steamAppId?: string;
-  genero: string;
-  plataforma: string;
-  precoOriginal: string;
-  precoPromocional: string;
-  desconto: number;
-  categorias: string[];
-  slug: string;
-  imagem?: string;
-  imagemPosicao?: string;
-  descricaoCustom?: string;
-}
+import { Produto } from '../models/jogo';
 
 @Injectable({ providedIn: 'root' })
 export class ProdutosService {
@@ -25,28 +10,26 @@ export class ProdutosService {
   private apiKey = '53cda31b968d4afea37f6db579e0ec8c';
 
   /**
-   * Procura os jogos dinamicamente na API RAWG e mapeia para o formato Produto[]
+   * Procura os jogos da RAWG API e mapeia instantaneamente.
+   * Dá prioridade à capa da Steam, mantendo a imagem da RAWG como fallback seguro.
    */
   obterProdutos(): Observable<Produto[]> {
     return this.http
       .get<any>(`${this.apiUrl}?key=${this.apiKey}&page_size=40`)
       .pipe(
         map((resposta) =>
-          resposta.results.map((item: any) => this.mapearJogoParaProduto(item))
+          (resposta.results || []).map((item: any) => this.mapearJogoParaProduto(item))
         )
       );
   }
 
-  /**
-   * Converte os dados brutos recebidos da RAWG na estrutura Produto esperada pelo teu e-commerce
-   */
   private mapearJogoParaProduto(item: any): Produto {
-    // Procura se o jogo tem registo na Steam para capturar o AppId
-    const steamStore = item.stores?.find((s: any) => s.store.slug === 'steam');
-    const steamAppId = steamStore ? steamStore.store.id.toString() : undefined;
+    // Procura se o jogo tem registo na loja Steam para capturar o AppId
+    const steamStore = item.stores?.find((s: any) => s.store?.slug === 'steam');
+    const steamAppId = steamStore?.store?.id ? steamStore.store.id.toString() : undefined;
 
-    // Se tiver ID da Steam, usa a capa vertical oficial da Steam, caso contrário usa a imagem da RAWG
-    const imagemCapa = steamAppId
+    // Tenta montar a URL da Steam; se não existir, usa a imagem oficial da RAWG
+    const imagemCapaSteam = steamAppId
       ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${steamAppId}/library_600x900.jpg`
       : item.background_image;
 
@@ -54,7 +37,7 @@ export class ProdutosService {
       id: item.id.toString(),
       nome: item.name,
       steamAppId: steamAppId,
-      imagem: imagemCapa,
+      imagem: imagemCapaSteam || 'assets/imagens/placeholder.jpg',
       imagemPosicao: 'center',
       precoOriginal: 'R$ 199,90',
       precoPromocional: 'R$ 99,95',

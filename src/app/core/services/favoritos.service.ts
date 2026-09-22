@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
-import { Produto } from './produtos.service';
+import { Produto } from '../models/jogo';
 
 const CHAVE_STORAGE = 'caribes-gaming-favoritos';
 
@@ -37,20 +37,31 @@ export class FavoritosService {
   }
 
   ehFavorito(produtoId: string): boolean {
-    return this.favoritosSubject.value.some(p => p.id === produtoId);
+    return this.favoritosSubject.value.some(p => p.id.toString() === produtoId.toString());
   }
 
-  // Método flexível para aceitar tanto a interface completa de Produto quanto objetos parciais das telas de detalhes
-  toggleFavorito(produto: Produto | { id: string; nome: string; imagem: string; [key: string]: any }) {
+  adicionarFavorito(produto: Produto): void {
     const listaAtual = this.favoritosSubject.value;
-    const jaExiste = listaAtual.some(p => p.id === produto.id);
+    if (!this.ehFavorito(produto.id)) {
+      const novaLista = [...listaAtual, produto];
+      this.favoritosSubject.next(novaLista);
+      this.salvarNoStorage(novaLista);
+    }
+  }
 
-    const novaLista = jaExiste
-      ? listaAtual.filter(p => p.id !== produto.id)
-      : [...listaAtual, produto as Produto];
-
+  removerFavorito(produtoId: string): void {
+    const listaAtual = this.favoritosSubject.value;
+    const novaLista = listaAtual.filter(p => p.id.toString() !== produtoId.toString());
     this.favoritosSubject.next(novaLista);
     this.salvarNoStorage(novaLista);
+  }
+
+  toggleFavorito(produto: Produto) {
+    if (this.ehFavorito(produto.id)) {
+      this.removerFavorito(produto.id);
+    } else {
+      this.adicionarFavorito(produto);
+    }
   }
 
   limparTodosFavoritos(): void {

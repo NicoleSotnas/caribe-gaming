@@ -11,7 +11,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { AuthFacade } from '../../core/facades/auth.facade';
-import { ProdutosService, Produto } from '../../core/services/produtos.service';
+import { ProdutosService} from '../../core/services/produtos.service';
+import { Produto } from '../../core/models/jogo';
 
 @Component({
   selector: 'app-header',

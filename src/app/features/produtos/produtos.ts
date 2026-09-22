@@ -1,211 +1,212 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ProdutosService, Produto } from '../../core/services/produtos.service';
+import { ProdutosService } from '../../core/services/produtos.service';
 import { CarrinhoFacade } from '../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../core/services/favoritos.service';
+import { Produto } from '../../core/models/jogo';
 
-interface ProdutoComFavorito extends Produto {
-  favorito: boolean;
-}
-
-interface Categoria {
+export interface CategoriaItem {
   id: string;
   nome: string;
   icone: string;
-  slugsRawg: string[]; // Slugs correspondentes retornados pela RAWG API
 }
 
 @Component({
   selector: 'app-produtos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './produtos.html',
-  styleUrls: ['./produtos.css'],
+  styleUrls: ['./produtos.css']
 })
 export class Produtos implements OnInit {
   private produtosService = inject(ProdutosService);
-  private router = inject(Router);
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
-  produtos: ProdutoComFavorito[] = [];
-  produtosFiltrados: ProdutoComFavorito[] = [];
+  produtos: Produto[] = [];
+  produtosExibidos: Produto[] = [];
 
+  // Estados de Abas e Filtros
   abaAtiva: 'todos' | 'favoritos' = 'todos';
+  faixaPrecoAtiva: string = 'todos';
+  plataformasSelecionadas: string[] = [];
+
+  // Dropdown e Categoria
   menuCategoriasAberto: boolean = false;
+  categoriaAtiva: string | null = null;
   mensagemToast: string | null = null;
 
-  // Mapeamento das categorias para os slugs em inglês da RAWG API
-  readonly categorias: Categoria[] = [
-    { id: 'acao', nome: 'Ação', icone: '⚔️', slugsRawg: ['action'] },
-    { id: 'aventura', nome: 'Aventura', icone: '🧭', slugsRawg: ['adventure'] },
-    { id: 'rpg', nome: 'RPG', icone: '🧙', slugsRawg: ['role-playing-games-rpg', 'rpg'] },
-    { id: 'simulacao', nome: 'Simulação', icone: '🎮', slugsRawg: ['simulation'] },
-    { id: 'mundo-aberto', nome: 'Mundo Aberto', icone: '🌎', slugsRawg: ['open-world'] },
+  readonly categorias: CategoriaItem[] = [
+    { id: 'acao', nome: 'Ação', icone: '⚔️' },
+    { id: 'rpg', nome: 'RPG', icone: '🛡️' },
+    { id: 'aventura', nome: 'Aventura', icone: '🧭' },
+    { id: 'fps', nome: 'FPS / Tiro', icone: '🎯' },
+    { id: 'simulacao', nome: 'Simulação', icone: '🚗' },
+    { id: 'esportes', nome: 'Esportes', icone: '⚽' }
   ];
 
-  categoriaAtiva: string | null = null;
-  plataformasAtivas = new Set<string>();
-  faixaPrecoAtiva: string = 'todos';
-
   ngOnInit(): void {
+    this.carregarProdutos();
+  }
+
+  carregarProdutos(): void {
     this.produtosService.obterProdutos().subscribe({
       next: (dados) => {
-        this.produtos = dados.map((p) => ({
+        this.produtos = dados.map(p => ({
           ...p,
-          favorito: this.favoritosService.ehFavorito(p.id),
+          favorito: this.favoritosService.ehFavorito(p.id)
         }));
         this.aplicarFiltros();
+        this.cdr.markForCheck();
       },
-      error: (err) => console.error('Erro ao carregar produtos:', err),
+      error: (err) => console.error('Erro ao carregar lista de jogos:', err)
     });
   }
 
   get quantidadeFavoritos(): number {
-    return this.produtos.filter((p) => p.favorito).length;
+    return this.favoritosService.obterFavoritos().length;
+  }
+
+  // --- LÓGICA DE FILTRAGEM ---
+  aplicarFiltros(): void {
+    let resultado = [...this.produtos];
+
+    // Atualiza o estado de favorito de cada item com o FavoritosService
+    resultado = resultado.map(p => ({
+      ...p,
+      favorito: this.favoritosService.ehFavorito(p.id)
+    }));
+
+    // 1. Aba de Favoritos
+    if (this.abaAtiva === 'favoritos') {
+      resultado = resultado.filter(p => p.favorito);
+    }
+
+    // 2. Filtro de Categorias
+    if (this.categoriaAtiva) {
+      resultado = resultado.filter(p =>
+        p.categorias?.includes(this.categoriaAtiva!) ||
+        p.genero.toLowerCase().includes(this.categoriaAtiva!.toLowerCase())
+      );
+    }
+
+    // 3. Filtro de Faixa de Preço
+    if (this.faixaPrecoAtiva === 'gratis') {
+      resultado = resultado.filter(p => p.precoPromocional === 'R$ 0,00' || p.precoOriginal === 'Gratuito');
+    } else if (this.faixaPrecoAtiva === '0-50') {
+      resultado = resultado.filter(p => {
+        const val = this.extrairValorPreco(p.precoPromocional);
+        return val > 0 && val <= 50;
+      });
+    } else if (this.faixaPrecoAtiva === '50-100') {
+      resultado = resultado.filter(p => {
+        const val = this.extrairValorPreco(p.precoPromocional);
+        return val > 50 && val <= 100;
+      });
+    } else if (this.faixaPrecoAtiva === 'acima-100') {
+      resultado = resultado.filter(p => this.extrairValorPreco(p.precoPromocional) > 100);
+    }
+
+    // 4. Filtro por Plataforma
+    if (this.plataformasSelecionadas.length > 0) {
+      resultado = resultado.filter(p =>
+        this.plataformasSelecionadas.some(plat => p.plataforma.toLowerCase().includes(plat.toLowerCase()))
+      );
+    }
+
+    this.produtosExibidos = resultado;
+    this.cdr.markForCheck();
+  }
+
+  // --- MÉTODOS DISPARADOS PELO HTML ---
+  definirFaixaPreco(faixa: string): void {
+    this.faixaPrecoAtiva = faixa;
+    this.aplicarFiltros();
+  }
+
+  togglePlataforma(plataforma: string): void {
+    const idx = this.plataformasSelecionadas.indexOf(plataforma);
+    if (idx >= 0) {
+      this.plataformasSelecionadas.splice(idx, 1);
+    } else {
+      this.plataformasSelecionadas.push(plataforma);
+    }
+    this.aplicarFiltros();
+  }
+
+  selecionarAba(aba: 'todos' | 'favoritos'): void {
+    this.abaAtiva = aba;
+    this.aplicarFiltros();
   }
 
   toggleMenuCategorias(): void {
     this.menuCategoriasAberto = !this.menuCategoriasAberto;
   }
 
-  obterNomeCategoriaAtiva(): string {
-    if (!this.categoriaAtiva) {
-      return '🏷️ Categorias';
-    }
-    const cat = this.categorias.find((c) => c.id === this.categoriaAtiva);
-    return cat ? `${cat.icone} ${cat.nome}` : '🏷️ Categorias';
-  }
-
-  selecionarAba(aba: 'todos' | 'favoritos'): void {
-    this.abaAtiva = aba;
-  }
-
-  get produtosExibidos(): ProdutoComFavorito[] {
-    if (this.abaAtiva === 'favoritos') {
-      return this.produtosFiltrados.filter((p) => p.favorito);
-    }
-    return this.produtosFiltrados;
-  }
-
-  selecionarCategoria(id: string): void {
-    this.categoriaAtiva = this.categoriaAtiva === id ? null : id;
+  selecionarCategoria(catId: string): void {
+    this.categoriaAtiva = catId ? catId : null;
     this.menuCategoriasAberto = false;
     this.aplicarFiltros();
   }
 
-  togglePlataforma(plat: string): void {
-    if (this.plataformasAtivas.has(plat)) {
-      this.plataformasAtivas.delete(plat);
-    } else {
-      this.plataformasAtivas.add(plat);
-    }
-    this.aplicarFiltros();
+  obterNomeCategoriaAtiva(): string {
+    if (!this.categoriaAtiva) return '🏝️ Categorias';
+    const cat = this.categorias.find(c => c.id === this.categoriaAtiva);
+    return cat ? `${cat.icone} ${cat.nome}` : '🏝️ Categorias';
   }
 
-  definirFaixaPreco(faixa: string): void {
-    this.faixaPrecoAtiva = faixa;
-    this.aplicarFiltros();
+  // --- NAVEGAÇÃO E AÇÕES DE E-COMMERCE ---
+  irParaPaginaDoJogo(produto: Produto): void {
+    this.router.navigate(['/produto', produto.slug || produto.id]);
   }
 
-  private aplicarFiltros(): void {
-    this.produtosFiltrados = this.produtos.filter((produto) => {
-      // Filtro de Categoria com suporte aos slugs da RAWG
-      let passaCategoria = true;
-      if (this.categoriaAtiva) {
-        const catConfig = this.categorias.find((c) => c.id === this.categoriaAtiva);
-        const slugsAceitos = catConfig ? [catConfig.id, ...catConfig.slugsRawg] : [this.categoriaAtiva];
-        
-        passaCategoria = produto.categorias.some((catSlug) =>
-          slugsAceitos.includes(catSlug.toLowerCase())
-        );
-      }
-
-      // Filtro de Plataforma
-      const passaPlataforma =
-        this.plataformasAtivas.size === 0 ||
-        [...this.plataformasAtivas].some((plat) =>
-          produto.plataforma.toLowerCase().includes(plat.toLowerCase())
-        );
-
-      // Filtro de Preço
-      const passaPreco = this.passaFiltroPreco(produto);
-
-      return passaCategoria && passaPlataforma && passaPreco;
+  adicionarAoCarrinho(produto: Produto): void {
+    this.carrinhoFacade.adicionarProduto({
+      id: Number(produto.id) || Date.now(),
+      nome: produto.nome,
+      preco: this.extrairValorPreco(produto.precoPromocional),
+      quantidade: 1,
+      imagemUrl: produto.imagem || '',
+      plataforma: produto.plataforma,
+      categoria: produto.genero
     });
+    this.exibirToast('🛒 Adicionado ao carrinho com sucesso!');
   }
 
-  private passaFiltroPreco(produto: ProdutoComFavorito): boolean {
-    if (this.faixaPrecoAtiva === 'todos') return true;
-
-    const preco = this.converterPreco(produto.precoPromocional);
-
-    switch (this.faixaPrecoAtiva) {
-      case 'gratis':
-        return preco === 0;
-      case '0-50':
-        return preco > 0 && preco <= 50;
-      case '50-100':
-        return preco > 50 && preco <= 100;
-      case 'acima-100':
-        return preco > 100;
-      default:
-        return true;
-    }
-  }
-
-  private converterPreco(preco: string): number {
-    if (!preco || preco.toLowerCase().includes('grátis')) return 0;
-    return Number(preco.replace('R$', '').replace(',', '.').trim());
-  }
-
-  private exibirToast(mensagem: string): void {
-    this.mensagemToast = mensagem;
-    this.cdr.markForCheck();
-
-    setTimeout(() => {
-      this.mensagemToast = null;
-      this.cdr.markForCheck();
-    }, 3000);
-  }
-
-  toggleFavorito(produto: ProdutoComFavorito): void {
+  toggleFavorito(produto: Produto): void {
     this.favoritosService.toggleFavorito(produto);
     produto.favorito = !produto.favorito;
+    
+    this.exibirToast(
+      produto.favorito ? '❤️ Salvo nos favoritos!' : '💔 Removido dos favoritos!'
+    );
 
-    const msg = produto.favorito ? '❤️ Adicionado aos favoritos!' : '💔 Removido dos favoritos!';
-    this.exibirToast(msg);
+    this.aplicarFiltros();
   }
 
   limparFavoritos(): void {
     this.favoritosService.limparTodosFavoritos();
-    this.produtos.forEach((p) => (p.favorito = false));
-    this.exibirToast('🗑️ Favoritos limpos!');
+    this.produtos.forEach(p => p.favorito = false);
+    this.aplicarFiltros();
+    this.exibirToast('🗑️ Favoritos limpos com sucesso!');
   }
 
-  adicionarAoCarrinho(produto: ProdutoComFavorito): void {
-    const preco = this.converterPreco(produto.precoPromocional);
-
-    this.carrinhoFacade.adicionarProduto({
-      id: Number(produto.id) || Date.now(),
-      nome: produto.nome,
-      preco: preco,
-      quantidade: 1,
-      imagemUrl: produto.imagem,
-      plataforma: produto.plataforma,
-      categoria: produto.genero,
-    });
-
-    const mensagem =
-      preco === 0
-        ? '🎁 Jogo gratuito adicionado ao carrinho!'
-        : '🛒 Jogo adicionado ao carrinho!';
-    this.exibirToast(mensagem);
+  private extrairValorPreco(precoStr: string): number {
+    if (!precoStr || precoStr === 'Gratuito' || precoStr === 'R$ 0,00') return 0;
+    const limpo = precoStr.replace('R$', '').replace('.', '').replace(',', '.').trim();
+    return parseFloat(limpo) || 0;
   }
 
-  irParaPaginaDoJogo(produto: ProdutoComFavorito): void {
-    this.router.navigate(['/produto', produto.id]);
+  private exibirToast(msg: string): void {
+    this.mensagemToast = msg;
+    this.cdr.markForCheck();
+    setTimeout(() => {
+      this.mensagemToast = null;
+      this.cdr.markForCheck();
+    }, 3000);
   }
 }
