@@ -4,207 +4,986 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
+
 import express from 'express';
+
 import { join } from 'node:path';
-import { randomUUID, createHmac, timingSafeEqual } from 'node:crypto';
+
+import {
+  existsSync,
+} from 'node:fs';
+
+import {
+  createHmac,
+  randomUUID,
+  timingSafeEqual,
+} from 'node:crypto';
+
+import {
+  loadEnvFile,
+} from 'node:process';
+
+import {
+  cert,
+  getApps,
+  initializeApp,
+} from 'firebase-admin/app';
+
+import {
+  FieldValue,
+  getFirestore,
+} from 'firebase-admin/firestore';
+
 import { PRECOS } from './server/catalogo-precos';
 
-const browserDistFolder = join(import.meta.dirname, '../browser');
+/**
+ * --------------------------------------------------
+ * CARREGAMENTO DO .ENV
+ * --------------------------------------------------
+ *
+ * Em desenvolvimento, carregamos o arquivo:
+ *
+ * .env
+ *
+ * localizado na raiz do projeto.
+ *
+ * Em produção (ex.: Vercel), as variáveis
+ * normalmente já estarão disponíveis em
+ * process.env, então não dependemos da existência
+ * de um arquivo .env.
+ */
+const envPath = join(
+  process.cwd(),
+  '.env',
+);
+
+if (existsSync(envPath)) {
+  loadEnvFile(envPath);
+}
+
+const browserDistFolder = join(
+  import.meta.dirname,
+  '../browser',
+);
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
 
-app.use(express.json());
+const angularApp =
+  new AngularNodeAppEngine();
 
-const MP_API = 'https://api.mercadopago.com';
+app.use(
+  express.json({
+    limit: '1mb',
+  }),
+);
 
-type Pedido = { totalCentavos: number; status: 'pending' | 'paid' | 'failed'; paymentId?: string };
-// DEMO: em memória (some ao reiniciar). Na fase Supabase isso vira a tabela "orders".
-const pedidos = new Map<string, Pedido>();
+const MP_API =
+  'https://api.mercadopago.com';
 
-// Consulta o pagamento NA FONTE e só aceita se pertencer a um pedido nosso
-// e o valor pago bater com o total calculado pelo servidor.
-async function reconciliar(paymentId: string, accessToken: string) {
+type StatusPedido =
+  | 'pending'
+  | 'paid'
+  | 'failed';
+
+interface PedidoFirestore {
+  totalCentavos: number;
+  status: StatusPedido;
+  paymentId?: string;
+  preferenceId?: string;
+  email: string;
+  items: {
+    id: string;
+    title: string;
+    quantity: number;
+    unit_price: number;
+    currency_id: 'BRL';
+  }[];
+  mpStatus?: string;
+  mpStatusDetail?: string;
+  createdAt?: FirebaseFirestore.Timestamp;
+  updatedAt?: FirebaseFirestore.Timestamp;
+}
+
+/**
+ * --------------------------------------------------
+ * FIREBASE ADMIN / FIRESTORE
+ * --------------------------------------------------
+ */
+function obterFirestore() {
+  const projectId =
+    process.env['FIREBASE_PROJECT_ID'];
+
+  const clientEmail =
+    process.env['FIREBASE_CLIENT_EMAIL'];
+
+  const privateKey =
+    process.env['FIREBASE_PRIVATE_KEY'];
+
+  if (
+    !projectId ||
+    !clientEmail ||
+    !privateKey
+  ) {
+    throw new Error(
+      'Firebase Admin não está configurado. ' +
+        'Defina FIREBASE_PROJECT_ID, ' +
+        'FIREBASE_CLIENT_EMAIL e FIREBASE_PRIVATE_KEY.',
+    );
+  }
+
+  const appFirebase =
+    getApps().length > 0
+      ? getApps()[0]
+      : initializeApp({
+          credential: cert({
+            projectId,
+            clientEmail,
+            privateKey:
+              privateKey.replace(
+                /\\n/g,
+                '\n',
+              ),
+          }),
+        });
+
+  return getFirestore(appFirebase);
+}
+
+/**
+ * --------------------------------------------------
+ * URL PÚBLICA
+ * --------------------------------------------------
+ */
+function obterPublicAppUrl(): string {
+  const configurada =
+    process.env['PUBLIC_APP_URL']?.trim();
+
+  if (configurada) {
+    return configurada.replace(
+      /\/+$/,
+      '',
+    );
+  }
+
+  const vercelUrl =
+    process.env['VERCEL_URL']?.trim();
+
+  if (vercelUrl) {
+    return `https://${vercelUrl.replace(
+      /^https?:\/\//,
+      '',
+    )}`;
+  }
+
+  return 'http://localhost:4000';
+}
+
+/**
+ * --------------------------------------------------
+ * VALIDAÇÃO DE E-MAIL
+ * --------------------------------------------------
+ */
+function emailValido(
+  email: string,
+): boolean {
+  return (
+    email.length > 0 &&
+    email.length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      email,
+    )
+  );
+}
+
+/**
+ * --------------------------------------------------
+ * RECONCILIAÇÃO DO PAGAMENTO
+ * --------------------------------------------------
+ *
+ * Consulta o Mercado Pago e sincroniza
+ * o pedido correspondente no Firestore.
+ */
+async function reconciliarPagamento(
+  paymentId: string,
+  accessToken: string,
+) {
   try {
-    const r = await fetch(`${MP_API}/v1/payments/${paymentId}`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    if (!r.ok) return null;
-    const pg = await r.json();
+    const resposta = await fetch(
+      `${MP_API}/v1/payments/${paymentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
 
-    const ref = String(pg.external_reference ?? '');
-    const pedido = pedidos.get(ref);
-    if (!pedido) return null;
-    if (Math.round(Number(pg.transaction_amount) * 100) !== pedido.totalCentavos) return null;
+    if (!resposta.ok) {
+      console.error(
+        'Mercado Pago retornou erro ao consultar pagamento:',
+        resposta.status,
+      );
 
-    if (pg.status === 'approved') {
-      pedido.status = 'paid';
-      pedido.paymentId = String(pg.id);
-    } else if ((pg.status === 'rejected' || pg.status === 'cancelled') && pedido.status === 'pending') {
-      pedido.status = 'failed';
+      return null;
     }
-    return { id: pg.id as number, status: pg.status as string, externalReference: ref };
+
+    const pagamento =
+      (await resposta.json()) as {
+        id?: unknown;
+        status?: unknown;
+        status_detail?: unknown;
+        external_reference?: unknown;
+        transaction_amount?: unknown;
+      };
+
+    const externalReference =
+      String(
+        pagamento.external_reference ??
+          '',
+      ).trim();
+
+    if (!externalReference) {
+      console.error(
+        'Pagamento sem external_reference:',
+        paymentId,
+      );
+
+      return null;
+    }
+
+    const transactionAmount =
+      Number(
+        pagamento.transaction_amount,
+      );
+
+    if (
+      !Number.isFinite(
+        transactionAmount,
+      ) ||
+      transactionAmount < 0
+    ) {
+      console.error(
+        'transaction_amount inválido no pagamento:',
+        paymentId,
+      );
+
+      return null;
+    }
+
+    const totalCentavosPagamento =
+      Math.round(
+        transactionAmount * 100,
+      );
+
+    const db = obterFirestore();
+
+    const pedidoRef =
+      db
+        .collection('pedidos')
+        .doc(externalReference);
+
+    const resultado =
+      await db.runTransaction(
+        async (transaction) => {
+          const snapshot =
+            await transaction.get(
+              pedidoRef,
+            );
+
+          if (!snapshot.exists) {
+            return null;
+          }
+
+          const pedido =
+            snapshot.data() as PedidoFirestore;
+
+          if (
+            Number(
+              pedido.totalCentavos,
+            ) !==
+            totalCentavosPagamento
+          ) {
+            console.error(
+              'Valor do pagamento diferente do pedido:',
+              {
+                paymentId,
+                externalReference,
+                esperado:
+                  pedido.totalCentavos,
+                recebido:
+                  totalCentavosPagamento,
+              },
+            );
+
+            return null;
+          }
+
+          const statusMercadoPago =
+            String(
+              pagamento.status ?? '',
+            );
+
+          let novoStatus =
+            pedido.status;
+
+          if (
+            statusMercadoPago ===
+            'approved'
+          ) {
+            novoStatus = 'paid';
+          } else if (
+            (
+              statusMercadoPago ===
+                'rejected' ||
+              statusMercadoPago ===
+                'cancelled'
+            ) &&
+            pedido.status !== 'paid'
+          ) {
+            novoStatus = 'failed';
+          } else if (
+            pedido.status !==
+            'paid'
+          ) {
+            novoStatus = 'pending';
+          }
+
+          const atualizacao: Record<
+            string,
+            unknown
+          > = {
+            status: novoStatus,
+            mpStatus:
+              statusMercadoPago,
+            mpStatusDetail:
+              String(
+                pagamento.status_detail ??
+                  '',
+              ),
+            updatedAt:
+              FieldValue.serverTimestamp(),
+          };
+
+          if (
+            pagamento.id !==
+              undefined &&
+            pagamento.id !== null
+          ) {
+            atualizacao[
+              'paymentId'
+            ] = String(
+              pagamento.id,
+            );
+          }
+
+          transaction.update(
+            pedidoRef,
+            atualizacao,
+          );
+
+          return {
+            id:
+              Number(
+                pagamento.id ??
+                  paymentId,
+              ),
+            status:
+              statusMercadoPago,
+            orderStatus:
+              novoStatus,
+            externalReference,
+          };
+        },
+      );
+
+    return resultado;
   } catch (erro) {
-    console.error('Falha ao consultar pagamento', erro);
+    console.error(
+      'Falha ao reconciliar pagamento:',
+      erro,
+    );
+
     return null;
   }
 }
 
-app.post('/api/mercado-pago/preference', async (req, res) => {
-  const accessToken = process.env['MERCADOPAGO_ACCESS_TOKEN'];
-  if (!accessToken) {
-    res.status(503).json({ error: 'Mercado Pago não configurado no servidor.' });
-    return;
-  }
+/**
+ * --------------------------------------------------
+ * CRIAÇÃO DA PREFERÊNCIA
+ * --------------------------------------------------
+ */
+app.post(
+  '/api/mercado-pago/preference',
+  async (req, res) => {
+    const accessToken =
+      process.env[
+        'MERCADOPAGO_ACCESS_TOKEN'
+      ];
 
-  const corpo = req.body ?? {};
-  const email = typeof corpo.payer?.email === 'string' ? corpo.payer.email.trim() : '';
-  const entrada: unknown[] = Array.isArray(corpo.items) ? corpo.items : [];
+    if (!accessToken) {
+      res.status(503).json({
+        error:
+          'Mercado Pago não configurado no servidor.',
+      });
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || entrada.length === 0 || entrada.length > 50) {
-    res.status(400).json({ error: 'Dados do pedido inválidos.' });
-    return;
-  }
-
-  // O cliente manda SÓ id e quantidade. Nome e preço vêm do servidor (catalogo-precos.ts).
-  const linhas: { title: string; quantity: number; unit_price: number; currency_id: string }[] = [];
-  let totalCentavos = 0;
-  for (const bruto of entrada) {
-    const item = (bruto ?? {}) as { id?: unknown; quantity?: unknown };
-    const produto = PRECOS[String(item.id)];
-    const quantity = Number(item.quantity);
-    if (!produto || !Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
-      res.status(400).json({ error: 'Há itens inválidos no pedido.' });
-      return;
-    }
-    if (produto.precoCentavos === 0) continue; // gratuito não passa pelo gateway
-    totalCentavos += produto.precoCentavos * quantity;
-    linhas.push({
-      title: produto.nome,
-      quantity,
-      unit_price: produto.precoCentavos / 100,
-      currency_id: 'BRL',
-    });
-  }
-  if (linhas.length === 0) {
-    res.status(400).json({ error: 'Nada a pagar neste pedido.' });
-    return;
-  }
-
-  const externalReference = randomUUID(); // gerado no servidor, não previsível
-  const publicAppUrl = process.env['PUBLIC_APP_URL'] || 'http://localhost:4000'; // corrigido: batia com a porta errada (4200)
-
-  try {
-    const response = await fetch(`${MP_API}/checkout/preferences`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-        'X-Idempotency-Key': externalReference,
-      },
-      body: JSON.stringify({
-        items: linhas,
-        payer: { email },
-        external_reference: externalReference,
-        back_urls: {
-          success: `${publicAppUrl}/checkout?status=approved`,
-          pending: `${publicAppUrl}/checkout?status=pending`,
-          failure: `${publicAppUrl}/checkout?status=failure`,
-        },
-        auto_return: 'approved', // exige https público; remova se falhar em localhost
-        notification_url: process.env['MERCADOPAGO_WEBHOOK_URL'],
-      }),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      console.error('Mercado Pago rejeitou a preferência:', data);
-      res.status(502).json({ error: 'Não foi possível iniciar o pagamento.' });
       return;
     }
 
-    pedidos.set(externalReference, { totalCentavos, status: 'pending' });
-    res.json({
-      id: data.id,
-      initPoint: data.init_point,
-      sandboxInitPoint: data.sandbox_init_point,
-      externalReference,
+    const corpo =
+      (req.body ?? {}) as {
+        payer?: {
+          email?: unknown;
+        };
+        items?: unknown;
+      };
+
+    const email =
+      typeof corpo.payer
+        ?.email === 'string'
+        ? corpo.payer.email.trim()
+        : '';
+
+    const entrada: unknown[] =
+      Array.isArray(corpo.items)
+        ? corpo.items
+        : [];
+
+    if (
+      !emailValido(email) ||
+      entrada.length === 0 ||
+      entrada.length > 50
+    ) {
+      res.status(400).json({
+        error:
+          'Dados do pedido inválidos.',
+      });
+
+      return;
+    }
+
+    const linhas: {
+      id: string;
+      title: string;
+      quantity: number;
+      unit_price: number;
+      currency_id: 'BRL';
+    }[] = [];
+
+    let totalCentavos = 0;
+
+    for (const bruto of entrada) {
+      const item =
+        (bruto ?? {}) as {
+          id?: unknown;
+          quantity?: unknown;
+        };
+
+      const produto =
+        PRECOS[String(item.id)];
+
+      const quantity =
+        Number(item.quantity);
+
+      if (
+        !produto ||
+        !Number.isInteger(
+          quantity,
+        ) ||
+        quantity < 1 ||
+        quantity > 99
+      ) {
+        res.status(400).json({
+          error:
+            'Há itens inválidos no pedido.',
+        });
+
+        return;
+      }
+
+      if (
+        produto.precoCentavos === 0
+      ) {
+        continue;
+      }
+
+      totalCentavos +=
+        produto.precoCentavos *
+        quantity;
+
+      linhas.push({
+        id: String(item.id),
+        title: produto.nome,
+        quantity,
+        unit_price:
+          produto.precoCentavos /
+          100,
+        currency_id: 'BRL',
+      });
+    }
+
+    if (
+      linhas.length === 0 ||
+      totalCentavos <= 0
+    ) {
+      res.status(400).json({
+        error:
+          'Nada a pagar neste pedido.',
+      });
+
+      return;
+    }
+
+    const externalReference =
+      randomUUID();
+
+    const publicAppUrl =
+      obterPublicAppUrl();
+
+    const webhookUrl =
+      process.env[
+        'MERCADOPAGO_WEBHOOK_URL'
+      ]?.trim() ||
+      `${publicAppUrl}/api/mercado-pago/webhook`;
+
+    const db =
+      (() => {
+        try {
+          return obterFirestore();
+        } catch (erro) {
+          console.error(
+            'Firebase Admin não configurado:',
+            erro,
+          );
+
+          return null;
+        }
+      })();
+
+    if (!db) {
+      res.status(503).json({
+        error:
+          'Firestore não configurado no servidor.',
+      });
+
+      return;
+    }
+
+    const pedidoRef =
+      db
+        .collection('pedidos')
+        .doc(externalReference);
+
+    const itensParaSalvar =
+      linhas.map((linha) => ({
+        id: linha.id,
+        title: linha.title,
+        quantity: linha.quantity,
+        unit_price: linha.unit_price,
+        currency_id:
+          linha.currency_id,
+      }));
+
+    await pedidoRef.set({
+      totalCentavos,
+      status:
+        'pending' as StatusPedido,
+      email,
+      items: itensParaSalvar,
+      createdAt:
+        FieldValue.serverTimestamp(),
+      updatedAt:
+        FieldValue.serverTimestamp(),
     });
-  } catch (error) {
-    console.error('Erro ao criar preferência no Mercado Pago:', error);
-    res.status(502).json({ error: 'Serviço de pagamento indisponível.' });
-  }
-});
 
-app.get('/api/mercado-pago/payment/:id', async (req, res) => {
-  const accessToken = process.env['MERCADOPAGO_ACCESS_TOKEN'];
-  const paymentId = req.params['id'];
-  if (!accessToken || !/^\d+$/.test(paymentId)) {
-    res.status(400).json({ error: 'Pagamento inválido.' });
-    return;
-  }
-  const resultado = await reconciliar(paymentId, accessToken);
-  if (!resultado) {
-    res.status(404).json({ error: 'Pagamento não encontrado para este pedido.' });
-    return;
-  }
-  res.json(resultado);
-});
+    try {
+      const response =
+        await fetch(
+          `${MP_API}/checkout/preferences`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type':
+                'application/json',
+              'X-Idempotency-Key':
+                externalReference,
+            },
+            body: JSON.stringify({
+              items: linhas.map(
+                (linha) => ({
+                  title:
+                    linha.title,
+                  quantity:
+                    linha.quantity,
+                  unit_price:
+                    linha.unit_price,
+                  currency_id:
+                    linha.currency_id,
+                }),
+              ),
+              payer: {
+                email,
+              },
+              external_reference:
+                externalReference,
+              back_urls: {
+                success:
+                  `${publicAppUrl}/checkout?status=approved`,
+                pending:
+                  `${publicAppUrl}/checkout?status=pending`,
+                failure:
+                  `${publicAppUrl}/checkout?status=failure`,
+              },
+              auto_return:
+                'approved',
+              notification_url:
+                webhookUrl,
+            }),
+          },
+        );
 
-app.post('/api/mercado-pago/webhook', async (req, res) => {
-  const secret = process.env['MERCADOPAGO_WEBHOOK_SECRET'];
-  const accessToken = process.env['MERCADOPAGO_ACCESS_TOKEN'];
-  const dataId = String(req.query['data.id'] ?? '');
-  if (!secret || !accessToken || !dataId) {
-    res.sendStatus(400);
-    return;
-  }
+      const data =
+        (await response.json()) as {
+          id?: unknown;
+          init_point?: unknown;
+          sandbox_init_point?: unknown;
+        };
 
-  const partes = Object.fromEntries(
-    String(req.header('x-signature') ?? '')
-      .split(',')
-      .map((p) => p.trim().split('=') as [string, string]),
-  );
-  const manifest = `id:${dataId.toLowerCase()};request-id:${req.header('x-request-id') ?? ''};ts:${partes['ts']};`;
-  const esperado = createHmac('sha256', secret).update(manifest).digest('hex');
-  const recebido = String(partes['v1'] ?? '');
-  const valida =
-    esperado.length === recebido.length &&
-    timingSafeEqual(Buffer.from(esperado), Buffer.from(recebido));
-  if (!valida) {
-    res.sendStatus(401);
-    return;
-  }
+      if (!response.ok) {
+        console.error(
+          'Mercado Pago rejeitou a preferência:',
+          data,
+        );
 
-  if ((req.query['type'] ?? req.query['topic']) === 'payment') {
-    await reconciliar(dataId, accessToken); // idempotente: repetir não muda nada
-  }
-  res.sendStatus(200);
-});
+        await pedidoRef.update({
+          status:
+            'failed' as StatusPedido,
+          updatedAt:
+            FieldValue.serverTimestamp(),
+        });
 
-app.use(
-  express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: false,
-    redirect: false,
-  }),
+        res.status(502).json({
+          error:
+            'Não foi possível iniciar o pagamento.',
+        });
+
+        return;
+      }
+
+      const preferenceId =
+        String(
+          data.id ?? '',
+        );
+
+      await pedidoRef.update({
+        preferenceId,
+        updatedAt:
+          FieldValue.serverTimestamp(),
+      });
+
+      res.json({
+        id: data.id,
+        initPoint:
+          data.init_point,
+        sandboxInitPoint:
+          data.sandbox_init_point,
+        externalReference,
+      });
+    } catch (erro) {
+      console.error(
+        'Erro ao criar preferência no Mercado Pago:',
+        erro,
+      );
+
+      await pedidoRef
+        .update({
+          status:
+            'failed' as StatusPedido,
+          updatedAt:
+            FieldValue.serverTimestamp(),
+        })
+        .catch(
+          (
+            erroFirestore,
+          ) => {
+            console.error(
+              'Erro ao marcar pedido como failed:',
+              erroFirestore,
+            );
+          },
+        );
+
+      res.status(502).json({
+        error:
+          'Serviço de pagamento indisponível.',
+      });
+    }
+  },
 );
 
-app.use((req, res, next) => {
-  angularApp
-    .handle(req)
-    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
-    .catch(next);
-});
+/**
+ * --------------------------------------------------
+ * CONSULTA DE PAGAMENTO
+ * --------------------------------------------------
+ */
+app.get(
+  '/api/mercado-pago/payment/:id',
+  async (req, res) => {
+    const accessToken =
+      process.env[
+        'MERCADOPAGO_ACCESS_TOKEN'
+      ];
 
-if (isMainModule(import.meta.url) || process.env['pm_id']) {
-  const port = process.env['PORT'] || 4000;
-  app.listen(port, (error) => {
-    if (error) {
-      throw error;
+    const paymentId =
+      req.params['id'];
+
+    if (
+      !accessToken ||
+      !/^\d+$/.test(paymentId)
+    ) {
+      res.status(400).json({
+        error:
+          'Pagamento inválido.',
+      });
+
+      return;
     }
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
+
+    const resultado =
+      await reconciliarPagamento(
+        paymentId,
+        accessToken,
+      );
+
+    if (!resultado) {
+      res.status(404).json({
+        error:
+          'Pagamento não encontrado para este pedido.',
+      });
+
+      return;
+    }
+
+    res.json(resultado);
+  },
+);
+
+/**
+ * --------------------------------------------------
+ * WEBHOOK DO MERCADO PAGO
+ * --------------------------------------------------
+ */
+app.post(
+  '/api/mercado-pago/webhook',
+  async (req, res) => {
+    const secret =
+      process.env[
+        'MERCADOPAGO_WEBHOOK_SECRET'
+      ];
+
+    const accessToken =
+      process.env[
+        'MERCADOPAGO_ACCESS_TOKEN'
+      ];
+
+    if (
+      !secret ||
+      !accessToken
+    ) {
+      res.sendStatus(503);
+      return;
+    }
+
+    const dataId =
+      String(
+        req.query['data.id'] ?? '',
+      ).trim();
+
+    const requestId =
+      String(
+        req.header(
+          'x-request-id',
+        ) ?? '',
+      ).trim();
+
+    const signature =
+      String(
+        req.header(
+          'x-signature',
+        ) ?? '',
+      ).trim();
+
+    if (
+      !dataId ||
+      !requestId ||
+      !signature
+    ) {
+      res.sendStatus(400);
+      return;
+    }
+
+    let ts = '';
+    let recebido = '';
+
+    for (
+      const parte of
+        signature.split(',')
+    ) {
+      const [chave, ...resto] =
+        parte
+          .trim()
+          .split('=');
+
+      const valor =
+        resto.join('=').trim();
+
+      if (chave === 'ts') {
+        ts = valor;
+      }
+
+      if (chave === 'v1') {
+        recebido = valor;
+      }
+    }
+
+    if (
+      !ts ||
+      !recebido
+    ) {
+      res.sendStatus(401);
+      return;
+    }
+
+    const manifest =
+      `id:${dataId.toLowerCase()};` +
+      `request-id:${requestId};` +
+      `ts:${ts};`;
+
+    const esperado =
+      createHmac(
+        'sha256',
+        secret,
+      )
+        .update(manifest)
+        .digest('hex');
+
+    let assinaturaValida =
+      false;
+
+    if (
+      esperado.length ===
+      recebido.length
+    ) {
+      try {
+        assinaturaValida =
+          timingSafeEqual(
+            Buffer.from(
+              esperado,
+              'utf8',
+            ),
+            Buffer.from(
+              recebido,
+              'utf8',
+            ),
+          );
+      } catch {
+        assinaturaValida =
+          false;
+      }
+    }
+
+    if (!assinaturaValida) {
+      res.sendStatus(401);
+      return;
+    }
+
+    const tipo =
+      String(
+        req.query['type'] ??
+          req.query['topic'] ??
+          '',
+      ).toLowerCase();
+
+    if (
+      tipo === 'payment'
+    ) {
+      await reconciliarPagamento(
+        dataId,
+        accessToken,
+      );
+    }
+
+    res.sendStatus(200);
+  },
+);
+
+/**
+ * --------------------------------------------------
+ * ARQUIVOS ESTÁTICOS
+ * --------------------------------------------------
+ */
+app.use(
+  express.static(
+    browserDistFolder,
+    {
+      maxAge: '1y',
+      index: false,
+      redirect: false,
+    },
+  ),
+);
+
+/**
+ * --------------------------------------------------
+ * ANGULAR SSR
+ * --------------------------------------------------
+ */
+app.use(
+  (req, res, next) => {
+    angularApp
+      .handle(req)
+      .then(
+        (response) =>
+          response
+            ? writeResponseToNodeResponse(
+                response,
+                res,
+              )
+            : next(),
+      )
+      .catch(next);
+  },
+);
+
+/**
+ * --------------------------------------------------
+ * SERVIDOR LOCAL
+ * --------------------------------------------------
+ */
+if (
+  isMainModule(import.meta.url) ||
+  process.env['pm_id']
+) {
+  const port =
+    process.env['PORT'] ||
+    4000;
+
+  app.listen(
+    port,
+    (error) => {
+      if (error) {
+        throw error;
+      }
+
+      console.log(
+        `Node Express server listening on http://localhost:${port}`,
+      );
+    },
+  );
 }
 
-export const reqHandler = createNodeRequestHandler(app);
+/**
+ * Handler utilizado pelo Angular SSR,
+ * Vercel e outros ambientes compatíveis.
+ */
+export const reqHandler =
+  createNodeRequestHandler(app);
