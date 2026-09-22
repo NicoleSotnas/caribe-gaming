@@ -1,14 +1,11 @@
-import { Injectable, inject, computed } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { of, switchMap, map, from } from 'rxjs';
 import { AuthService } from '../services/auth';
 
-const EMAIL_ADMIN = 'admin@email.com';
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthFacade {
-  private authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   usuarioAtual = toSignal(this.authService.usuarioAtual$, { initialValue: null });
 
@@ -16,9 +13,16 @@ export class AuthFacade {
     return !!this.usuarioAtual();
   }
 
-  ehAdmin = computed(() => this.usuarioAtual()?.email === EMAIL_ADMIN);
+  // Antes: comparação com EMAIL_ADMIN no cliente. Agora: papel vindo do banco (profiles.role).
+  // Isto só controla a INTERFACE (mostrar/esconder botão); quem protege de verdade é o RLS/is_admin().
+  ehAdmin = toSignal(
+    this.authService.usuarioAtual$.pipe(
+      switchMap((u) => (u ? from(this.authService.buscarPapel(u.uid)) : of('customer'))),
+      map((papel) => papel === 'admin'),
+    ),
+    { initialValue: false },
+  );
 
-  // nome de exibição: usa o nome de usuário se tiver, senão cai no email
   nomeExibicao = computed(() => {
     const usuario = this.usuarioAtual();
     return usuario?.displayName || usuario?.email || '';
