@@ -1,148 +1,238 @@
-import { render, screen, fireEvent } from '@testing-library/angular';
-import { vi } from 'vitest';
-import { of } from 'rxjs';
+import { render, screen } from '@testing-library/angular';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { TestBed } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 
 import { TheSims } from './thesims';
-
-import { FavoritosService } from '../../../../core/services/favoritos.service';
 import { RawgService } from '../../../../core/services/rawg.service';
 import { CarrinhoFacade } from '../../../../core/facades/carrinho.facade';
+import { FavoritosService } from '../../../../core/services/favoritos.service';
 
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+// Mock do localStorage e sessionStorage para o ambiente de testes
+const mockStorage = () => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => { store[key] = value.toString(); },
+    clear: () => { store = {}; }
+  };
+};
 
-describe('TheSims - Favoritos', () => {
+Object.defineProperty(window, 'localStorage', { value: mockStorage() });
+Object.defineProperty(window, 'sessionStorage', { value: mockStorage() });
 
-  it('deve deixar o coração vermelho quando o jogo for favoritado', async () => {
+// Mocks dos Serviços
+const mockRawgService = {
+  obterDetalhesJogo: vi.fn().mockReturnValue(of({
+    id: 1222670,
+    name: 'The Sims 4',
+    released: '2014-09-02',
+    developers: [{ name: 'Electronic Arts' }],
+    publishers: [{ name: 'Electronic Arts' }],
+    platforms: [{ platform: { name: 'PC' } }],
+    background_image: 'sims4.jpg'
+  })),
+  obterScreenshots: vi.fn().mockReturnValue(of({
+    results: [{ image: 'screen1.jpg' }, { image: 'screen2.jpg' }]
+  }))
+};
 
-    // Serviço de favoritos falso
-    const favoritosServiceMock = {
-      ehFavorito: vi.fn().mockReturnValue(false),
-      toggleFavorito: vi.fn()
-    };
+const mockCarrinhoFacade = {
+  adicionarProduto: vi.fn()
+};
 
-    // Serviço da RAWG falso
-    const rawgServiceMock = {
-      obterDetalhesJogo: vi.fn().mockReturnValue(
-        of({})
-      ),
-      obterScreenshots: vi.fn().mockReturnValue(
-        of({ results: [] })
-      )
-    };
+const mockFavoritosService = {
+  ehFavorito: vi.fn().mockReturnValue(false),
+  toggleFavorito: vi.fn()
+};
 
-    // Carrinho falso
-    const carrinhoFacadeMock = {
-      adicionarProduto: vi.fn()
-    };
+const mockRouter = {
+  navigate: vi.fn()
+};
 
-    // Router falso
-    const routerMock = {
-      navigate: vi.fn()
-    };
+const mockLocation = {
+  back: vi.fn()
+};
 
-    // Location falsa
-    const locationMock = {
-      back: vi.fn()
-    };
+describe('Componente TheSims - Testes de Cobertura Alta', () => {
 
-    // Jogo fictício
-    const jogoFicticio = {
-      id: 1222670,
-      nome: 'The Sims 4',
-      descricao: 'Jogo de simulação',
-      dataLancamento: '02/09/2014',
-      desenvolvedoras: 'Electronic Arts',
-      distribuidoras: 'Electronic Arts',
-      classificacaoEtaria: '12+',
-      plataformas: 'PC / PlayStation 4 / Xbox One',
-      background_image: 'imagem.jpg'
-    };
+  // ==========================================
+  // 1. TESTES DE LÓGICA INTERNA E MÉTODOS (Vitest)
+  // ==========================================
+  describe('Lógica de Métodos e Estado (Vitest)', () => {
+    let component: TheSims;
 
-    // Coloca o jogo fictício no cache
-    sessionStorage.setItem(
-      'sims4_dados_completos',
-      JSON.stringify({
-        jogo: jogoFicticio,
-        imagens: ['imagem.jpg']
-      })
-    );
+    beforeEach(() => {
+      localStorage.clear();
+      sessionStorage.clear();
 
-    // Renderiza o componente
-    const { fixture } = await render(TheSims, {
-      providers: [
-        {
-          provide: FavoritosService,
-          useValue: favoritosServiceMock
-        },
-        {
-          provide: RawgService,
-          useValue: rawgServiceMock
-        },
-        {
-          provide: CarrinhoFacade,
-          useValue: carrinhoFacadeMock
-        },
-        {
-          provide: Router,
-          useValue: routerMock
-        },
-        {
-          provide: Location,
-          useValue: locationMock
-        }
-      ]
+      TestBed.resetTestingModule(); // Reseta a configuração do módulo
+
+      TestBed.configureTestingModule({
+        imports: [TheSims],
+        providers: [
+          { provide: RawgService, useValue: mockRawgService },
+          { provide: CarrinhoFacade, useValue: mockCarrinhoFacade },
+          { provide: FavoritosService, useValue: mockFavoritosService },
+          { provide: Router, useValue: mockRouter },
+          { provide: Location, useValue: mockLocation }
+        ]
+      });
+
+      const fixture = TestBed.createComponent(TheSims);
+      component = fixture.componentInstance;
     });
 
-    // Espera o componente terminar de carregar
-    await fixture.whenStable();
+    it('deve inicializar o componente e carregar dados do jogo', () => {
+      expect(component).toBeTruthy();
+      (component as any).carregarDadosDoJogo();
+      expect(component.jogo?.nome).toBe('The Sims 4');
+      expect(component.galeriaImagens.length).toBeGreaterThan(0);
+    });
 
-    // Atualiza a tela
-    fixture.detectChanges();
+    it('deve navegar para a página de expansões', () => {
+      component.irParaExpansoes();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/jogos/the-sims-4/expansoes']);
+    });
 
-    // Procura o botão do coração
-    const botaoFavorito = screen.getByTitle('Favoritar');
+    it('deve manipular o modal de avaliação e validação de envio', () => {
+      component.abrirModal();
+      expect(component.exibirModalAvaliacao).toBe(true);
 
-    // Antes do clique, o jogo não está favoritado
-    expect(fixture.componentInstance.favorito).toBe(false);
+      // Tenta enviar com campos vazios (dispara o toast de alerta)
+      component.novoNome = '';
+      component.novoTexto = '';
+      component.enviarAvaliacao();
+      expect(component.mensagemToast).toContain('Preencha seu nome');
 
-    // O coração inicialmente não está vermelho
-    const coracaoAntes = botaoFavorito.querySelector('svg');
+      // Preenche e envia corretamente
+      component.novoNome = 'Bella';
+      component.novoTexto = 'Adoro construir casas neste jogo!';
+      component.enviarAvaliacao();
+      expect(component.listaComentarios[0].autor).toBe('Bella');
+      expect(component.exibirModalAvaliacao).toBe(false);
+    });
 
-    expect(
-      coracaoAntes?.getAttribute('fill')
-    ).toBe('none');
+    it('deve testar os likes e dislikes nos comentários', () => {
+      const comentario = component.listaComentarios[0];
+      const likesIniciais = comentario.likes;
 
-    // Clica no coração
-    await fireEvent.click(botaoFavorito);
+      // Adiciona Like
+      component.darLike(comentario);
+      expect(comentario.likes).toBe(likesIniciais + 1);
+      expect(comentario.votouLike).toBe(true);
 
-    // Atualiza a tela
-    fixture.detectChanges();
+      // Remove Like ao clicar novamente
+      component.darLike(comentario);
+      expect(comentario.likes).toBe(likesIniciais);
 
-    // Depois do clique, o jogo deve estar favoritado
-    expect(fixture.componentInstance.favorito).toBe(true);
+      // Adiciona Dislike
+      component.darDislike(comentario);
+      expect(comentario.votouDislike).toBe(true);
+    });
 
-    // O botão deve receber a classe "favoritado"
-    expect(
-      botaoFavorito.classList.contains('favoritado')
-    ).toBe(true);
+    it('deve navegar na galeria de fotos (próxima, anterior e selecionar)', () => {
+      component.galeriaImagens = ['foto1.jpg', 'foto2.jpg', 'foto3.jpg'];
+      
+      component.proximaFoto();
+      expect(component.indiceAtivo).toBe(1);
 
-    // Procura o coração dentro do botão
-    const coracaoDepois = botaoFavorito.querySelector('svg');
+      component.proximaFoto();
+      expect(component.indiceAtivo).toBe(2);
 
-    // O coração deve ficar vermelho
-    expect(
-      coracaoDepois?.getAttribute('fill')
-    ).toBe('#ff4757');
+      component.proximaFoto(); // Loop para a primeira
+      expect(component.indiceAtivo).toBe(0);
 
-    // O serviço de favoritos deve ter sido chamado
-    expect(
-      favoritosServiceMock.toggleFavorito
-    ).toHaveBeenCalled();
+      component.fotoAnterior(); // Loop para a última
+      expect(component.indiceAtivo).toBe(2);
 
-    // Limpa o cache usado pelo teste
-    sessionStorage.removeItem('sims4_dados_completos');
+      component.selecionarIndice(1);
+      expect(component.indiceAtivo).toBe(1);
+    });
 
+    it('deve formatar estrelas de avaliação corretamente', () => {
+      const estrelas = component.getEstrelasTexto(5);
+      expect(estrelas).toBe('★★★★★');
+    });
+
+    it('deve adicionar ao carrinho, favoritar e acionar comprar agora', () => {
+      component.jogo = { nome: 'The Sims 4', plataformas: 'PC' } as any;
+
+      component.adicionarAoCarrinho();
+      expect(mockCarrinhoFacade.adicionarProduto).toHaveBeenCalled();
+
+      component.toggleFavorito();
+      expect(mockFavoritosService.toggleFavorito).toHaveBeenCalled();
+
+      component.comprarAgora();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/carrinho']);
+    });
+
+    it('deve testar rotas de navegação e o botão de voltar', () => {
+      component.voltarPagina();
+      expect(mockLocation.back).toHaveBeenCalled();
+
+      component.irParaHome();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+
+      component.irParaJogos();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/jogos']);
+    });
+
+    it('deve tratar erro de carregamento da API RAWG sem poluir o console', () => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockRawgService.obterDetalhesJogo.mockReturnValueOnce(throwError(() => new Error('Erro API')));
+      (component as any).carregarDadosDoJogo();
+      expect(component.erro).toBe(true);
+    });
   });
 
+  // ==========================================
+  // 2. TESTES DE INTERFACE E DOM (Testing Library)
+  // ==========================================
+  describe('Interface do Usuário (Testing Library)', () => {
+    beforeEach(() => {
+      TestBed.resetTestingModule(); // Garante ambiente isolado para o render()
+    });
+
+    it('deve renderizar a página do jogo e checar comentários na tela', async () => {
+      await render(TheSims, {
+        providers: [
+          { provide: RawgService, useValue: mockRawgService },
+          { provide: CarrinhoFacade, useValue: mockCarrinhoFacade },
+          { provide: FavoritosService, useValue: mockFavoritosService },
+          { provide: Router, useValue: mockRouter },
+          { provide: Location, useValue: mockLocation }
+        ]
+      });
+
+      // Valida se o comentário padrão da BellaGoth_Lover aparece visível na página
+      const autorComentario = screen.getByText(/BellaGoth_Lover/i);
+      expect(autorComentario).not.toBeNull();
+    });
+  });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

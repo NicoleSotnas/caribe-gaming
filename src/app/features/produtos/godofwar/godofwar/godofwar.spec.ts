@@ -1,55 +1,211 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
-import { vi } from 'vitest';
-
-// Tokens do Firebase para a Injeção de Dependência
-import { Auth } from '@angular/fire/auth';
-import { Firestore } from '@angular/fire/firestore';
+import { render, screen } from '@testing-library/angular';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { TestBed } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 
 import { GodOfWar } from './godofwar';
+import { RawgService } from '../../../../core/services/rawg.service';
+import { CarrinhoFacade } from '../../../../core/facades/carrinho.facade';
+import { FavoritosService } from '../../../../core/services/favoritos.service';
 
-describe('Godofwar', () => {
-  let component: GodOfWar;
-  let fixture: ComponentFixture<GodOfWar>;
-
-  // Mock do Firebase Auth
-  const mockAuth = {
-    onIdTokenChanged: vi.fn((callback: (user: unknown) => void) => {
-      callback(null);
-      return () => {};
-    }),
-    onAuthStateChanged: vi.fn((callback: (user: unknown) => void) => {
-      callback(null);
-      return () => {};
-    }),
+// Mock do localStorage e sessionStorage para o ambiente de testes
+const mockStorage = () => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => { store[key] = value.toString(); },
+    clear: () => { store = {}; }
   };
+};
 
-  // Mock do HttpClient para evitar falhas de requisição à API externa
-  const mockHttpClient = {
-    get: vi.fn(() => of({ results: [], screenshots: [] })),
-  };
+Object.defineProperty(window, 'localStorage', { value: mockStorage() });
+Object.defineProperty(window, 'sessionStorage', { value: mockStorage() });
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [GodOfWar],
-      providers: [
-        provideRouter([]),
-        { provide: Auth, useValue: mockAuth },
-        { provide: Firestore, useValue: {} },
-        { provide: HttpClient, useValue: mockHttpClient },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+// Mocks dos Serviços
+const mockRawgService = {
+  obterDetalhesJogo: vi.fn().mockReturnValue(of({
+    id: 1593500,
+    name: 'God of War',
+    released: '2018-04-20',
+    developers: [{ name: 'Santa Monica Studio' }],
+    publishers: [{ name: 'PlayStation PC LLC' }],
+    platforms: [{ platform: { name: 'PC' } }],
+    background_image: 'gow2018.jpg'
+  })),
+  obterScreenshots: vi.fn().mockReturnValue(of({
+    results: [{ image: 'screen1.jpg' }, { image: 'screen2.jpg' }]
+  }))
+};
 
-    fixture = TestBed.createComponent(GodOfWar);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
+const mockCarrinhoFacade = {
+  adicionarProduto: vi.fn()
+};
+
+const mockFavoritosService = {
+  ehFavorito: vi.fn().mockReturnValue(false),
+  toggleFavorito: vi.fn()
+};
+
+const mockRouter = {
+  navigate: vi.fn()
+};
+
+const mockLocation = {
+  back: vi.fn()
+};
+
+describe('Componente GodOfWar - Testes de Cobertura Alta', () => {
+
+  // ==========================================
+  // 1. TESTES DE LÓGICA INTERNA E MÉTODOS (Vitest)
+  // ==========================================
+  describe('Lógica de Métodos e Estado (Vitest)', () => {
+    let component: GodOfWar;
+
+    beforeEach(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+
+      TestBed.resetTestingModule(); // Reseta a configuração do módulo
+
+      TestBed.configureTestingModule({
+        imports: [GodOfWar],
+        providers: [
+          { provide: RawgService, useValue: mockRawgService },
+          { provide: CarrinhoFacade, useValue: mockCarrinhoFacade },
+          { provide: FavoritosService, useValue: mockFavoritosService },
+          { provide: Router, useValue: mockRouter },
+          { provide: Location, useValue: mockLocation }
+        ]
+      });
+
+      const fixture = TestBed.createComponent(GodOfWar);
+      component = fixture.componentInstance;
+    });
+
+    it('deve inicializar o componente e carregar dados do jogo', () => {
+      expect(component).toBeTruthy();
+      (component as any).carregarDadosDoJogo();
+      expect(component.jogo?.nome).toBe('God of War');
+      expect(component.galeriaImagens.length).toBeGreaterThan(0);
+    });
+
+    it('deve manipular o modal de avaliação e validação de envio', () => {
+      component.abrirModal();
+      expect(component.exibirModalAvaliacao).toBe(true);
+
+      // Tenta enviar com campos vazios (dispara o toast de alerta)
+      component.novoNome = '';
+      component.novoTexto = '';
+      component.enviarAvaliacao();
+      expect(component.mensagemToast).toContain('Preencha seu nome');
+
+      // Preenche e envia corretamente
+      component.novoNome = 'Kratos';
+      component.novoTexto = 'Combate incrível e narrativa profunda!';
+      component.enviarAvaliacao();
+      expect(component.listaComentarios[0].autor).toBe('Kratos');
+      expect(component.exibirModalAvaliacao).toBe(false);
+    });
+
+    it('deve testar os likes e dislikes nos comentários', () => {
+      const comentario = component.listaComentarios[0];
+      const likesIniciais = comentario.likes;
+
+      // Adiciona Like
+      component.darLike(comentario);
+      expect(comentario.likes).toBe(likesIniciais + 1);
+      expect(comentario.votouLike).toBe(true);
+
+      // Remove Like ao clicar novamente
+      component.darLike(comentario);
+      expect(comentario.likes).toBe(likesIniciais);
+
+      // Adiciona Dislike
+      component.darDislike(comentario);
+      expect(comentario.votouDislike).toBe(true);
+    });
+
+    it('deve navegar na galeria de fotos (próxima, anterior e selecionar)', () => {
+      component.galeriaImagens = ['foto1.jpg', 'foto2.jpg', 'foto3.jpg'];
+      
+      component.proximaFoto();
+      expect(component.indiceAtivo).toBe(1);
+
+      component.proximaFoto();
+      expect(component.indiceAtivo).toBe(2);
+
+      component.proximaFoto(); // Loop para a primeira
+      expect(component.indiceAtivo).toBe(0);
+
+      component.fotoAnterior(); // Loop para a última
+      expect(component.indiceAtivo).toBe(2);
+
+      component.selecionarIndice(1);
+      expect(component.indiceAtivo).toBe(1);
+    });
+
+    it('deve formatar estrelas de avaliação corretamente', () => {
+      const estrelas = component.getEstrelasTexto(5);
+      expect(estrelas).toBe('★★★★★');
+    });
+
+    it('deve adicionar ao carrinho, favoritar e acionar comprar agora', () => {
+      component.jogo = { nome: 'God of War', plataformas: 'PC' } as any;
+
+      component.adicionarAoCarrinho();
+      expect(mockCarrinhoFacade.adicionarProduto).toHaveBeenCalled();
+
+      component.toggleFavorito();
+      expect(mockFavoritosService.toggleFavorito).toHaveBeenCalled();
+
+      component.comprarAgora();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/carrinho']);
+    });
+
+    it('deve testar rotas de navegação e o botão de voltar', () => {
+      component.voltarPagina();
+      expect(mockLocation.back).toHaveBeenCalled();
+
+      component.irParaHome();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+
+      component.irParaJogos();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/jogos']);
+    });
+
+    it('deve tratar erro de carregamento da API RAWG sem poluir o console', () => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockRawgService.obterDetalhesJogo.mockReturnValueOnce(throwError(() => new Error('Erro API')));
+      (component as any).carregarDadosDoJogo();
+      expect(component.erro).toBe(true);
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  // ==========================================
+  // 2. TESTES DE INTERFACE E DOM (Testing Library)
+  // ==========================================
+  describe('Interface do Usuário (Testing Library)', () => {
+    beforeEach(() => {
+      TestBed.resetTestingModule(); // Garante ambiente isolado para o render()
+    });
+
+    it('deve renderizar a página do jogo e checar comentários na tela', async () => {
+      await render(GodOfWar, {
+        providers: [
+          { provide: RawgService, useValue: mockRawgService },
+          { provide: CarrinhoFacade, useValue: mockCarrinhoFacade },
+          { provide: FavoritosService, useValue: mockFavoritosService },
+          { provide: Router, useValue: mockRouter },
+          { provide: Location, useValue: mockLocation }
+        ]
+      });
+
+      // Valida se o comentário padrão do KratosSpartan aparece visível na página
+      const autorComentario = screen.getByText(/KratosSpartan/i);
+      expect(autorComentario).not.toBeNull();
+    });
   });
 });
