@@ -3,7 +3,11 @@
   min-height: 100vh;
 }
 
-.pagina-boleto {
+/* =========================================
+   PÁGINA
+========================================= */
+
+.pagina-pagamento {
   min-height: 100vh;
   box-sizing: border-box;
 
@@ -14,31 +18,42 @@
 
   background:
     radial-gradient(
-      circle at 85% 8%,
-      rgba(241, 201, 63, 0.06),
+      circle at 82% 7%,
+      rgba(20, 207, 239, 0.08),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 15% 80%,
+      rgba(35, 107, 171, 0.1),
       transparent 28%
     ),
-    #050b15;
+    linear-gradient(
+      180deg,
+      #07121e 0%,
+      #06101b 52%,
+      #050b15 100%
+    );
 
   color: #eef5fa;
 }
 
 /* =========================================
-   TOPO
+   BREADCRUMB
 ========================================= */
 
 .breadcrumb {
   max-width: 1250px;
+
   margin:
     0 auto
-    28px;
+    25px;
 
   display: flex;
   align-items: center;
 
-  gap: 11px;
+  gap: 10px;
 
-  color: #788ea2;
+  color: #71879a;
 
   font-size: 12px;
 }
@@ -47,17 +62,32 @@
   color: #28c8ee;
 
   text-decoration: none;
+
+  transition:
+    color 0.2s ease;
 }
 
-.cabecalho {
+.breadcrumb a:hover {
+  color: #72e2f7;
+}
+
+/* =========================================
+   CABEÇALHO
+========================================= */
+
+.cabecalho-pagamento {
   max-width: 1250px;
-  margin: 0 auto 28px;
+
+  margin:
+    0 auto
+    30px;
 
   display: flex;
-  align-items: flex-start;
+
+  align-items: center;
   justify-content: space-between;
 
-  gap: 25px;
+  gap: 30px;
 }
 
 .eyebrow {
@@ -65,500 +95,616 @@
 
   margin-bottom: 8px;
 
-  color: #f2ce41;
+  color: #f0ce43;
 
-  font-size: 11px;
+  font-size: 10px;
+
   font-weight: 900;
 
   letter-spacing: 0.15em;
 }
 
-.cabecalho h1,
-.sucesso-topo h1 {
+.cabecalho-pagamento h1,
+.sucesso-titulo h1 {
   margin: 0;
 
-  color: #f6fafc;
+  color: #f5fafc;
 
   font-size:
     clamp(
-      32px,
+      34px,
       4vw,
-      48px
+      50px
     );
 
   line-height: 1.05;
-}
 
-.cabecalho p,
-.sucesso-topo p {
-  max-width: 720px;
-
-  margin-top: 10px;
-
-  color: #8da2b4;
-
-  line-height: 1.6;
-}
-
-.badge {
-  flex-shrink: 0;
-
-  padding:
-    9px
-    12px;
-
-  border:
-    1px solid
-    rgba(240, 198, 60, 0.38);
-
-  border-radius: 999px;
-
-  color: #f1cd40;
-
-  font-size: 9px;
   font-weight: 900;
 }
 
+.cabecalho-pagamento p,
+.sucesso-titulo p {
+  max-width: 700px;
+
+  margin:
+    12px
+    0
+    0;
+
+  color: #8ba1b2;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
 /* =========================================
-   GRID
+   MARCA PIX
 ========================================= */
 
-.layout {
+.pix-marca {
+  min-width: 105px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  padding:
+    13px
+    18px;
+
+  border:
+    1px solid
+    rgba(41, 208, 239, 0.3);
+
+  border-radius: 12px;
+
+  background:
+    rgba(21, 204, 236, 0.05);
+
+  color: #31d1ec;
+
+  box-shadow:
+    0 10px 35px
+    rgba(0, 0, 0, 0.15);
+}
+
+.pix-marca svg {
+  width: 26px;
+  height: 26px;
+
+  flex-shrink: 0;
+}
+
+.pix-marca strong {
+  font-size: 19px;
+}
+
+/* =========================================
+   LAYOUT PRINCIPAL
+========================================= */
+
+.layout-pagamento {
   max-width: 1250px;
+
   margin: 0 auto;
 
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1.45fr)
-    minmax(330px, 0.7fr);
+    minmax(0, 1.4fr)
+    minmax(330px, 0.72fr);
 
   gap: 22px;
 
   align-items: start;
 }
 
-.area-boleto,
-.resumo {
+/* =========================================
+   PAINÉIS
+========================================= */
+
+.painel-pix,
+.painel-resumo {
+  box-sizing: border-box;
+
   border:
     1px solid
-    rgba(78, 111, 139, 0.38);
+    rgba(77, 111, 138, 0.36);
 
   border-radius: 18px;
 
   background:
     linear-gradient(
       145deg,
-      #121d2b,
-      #06111d
+      #111d2b,
+      #07121e
     );
 
   box-shadow:
     0 25px 65px
-    rgba(0, 0, 0, 0.3);
+    rgba(0, 0, 0, 0.28);
 }
 
-.area-boleto {
-  padding: 25px;
+.painel-pix {
+  padding: 28px;
 }
 
-.resumo {
+.painel-resumo {
   padding: 24px;
 
   position: sticky;
+
   top: 108px;
 
   align-self: start;
 }
 
 /* =========================================
-   BOLETO DOCUMENTO
+   TOPO DO PIX
 ========================================= */
 
-.boleto-documento,
-.documento-final {
-  box-sizing: border-box;
-
-  border:
-    1px solid
-    #c8d0d7;
-
-  background: #fff;
-
-  color: #263541;
-}
-
-.boleto-documento {
-  padding: 22px;
-}
-
-.boleto-faixa {
+.pix-topo {
   display: flex;
-  align-items: center;
 
-  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
 
-  padding-bottom: 14px;
+  gap: 20px;
+
+  padding-bottom: 21px;
 
   border-bottom:
-    2px solid
-    #1f2931;
+    1px solid
+    rgba(108, 135, 156, 0.15);
 }
 
-.marca-ficticia {
-  width: 48px;
-  height: 48px;
+.numero-etapa {
+  display: inline-flex;
 
-  display: flex;
+  width: 31px;
+  height: 31px;
+
   align-items: center;
   justify-content: center;
 
-  background: #18242d;
+  margin-bottom: 10px;
 
-  color: #fff;
+  border-radius: 9px;
 
-  font-size: 15px;
+  background:
+    rgba(240, 206, 65, 0.08);
+
+  color: #f0cf44;
+
+  font-size: 10px;
+
   font-weight: 900;
 }
 
-.boleto-faixa strong {
-  display: block;
+.pix-topo h2 {
+  margin: 0;
+
+  color: #f3f8fb;
+
+  font-size: 22px;
 }
 
-.boleto-faixa span {
-  display: block;
-
-  margin-top: 4px;
-
-  color: #687783;
-
-  font-size: 8px;
-  font-weight: 800;
-}
-
-.codigo-banco {
-  margin-left: auto;
-
-  font-size: 19px !important;
-}
-
-/* =========================================
-   AVISO
-========================================= */
-
-.boleto-aviso {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 15px;
-
+.pix-topo p {
   margin:
-    14px
+    7px
+    0
     0;
 
-  padding: 10px;
+  color: #7f95a8;
+
+  font-size: 11px;
+}
+
+.badge-falso {
+  flex-shrink: 0;
+
+  padding:
+    8px
+    11px;
 
   border:
-    1px dashed
-    #b7c0c8;
+    1px solid
+    rgba(240, 204, 61, 0.38);
 
-  background: #f5f7f8;
-}
+  border-radius: 999px;
 
-.boleto-aviso strong {
-  color: #af3535;
+  background:
+    rgba(241, 202, 61, 0.04);
+
+  color: #f0cd41;
 
   font-size: 9px;
-}
 
-.boleto-aviso span {
-  color: #6e7c87;
+  font-weight: 900;
 
-  font-size: 8px;
+  letter-spacing: 0.08em;
 }
 
 /* =========================================
-   DADOS
+   QR CODE
 ========================================= */
 
-.boleto-linhas {
-  display: grid;
+.qr-area {
+  min-height: 430px;
 
-  grid-template-columns:
-    1.5fr
-    1fr
-    1fr
-    1fr;
+  display: flex;
 
-  border-top:
-    1px solid
-    #d4dbe0;
+  flex-direction: column;
 
-  border-left:
-    1px solid
-    #d4dbe0;
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+
+  padding:
+    30px
+    20px;
 }
 
-.boleto-linhas > div {
-  min-height: 57px;
+.qr-code {
+  position: relative;
 
-  padding: 8px;
+  width: 285px;
+  height: 285px;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(29, 1fr);
+
+  padding: 13px;
 
   box-sizing: border-box;
 
-  border-right:
-    1px solid
-    #d4dbe0;
+  border:
+    10px solid
+    #fff;
 
-  border-bottom:
-    1px solid
-    #d4dbe0;
+  border-radius: 8px;
+
+  background: #fff;
+
+  box-shadow:
+    0 20px 55px
+    rgba(0, 0, 0, 0.34);
 }
 
-.boleto-linhas span,
-.boleto-linhas strong {
+.qr-linha {
+  display: grid;
+
+  grid-template-columns:
+    repeat(29, 1fr);
+
+  min-height: 0;
+}
+
+.qr-linha span {
   display: block;
+
+  min-width: 0;
+  min-height: 0;
+
+  background: #fff;
 }
 
-.boleto-linhas span {
-  color: #7d8a95;
-
-  font-size: 7px;
-
-  text-transform: uppercase;
+.qr-linha span.preta {
+  background: #10161c;
 }
 
-.boleto-linhas strong {
-  margin-top: 7px;
+.qr-centro {
+  position: absolute;
 
-  font-size: 10px;
-}
+  left: 50%;
+  top: 50%;
 
-.boleto-linhas .valor {
-  color: #087892;
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
 
-  font-size: 15px;
-}
+  width: 44px;
+  height: 44px;
 
-/* =========================================
-   LINHA DIGITÁVEL
-========================================= */
+  display: flex;
 
-.linha-principal {
-  margin-top: 15px;
-
-  padding: 10px;
+  align-items: center;
+  justify-content: center;
 
   border:
-    1px solid
-    #ccd5db;
+    3px solid
+    #fff;
 
-  background: #fafbfc;
-}
+  border-radius: 11px;
 
-.linha-principal span {
-  display: block;
+  background: #12b9d8;
 
-  margin-bottom: 7px;
+  color: #fff;
 
-  color: #74818c;
+  font-size: 9px;
 
-  font-size: 7px;
   font-weight: 900;
+
+  letter-spacing: 0.04em;
+
+  box-shadow:
+    0 4px 15px
+    rgba(0, 0, 0, 0.22);
 }
 
-.linha-principal strong {
-  display: block;
-
-  color: #1c2833;
-
-  font-family: monospace;
-
-  font-size: 12px;
-
-  line-height: 1.5;
-
-  word-break: break-all;
-}
-
-/* =========================================
-   BARRAS
-========================================= */
-
-.barcode,
-.barcode-final {
-  margin-top: 15px;
-
-  padding:
-    10px
-    3px
-    7px;
-
-  border-top:
-    1px solid
-    #ccd5db;
-}
-
-.barcode-barras {
-  height: 53px;
-
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #111 0 2px,
-      #fff 2px 4px,
-      #111 4px 5px,
-      #fff 5px 8px,
-      #111 8px 11px,
-      #fff 11px 13px
-    );
-}
-
-.barcode > span,
-.barcode-final span {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #85919a;
-
-  font-size: 7px;
+.qr-info {
+  max-width: 430px;
 
   text-align: center;
 }
 
-/* =========================================
-   RODAPÉ DO BOLETO
-========================================= */
-
-.boleto-rodape {
-  display: grid;
-
-  grid-template-columns:
-    1fr
-    1fr
-    1fr
-    1fr;
-
-  margin-top: 14px;
-
-  border-top:
-    1px solid
-    #d3d9de;
-}
-
-.boleto-rodape > div {
-  padding: 9px;
-
-  border-right:
-    1px solid
-    #d3d9de;
-}
-
-.boleto-rodape span,
-.boleto-rodape strong {
+.qr-info strong {
   display: block;
+
+  color: #dceaf1;
+
+  font-size: 12px;
 }
 
-.boleto-rodape span {
-  color: #7b8791;
+.qr-info span {
+  display: block;
 
-  font-size: 7px;
-}
+  margin-top: 6px;
 
-.boleto-rodape strong {
-  margin-top: 4px;
+  color: #748b9d;
 
-  font-size: 9px;
+  font-size: 10px;
+
+  line-height: 1.6;
 }
 
 /* =========================================
-   AÇÕES
+   SEPARADOR
 ========================================= */
 
-.boleto-acoes {
-  display: grid;
+.separador-ou {
+  display: flex;
 
-  grid-template-columns:
-    1fr
-    1fr;
+  align-items: center;
 
   gap: 12px;
 
-  margin-top: 18px;
+  margin:
+    0
+    0
+    20px;
 }
 
-.botao-copiar,
-.botao-pagar {
-  min-height: 51px;
+.separador-ou::before,
+.separador-ou::after {
+  content: '';
+
+  flex: 1;
+
+  height: 1px;
+
+  background:
+    rgba(105, 133, 154, 0.2);
+}
+
+.separador-ou span {
+  color: #60798e;
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  text-transform: uppercase;
+}
+
+/* =========================================
+   COPIA E COLA
+========================================= */
+
+.codigo-area {
+  padding-top: 2px;
+}
+
+.codigo-area label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #e0ecf2;
+
+  font-size: 11px;
+
+  font-weight: 900;
+}
+
+.codigo {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  min-height: 66px;
+
+  padding: 13px;
+
+  overflow-wrap: anywhere;
+
+  border:
+    1px solid
+    #2b485f;
+
+  border-radius: 10px;
+
+  background:
+    #06111d;
+
+  color: #9ed9e8;
+
+  font-family: monospace;
+
+  font-size: 10px;
+
+  line-height: 1.7;
+}
+
+.botao-copiar {
+  width: 100%;
+
+  min-height: 49px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 11px;
+
+  border:
+    1px solid
+    #67572c;
 
   border-radius: 9px;
+
+  background:
+    rgba(235, 196, 58, 0.05);
+
+  color: #f0cf44;
+
+  font-size: 11px;
 
   font-weight: 900;
 
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.botao-copiar {
-  border:
-    1px solid
-    #80672e;
-
+.botao-copiar:hover {
   background:
-    rgba(229, 191, 52, 0.05);
+    rgba(235, 196, 58, 0.1);
 
-  color: #efcc43;
+  transform:
+    translateY(-1px);
 }
 
 .botao-copiar svg {
   width: 18px;
-
-  vertical-align: middle;
+  height: 18px;
 
   margin-right: 7px;
 }
 
+/* =========================================
+   ERRO
+========================================= */
+
+.mensagem-erro {
+  margin-top: 13px;
+
+  padding: 12px;
+
+  border:
+    1px solid
+    rgba(238, 89, 89, 0.3);
+
+  border-radius: 9px;
+
+  background:
+    rgba(131, 26, 26, 0.14);
+
+  color: #ff9696;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+/* =========================================
+   BOTÃO PAGAMENTO
+========================================= */
+
 .botao-pagar {
+  width: 100%;
+
+  min-height: 54px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 17px;
+
   border: 0;
+
+  border-radius: 10px;
 
   background:
     linear-gradient(
       135deg,
-      #dcb022,
-      #f2d452
+      #dcb021,
+      #f3d451
     );
 
-  color: #161c21;
+  color: #151c22;
+
+  font-size: 12px;
+
+  font-weight: 900;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.botao-pagar:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 8px 22px
+    rgba(227, 191, 52, 0.2);
 }
 
 .botao-pagar:disabled {
-  opacity: 0.55;
+  opacity: 0.7;
 
   cursor: wait;
 }
 
 .botao-pagar svg {
-  width: 18px;
-
-  vertical-align: middle;
+  width: 19px;
+  height: 19px;
 
   margin-right: 7px;
 }
 
 .spinner {
-  display: inline-block;
-
   width: 17px;
   height: 17px;
 
-  margin-right: 7px;
+  display: inline-block;
+
+  margin-right: 8px;
 
   border:
     2px solid
-    rgba(0, 0, 0, 0.22);
+    rgba(0, 0, 0, 0.2);
 
-  border-top-color: #161d22;
+  border-top-color:
+    #161d22;
 
   border-radius: 50%;
 
@@ -571,91 +717,18 @@
 
 @keyframes giro {
   to {
-    transform: rotate(360deg);
+    transform:
+      rotate(360deg);
   }
-}
-
-/* =========================================
-   CPF / ERRO
-========================================= */
-
-.campo {
-  margin-top: 20px;
-}
-
-.campo label {
-  display: block;
-
-  margin-bottom: 7px;
-
-  color: #dce8f0;
-
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.campo input {
-  width: 100%;
-  min-height: 48px;
-
-  padding:
-    0
-    13px;
-
-  box-sizing: border-box;
-
-  border:
-    1px solid
-    #2b4860;
-
-  border-radius: 9px;
-
-  outline: none;
-
-  background: #06111e;
-
-  color: #fff;
-}
-
-.campo input:focus {
-  border-color: #25cbee;
-}
-
-.campo small {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #ff9191;
-
-  font-size: 10px;
-}
-
-.erro {
-  margin-top: 13px;
-
-  padding: 12px;
-
-  border:
-    1px solid
-    rgba(238, 89, 89, 0.3);
-
-  border-radius: 8px;
-
-  background:
-    rgba(131, 26, 26, 0.14);
-
-  color: #ff9696;
-
-  font-size: 11px;
 }
 
 /* =========================================
    RESUMO
 ========================================= */
 
-.resumo-topo {
+.resumo-titulo {
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 
@@ -666,32 +739,35 @@
     rgba(112, 138, 158, 0.16);
 }
 
-.resumo-topo > div:first-child > span,
+.resumo-titulo > div:first-child > span,
 .comprador > span,
-.produtos > span,
-.endereco > span {
+.itens > .label {
   color: #f1ce40;
 
   font-size: 9px;
+
   font-weight: 900;
 
   letter-spacing: 0.13em;
 }
 
-.resumo-topo h2 {
+.resumo-titulo h2 {
   margin:
     5px
     0
     0;
 
+  color: #f4f9fb;
+
   font-size: 20px;
 }
 
-.icone {
-  width: 34px;
-  height: 34px;
+.icone-resumo {
+  width: 35px;
+  height: 35px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -702,8 +778,14 @@
 
   color: #f0cf43;
 
+  font-size: 13px;
+
   font-weight: 900;
 }
+
+/* =========================================
+   COMPRADOR
+========================================= */
 
 .comprador {
   padding:
@@ -721,7 +803,9 @@
 }
 
 .comprador strong {
-  margin-top: 6px;
+  margin-top: 7px;
+
+  color: #e1edf3;
 
   font-size: 14px;
 }
@@ -729,12 +813,18 @@
 .comprador small {
   margin-top: 4px;
 
-  color: #73899b;
+  color: #71889b;
 
   font-size: 10px;
+
+  overflow-wrap: anywhere;
 }
 
-.produtos {
+/* =========================================
+   ITENS
+========================================= */
+
+.itens {
   padding:
     17px
     0;
@@ -744,15 +834,18 @@
     rgba(112, 138, 158, 0.16);
 }
 
-.produtos > span {
+.itens > .label {
   display: block;
 
-  margin-bottom: 7px;
+  margin-bottom: 6px;
 }
 
-.produto {
+.item {
   display: flex;
+
   justify-content: space-between;
+
+  align-items: flex-start;
 
   gap: 12px;
 
@@ -761,18 +854,24 @@
     0;
 }
 
-.produto strong,
-.produto small {
+.item > div {
+  min-width: 0;
+}
+
+.item strong,
+.item small {
   display: block;
 }
 
-.produto strong {
+.item div > strong {
   color: #dce9f0;
 
   font-size: 11px;
+
+  line-height: 1.45;
 }
 
-.produto small {
+.item small {
   margin-top: 3px;
 
   color: #74899b;
@@ -780,24 +879,30 @@
   font-size: 9px;
 }
 
-.produto > strong {
-  color: #cbeaf3;
+.item > strong {
+  flex-shrink: 0;
+
+  color: #c8edf5;
+
+  font-size: 10px;
 
   white-space: nowrap;
 }
 
 /* =========================================
-   TOTAL
+   FINANCEIRO
 ========================================= */
 
-.resumo-total {
+.financeiro {
   padding:
     17px
     0;
 }
 
-.resumo-total > div {
+.financeiro > div {
   display: flex;
+
+  align-items: center;
   justify-content: space-between;
 
   gap: 12px;
@@ -806,26 +911,26 @@
     5px
     0;
 
-  color: #7f93a5;
+  color: #7d93a5;
 
   font-size: 11px;
 }
 
-.resumo-total strong {
-  color: #e2edf3;
+.financeiro > div strong {
+  color: #e0edf3;
 }
 
-.total-final {
+.financeiro .total {
   margin-top: 7px;
 
-  padding-top: 13px !important;
+  padding-top: 13px;
 
   border-top:
     1px solid
     rgba(112, 138, 158, 0.16);
 }
 
-.total-final strong {
+.financeiro .total strong {
   color: #f2cf43;
 
   font-size: 21px;
@@ -835,59 +940,64 @@
    STATUS / ENDEREÇO
 ========================================= */
 
-.status,
+.status-resumo,
 .endereco {
   display: flex;
+
   align-items: flex-start;
 
   gap: 10px;
 
-  margin-top: 8px;
+  margin-top: 9px;
 
   padding: 12px;
 
   border-radius: 9px;
 
   background:
-    rgba(239, 200, 54, 0.04);
+    rgba(239, 200, 54, 0.035);
 }
 
 .status-icone {
-  width: 27px;
-  height: 27px;
+  width: 28px;
+  height: 28px;
 
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
   border-radius: 7px;
 
   background:
-    rgba(235, 195, 52, 0.12);
+    rgba(235, 195, 52, 0.11);
 
   color: #f3cf42;
 
-  font-size: 11px;
+  font-size: 10px;
+
   font-weight: 900;
 }
 
-.status strong,
-.status small,
+.status-resumo strong,
+.status-resumo small,
 .endereco strong,
 .endereco small {
   display: block;
 }
 
-.status strong,
+.status-resumo strong,
 .endereco strong {
-  color: #dbe6ed;
+  color: #dbe7ed;
 
   font-size: 10px;
+
+  line-height: 1.45;
 }
 
-.status small,
+.status-resumo small,
 .endereco small {
   margin-top: 4px;
 
@@ -908,8 +1018,9 @@
   margin: 0 auto;
 }
 
-.sucesso-topo {
+.sucesso-titulo {
   display: flex;
+
   align-items: center;
 
   gap: 20px;
@@ -924,12 +1035,13 @@
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
   border:
     1px solid
-    #55d9aa;
+    #50d5a6;
 
   border-radius: 50%;
 
@@ -939,19 +1051,37 @@
   color: #45dbab;
 
   font-size: 28px;
+
   font-weight: 900;
 }
 
 /* =========================================
-   DOCUMENTO FINAL
+   COMPROVANTE
 ========================================= */
 
-.documento-final {
-  padding: 27px;
+.comprovante {
+  box-sizing: border-box;
+
+  padding: 28px;
+
+  border:
+    1px solid
+    #c9d3da;
+
+  border-radius: 5px;
+
+  background: #fff;
+
+  color: #263541;
+
+  box-shadow:
+    0 20px 50px
+    rgba(0, 0, 0, 0.24);
 }
 
-.documento-cabecalho {
+.comprovante-topo {
   display: flex;
+
   align-items: flex-start;
   justify-content: space-between;
 
@@ -961,125 +1091,98 @@
 
   border-bottom:
     2px solid
-    #222d35;
+    #24303a;
 }
 
-.marca {
-  display: flex;
-  align-items: center;
+.comprovante-topo > div:first-child > span {
+  display: block;
 
-  gap: 11px;
+  color: #697883;
+
+  font-size: 8px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.12em;
 }
 
-.marca-simbolo {
-  width: 42px;
-  height: 42px;
+.comprovante-topo h2 {
+  margin:
+    6px
+    0
+    4px;
+
+  color: #1f2c36;
+
+  font-size: 21px;
+}
+
+.comprovante-topo > div:first-child > strong {
+  color: #9b3b3b;
+
+  font-size: 8px;
+}
+
+.status-pago {
+  min-width: 72px;
 
   display: flex;
+
+  flex-direction: column;
+
   align-items: center;
   justify-content: center;
 
-  background: #18242d;
-
-  color: #fff;
-
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.marca strong,
-.marca span {
-  display: block;
-}
-
-.marca strong {
-  font-size: 14px;
-}
-
-.marca span {
-  margin-top: 4px;
-
-  color: #71808c;
-
-  font-size: 8px;
-  font-weight: 900;
-}
-
-.pago {
-  min-width: 80px;
-
-  padding: 9px;
+  padding: 10px;
 
   border:
     1px solid
-    #74d4aa;
+    #6bcda6;
 
-  border-radius: 9px;
+  border-radius: 8px;
 
-  background: #f2fff9;
+  background: #f1fff8;
 
-  text-align: center;
-}
+  color: #1d9165;
 
-.pago span,
-.pago strong,
-.pago small {
-  display: block;
-}
+  font-size: 21px;
 
-.pago span {
-  color: #22a16e;
-
-  font-size: 18px;
-}
-
-.pago strong {
-  color: #188c5e;
-
-  font-size: 10px;
-}
-
-.pago small {
-  margin-top: 2px;
-
-  color: #6da18b;
-
-  font-size: 6px;
-}
-
-/* =========================================
-   CARIMBO
-========================================= */
-
-.carimbo {
-  display: inline-block;
-
-  margin:
-    14px
-    0;
-
-  padding:
-    7px
-    11px;
-
-  border:
-    2px solid
-    rgba(186, 47, 47, 0.58);
-
-  color: #b63434;
-
-  transform:
-    rotate(-2deg);
-
-  font-size: 9px;
   font-weight: 900;
 }
 
+.status-pago span {
+  margin-top: 2px;
+
+  color: #188c5e;
+
+  font-size: 8px;
+}
+
+.aviso {
+  margin:
+    15px
+    0;
+
+  padding: 11px;
+
+  border:
+    1px dashed
+    #c8d0d7;
+
+  background: #f5f7f8;
+
+  color: #6b7a85;
+
+  font-size: 8px;
+
+  line-height: 1.55;
+}
+
 /* =========================================
-   DADOS FINAIS
+   METADADOS
 ========================================= */
 
-.dados-boleto {
+.metadados {
   display: grid;
 
   grid-template-columns:
@@ -1087,152 +1190,94 @@
 
   border-top:
     1px solid
-    #ccd5dc;
+    #d3dbe0;
 
   border-left:
     1px solid
-    #ccd5dc;
+    #d3dbe0;
 }
 
-.dados-boleto > div {
-  min-height: 60px;
+.metadados > div {
+  min-height: 66px;
 
-  padding: 9px;
+  padding: 10px;
 
   border-right:
     1px solid
-    #ccd5dc;
+    #d3dbe0;
 
   border-bottom:
     1px solid
-    #ccd5dc;
+    #d3dbe0;
 }
 
-.dados-boleto span,
-.beneficiario span,
-.payer span,
-.nota-fiscal span {
+.metadados span,
+.dados-comprador span {
   display: block;
 
-  color: #7b8994;
+  color: #788791;
 
   font-size: 7px;
 
   text-transform: uppercase;
 }
 
-.dados-boleto strong,
-.beneficiario strong,
-.payer strong,
-.nota-fiscal strong {
+.metadados strong,
+.dados-comprador strong {
   display: block;
 
   margin-top: 6px;
 
+  color: #283640;
+
   font-size: 10px;
+
+  overflow-wrap: anywhere;
 }
 
-.beneficiario {
-  display: grid;
+/* =========================================
+   SEÇÕES
+========================================= */
 
-  grid-template-columns:
-    1fr
-    1fr;
-
-  gap: 20px;
-
+.comprovante section {
   padding:
-    15px
+    17px
     0;
 
   border-bottom:
     1px solid
-    #ccd5dc;
+    #d4dce1;
 }
 
-.payer {
-  padding:
-    15px
-    0;
-
-  border-bottom:
-    1px solid
-    #ccd5dc;
-}
-
-.payer h3,
-.itens-final h3 {
+.comprovante section h3 {
   margin:
     0
     0
     11px;
+
+  color: #293842;
 
   font-size: 10px;
 
   letter-spacing: 0.08em;
 }
 
-.payer-grid {
+.dados-comprador {
   display: grid;
 
   grid-template-columns:
     2fr
-    1fr
-    2fr;
+    2fr
+    1.3fr;
 
   gap: 18px;
 }
 
-.linha-destaque {
-  margin-top: 15px;
+/* =========================================
+   ITENS FINAIS
+========================================= */
 
-  padding: 12px;
-
-  border:
-    1px solid
-    #c6cfd6;
-
-  background: #f8fafb;
-}
-
-.linha-destaque span {
-  display: block;
-
-  margin-bottom: 8px;
-
-  color: #7a8791;
-
-  font-size: 7px;
-  font-weight: 900;
-}
-
-.linha-destaque strong {
-  display: block;
-
-  font-family: monospace;
-
-  font-size: 12px;
-
-  line-height: 1.55;
-
-  word-break: break-all;
-}
-
-.barcode-final {
-  border-top: 0;
-}
-
-.itens-final {
-  padding:
-    16px
-    0;
-
-  border-bottom:
-    1px solid
-    #ccd5dc;
-}
-
-.item-final {
+.linha-item {
   display: grid;
 
   grid-template-columns:
@@ -1243,66 +1288,124 @@
   gap: 10px;
 
   padding:
-    8px
+    9px
     0;
 
   border-top:
     1px solid
     #e5eaee;
 
+  color: #30404b;
+
   font-size: 10px;
 }
 
-.item-final strong {
+.linha-item strong {
+  color: #24333d;
+
   text-align: right;
 }
 
-.total-final-documento {
+/* =========================================
+   TOTAL PAGO
+========================================= */
+
+.total-pago {
   display: flex;
-  justify-content: flex-end;
+
   align-items: center;
+  justify-content: flex-end;
 
   gap: 22px;
 
   padding:
     20px
     0;
+
+  border-bottom:
+    1px solid
+    #ccd5dc;
 }
 
-.total-final-documento span {
+.total-pago span {
+  color: #364650;
+
   font-size: 9px;
+
   font-weight: 900;
 }
 
-.total-final-documento strong {
+.total-pago strong {
   color: #087b99;
 
   font-size: 25px;
 }
 
-.nota-fiscal {
-  display: grid;
+/* =========================================
+   QR DO COMPROVANTE
+========================================= */
 
-  grid-template-columns:
-    2fr
-    1fr
-    1fr;
+.qr-comprovante {
+  display: flex;
 
-  gap: 13px;
+  align-items: center;
 
-  padding-top: 14px;
+  gap: 18px;
 
-  border-top:
-    1px solid
-    #ccd5dc;
+  padding-top: 18px;
+}
+
+.qr-comprovante > div:last-child {
+  min-width: 0;
+}
+
+.qr-comprovante strong {
+  display: block;
+
+  color: #2d3d46;
+
+  font-size: 11px;
+}
+
+.qr-comprovante p {
+  margin:
+    5px
+    0
+    0;
+
+  color: #74818b;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+.qr-code.pequeno {
+  width: 110px;
+  height: 110px;
+
+  flex-shrink: 0;
+
+  padding: 5px;
+
+  border: 5px solid #fff;
+
+  box-shadow:
+    0 5px 18px
+    rgba(0, 0, 0, 0.14);
+}
+
+.qr-code.pequeno .qr-centro {
+  display: none;
 }
 
 /* =========================================
-   AÇÕES
+   AÇÕES FINAIS
 ========================================= */
 
 .acoes {
   display: flex;
+
   justify-content: flex-end;
 
   gap: 10px;
@@ -1315,6 +1418,7 @@
   min-height: 44px;
 
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
@@ -1325,6 +1429,7 @@
   border-radius: 8px;
 
   font-size: 11px;
+
   font-weight: 800;
 
   text-decoration: none;
@@ -1343,65 +1448,129 @@
 }
 
 .botao-continuar {
+  border: 0;
+
   background: #10b8d8;
 
   color: #fff;
 }
 
 /* =========================================
-   RESPONSIVO
+   TABLET
 ========================================= */
 
 @media (max-width: 950px) {
-  .layout {
+  .layout-pagamento {
     grid-template-columns: 1fr;
   }
 
-  .resumo {
+  .painel-resumo {
     position: static;
   }
 
-  .dados-boleto {
+  .qr-area {
+    min-height: 380px;
+  }
+
+  .metadados {
+    grid-template-columns:
+      1fr
+      1fr;
+  }
+
+  .dados-comprador {
     grid-template-columns:
       1fr
       1fr;
   }
 }
 
+/* =========================================
+   CELULAR
+========================================= */
+
 @media (max-width: 650px) {
-  .pagina-boleto {
+  .pagina-pagamento {
     padding:
       100px
       16px
       45px;
   }
 
-  .cabecalho,
-  .sucesso-topo,
-  .documento-cabecalho {
+  .cabecalho-pagamento {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .pix-marca {
+    align-self: flex-start;
+  }
+
+  .pix-topo {
     flex-direction: column;
   }
 
-  .boleto-linhas,
-  .dados-boleto,
-  .beneficiario,
-  .payer-grid,
-  .nota-fiscal {
+  .badge-falso {
+    align-self: flex-start;
+  }
+
+  .painel-pix,
+  .painel-resumo,
+  .comprovante {
+    padding: 18px;
+  }
+
+  .qr-area {
+    padding:
+      22px
+      4px;
+
+    min-height: 0;
+  }
+
+  .qr-code {
+    width: min(
+      285px,
+      78vw
+    );
+
+    height: min(
+      285px,
+      78vw
+    );
+  }
+
+  .metadados,
+  .dados-comprador {
     grid-template-columns: 1fr;
   }
 
-  .boleto-acoes {
-    grid-template-columns: 1fr;
+  .comprovante-topo {
+    flex-direction: column;
   }
 
-  .item-final {
+  .status-pago {
+    align-self: flex-start;
+  }
+
+  .linha-item {
     grid-template-columns:
       1fr
       55px;
   }
 
-  .item-final strong {
+  .linha-item strong {
+    grid-column: 2;
+    grid-row: 1;
+
     text-align: right;
+  }
+
+  .qr-comprovante {
+    flex-direction: column;
+
+    align-items: flex-start;
   }
 
   .acoes {
@@ -1413,27 +1582,39 @@
     width: 100%;
   }
 
-  .boleto-documento,
-  .documento-final {
-    padding: 17px;
+  .sucesso-titulo {
+    align-items: flex-start;
+  }
+
+  .selo {
+    width: 56px;
+    height: 56px;
+
+    font-size: 23px;
   }
 }
 
+/* =========================================
+   IMPRESSÃO
+========================================= */
+
 @media print {
-  .pagina-boleto {
+  .pagina-pagamento {
     padding: 0;
 
     background: #fff;
   }
 
   .breadcrumb,
-  .cabecalho,
-  .sucesso-topo,
+  .cabecalho-pagamento,
+  .sucesso-titulo,
   .acoes {
     display: none !important;
   }
 
-  .documento-final {
+  .comprovante {
+    border: 0;
+
     box-shadow: none;
   }
 }

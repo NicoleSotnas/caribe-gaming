@@ -7,7 +7,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 To start a local development server, run:
 
 ```bash
-npm.cmd start
+npm start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
@@ -23,16 +23,16 @@ página hospedada pelo Mercado Pago, sem que dados de cartão entrem no Angular 
 2. Copie o Access Token de teste. Ele nunca deve ser colocado em `src/` ou enviado ao navegador.
 3. Gere o build e inicie o servidor SSR com as variáveis abaixo no PowerShell:
 
-```powershell
-$env:MERCADOPAGO_ACCESS_TOKEN = "TEST-seu-token"
-$env:PUBLIC_APP_URL = "http://localhost:4200"
-$env:MERCADOPAGO_WEBHOOK_URL = "https://sua-url-publica/api/mercado-pago/webhook"
-npm.cmd run build
-npm.cmd run serve:ssr:caribe-gaming
+```bash
+export MERCADOPAGO_ACCESS_TOKEN="TEST-seu-token"
+export PUBLIC_APP_URL="http://localhost:4200"
+export MERCADOPAGO_WEBHOOK_URL="https://sua-url-publica/api/mercado-pago/webhook"
+npm run build
+npm run serve:ssr:caribe-gaming
 ```
 
-Em outro terminal, execute `npm.cmd start`. O proxy em `proxy.conf.json` encaminha `/api` para o
-servidor SSR em `http://localhost:4000`.
+Em outro terminal, execute `npm start`. Para iniciar frontend e servidor SSR juntos, use `npm run dev`.
+O proxy em `proxy.conf.json` encaminha `/api` para o servidor SSR em `http://localhost:4000`.
 
 O botão do checkout cria uma preferência no servidor e redireciona para `init_point`. Ao voltar,
 o servidor consulta o `payment_id` na API do Mercado Pago antes de limpar o carrinho.
