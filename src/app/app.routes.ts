@@ -1,155 +1,310 @@
 import { Routes } from '@angular/router';
+
 import { Login } from './features/login/login';
 import { Perfil } from './features/perfil/perfil';
-import { Home } from './home/home/home';
-import { Produtos } from './features/produtos/produtos';
 import { Carrinho } from './features/carrinho/carrinho';
 import { Checkout } from './features/checkout/checkout/checkout';
-import { Thewitcher } from './features/produtos/thewitcher3/thewitcher/thewitcher';
+import { Produtos } from './features/produtos/produtos';
 import { Admin } from './features/admin/admin';
-import { adminGuard } from './core/guards/admin-guard';
 import { authGuard } from './core/guards/auth-guard';
-import { TheSims } from './features/produtos/thesims4/thesims/thesims';
-import { EldenRing } from './features/produtos/elden-ring/elden-ring';
-import { GrandTheftAutoV } from './features/produtos/grandtheftautov/grandtheftautov/grandtheftautov';
-import { GodOfWar } from './features/produtos/godofwar/godofwar/godofwar';
-import { MarvelsSpiderManRemastered } from './features/produtos/marvels-spider-man-remastered/marvels-spider-man-remastered';
-import { CallOfDutyModernWarfareIi } from './features/produtos/call-of-duty-modern-warfare-ii/call-of-duty-modern-warfare-ii';
-import { APlagueTale } from './features/produtos/a-plague-tale/a-plague-tale';
-import { GodOfWarRagnarok } from './features/produtos/god-of-war-ragnarok/god-of-war-ragnarok';
-import { HollowKnight } from './features/produtos/hollow-knight/hollow-knight';
-import { RedDeadRedemption2 } from './features/produtos/red-dead-redemption-2/red-dead-redemption-2';
-import { AssassinsCreedBlackFlag } from './features/produtos/assassins-creed-black-flag/assassins-creed-black-flag';
-import { Yakuza } from './features/produtos/yakuza/yakuza';
-import { Fifa } from './features/produtos/fifa/fifa';
-import { LifeIsStrange } from './features/produtos/life-is-strange/life-is-strange';
-import { TheLastOfUs } from './features/produtos/the-last-of-us/the-last-of-us';
-import { F1 } from './features/produtos/f1/f1';
-import { Cyberpunk2077 } from './features/produtos/cyberpunk-2077/cyberpunk-2077';
-import { MarvelRivals } from './features/produtos/marvel-rivals/marvel-rivals';
-import { TheLastOfUsPartii } from './features/produtos/the-last-of-us-part-ii/the-last-of-us-part-ii';
-import { DetalheJogo } from './features/produtos/detalhe-jogo/detalhe-jogo';
-import { Sobrenos } from './features/sobrenos/sobrenos'; // <-- Importe o componente (ajuste o caminho se necessário)
+import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./home/home/home').then((m) => m.Home),
+    loadComponent: () =>
+      import('./home/home/home').then(
+        (m) => m.Home,
+      ),
   },
+
   {
-    path: 'sobre-nos', // <-- Rota adicionada
-    component: Sobrenos,
+    path: 'sobre-nos',
+    loadComponent: () =>
+      import('./features/sobrenos/sobrenos').then(
+        (m) => m.Sobrenos,
+      ),
   },
+
   {
     path: 'jogos',
     component: Produtos,
   },
+
   {
     path: 'jogos/grand-theft-auto-v',
-    component: GrandTheftAutoV,
+    loadComponent: () =>
+      import(
+        './features/produtos/grandtheftautov/grandtheftautov/grandtheftautov'
+      ).then(
+        (m) => m.GrandTheftAutoV,
+      ),
   },
+
   {
     path: 'jogos/the-witcher-3',
-    component: Thewitcher,
+    loadComponent: () =>
+      import(
+        './features/produtos/thewitcher3/thewitcher/thewitcher'
+      ).then(
+        (m) => m.Thewitcher,
+      ),
   },
+
   {
     path: 'jogos/the-sims-4',
-    component: TheSims,
+    loadComponent: () =>
+      import(
+        './features/produtos/thesims4/thesims/thesims'
+      ).then(
+        (m) => m.TheSims,
+      ),
   },
+
   {
     path: 'jogos/god-of-war',
-    component: GodOfWar,
+    loadComponent: () =>
+      import(
+        './features/produtos/godofwar/godofwar/godofwar'
+      ).then(
+        (m) => m.GodOfWar,
+      ),
   },
+
   {
     path: 'jogos/marvels-spider-man-remastered',
-    component: MarvelsSpiderManRemastered,
+    loadComponent: () =>
+      import(
+        './features/produtos/marvels-spider-man-remastered/marvels-spider-man-remastered'
+      ).then(
+        (m) => m.MarvelsSpiderManRemastered,
+      ),
   },
+
   {
     path: 'jogos/call-of-duty-modern-warfare-ii',
-    component: CallOfDutyModernWarfareIi,
+    loadComponent: () =>
+      import(
+        './features/produtos/call-of-duty-modern-warfare-ii/call-of-duty-modern-warfare-ii'
+      ).then(
+        (m) => m.CallOfDutyModernWarfareIi,
+      ),
   },
+
   {
     path: 'jogos/a-plague-tale',
-    component: APlagueTale,
+    loadComponent: () =>
+      import(
+        './features/produtos/a-plague-tale/a-plague-tale'
+      ).then(
+        (m) => m.APlagueTale,
+      ),
   },
+
   {
     path: 'jogos/god-of-war-ragnarök',
-    component: GodOfWarRagnarok,
+    loadComponent: () =>
+      import(
+        './features/produtos/god-of-war-ragnarok/god-of-war-ragnarok'
+      ).then(
+        (m) => m.GodOfWarRagnarok,
+      ),
   },
+
   {
     path: 'jogos/hollow-knight',
-    component: HollowKnight,
+    loadComponent: () =>
+      import(
+        './features/produtos/hollow-knight/hollow-knight'
+      ).then(
+        (m) => m.HollowKnight,
+      ),
   },
+
   {
     path: 'jogos/the-last-of-us-II',
-    component: TheLastOfUsPartii,
+    loadComponent: () =>
+      import(
+        './features/produtos/the-last-of-us-part-ii/the-last-of-us-part-ii'
+      ).then(
+        (m) => m.TheLastOfUsPartii,
+      ),
   },
+
   {
     path: 'jogos/red-dead-redemption-2',
-    component: RedDeadRedemption2,
+    loadComponent: () =>
+      import(
+        './features/produtos/red-dead-redemption-2/red-dead-redemption-2'
+      ).then(
+        (m) => m.RedDeadRedemption2,
+      ),
   },
+
   {
     path: 'jogos/assassins-creed-iv-black-flag',
-    component: AssassinsCreedBlackFlag,
+    loadComponent: () =>
+      import(
+        './features/produtos/assassins-creed-black-flag/assassins-creed-black-flag'
+      ).then(
+        (m) => m.AssassinsCreedBlackFlag,
+      ),
   },
+
   {
     path: 'jogos/yakuza-0',
-    component: Yakuza,
+    loadComponent: () =>
+      import(
+        './features/produtos/yakuza/yakuza'
+      ).then(
+        (m) => m.Yakuza,
+      ),
   },
+
   {
     path: 'jogos/ea-sports-fc-24',
-    component: Fifa,
+    loadComponent: () =>
+      import(
+        './features/produtos/fifa/fifa'
+      ).then(
+        (m) => m.Fifa,
+      ),
   },
+
   {
     path: 'jogos/life-is-strange',
-    component: LifeIsStrange,
+    loadComponent: () =>
+      import(
+        './features/produtos/life-is-strange/life-is-strange'
+      ).then(
+        (m) => m.LifeIsStrange,
+      ),
   },
+
   {
     path: 'jogos/the-last-of-Us',
-    component: TheLastOfUs,
+    loadComponent: () =>
+      import(
+        './features/produtos/the-last-of-us/the-last-of-us'
+      ).then(
+        (m) => m.TheLastOfUs,
+      ),
   },
+
   {
     path: 'jogos/f1-23',
-    component: F1,
+    loadComponent: () =>
+      import(
+        './features/produtos/f1/f1'
+      ).then(
+        (m) => m.F1,
+      ),
   },
+
   {
     path: 'jogos/elden-ring',
-    component: EldenRing,
+    loadComponent: () =>
+      import(
+        './features/produtos/elden-ring/elden-ring'
+      ).then(
+        (m) => m.EldenRing,
+      ),
   },
+
   {
     path: 'jogos/cyberpunk-2077',
-    component: Cyberpunk2077,
+    loadComponent: () =>
+      import(
+        './features/produtos/cyberpunk-2077/cyberpunk-2077'
+      ).then(
+        (m) => m.Cyberpunk2077,
+      ),
   },
+
   {
     path: 'jogos/marvel-rivals',
-    component: MarvelRivals,
+    loadComponent: () =>
+      import(
+        './features/produtos/marvel-rivals/marvel-rivals'
+      ).then(
+        (m) => m.MarvelRivals,
+      ),
   },
+
   {
     path: 'login',
     component: Login,
   },
+
   {
     path: 'registro',
-    loadComponent: () => import('./features/login/registro').then((m) => m.Registro),
+    loadComponent: () =>
+      import('./features/login/registro').then(
+        (m) => m.Registro,
+      ),
   },
+
   {
     path: 'carrinho',
-    loadComponent: () => import('./features/carrinho/carrinho').then((m) => m.Carrinho),
+    loadComponent: () =>
+      import('./features/carrinho/carrinho').then(
+        (m) => m.Carrinho,
+      ),
   },
+
   {
     path: 'checkout',
     component: Checkout,
     canActivate: [authGuard],
   },
+
+  {
+    path: 'checkout/pagamento-pix',
+    loadComponent: () =>
+      import(
+        './features/checkout/checkout/pagamento-pix/pagamento-pix'
+      ).then(
+        (m) => m.PagamentoPix,
+      ),
+    canActivate: [authGuard],
+  },
+
+  {
+    path: 'checkout/pagamento-cartao',
+    loadComponent: () =>
+      import(
+        './features/checkout/checkout/pagamento-cartao/pagamento-cartao'
+      ).then(
+        (m) => m.PagamentoCartao,
+      ),
+    canActivate: [authGuard],
+  },
+
+  {
+    path: 'checkout/pagamento-boleto',
+    loadComponent: () =>
+      import(
+        './features/checkout/checkout/pagamento-boleto/pagamento-boleto'
+      ).then(
+        (m) => m.PagamentoBoleto,
+      ),
+    canActivate: [authGuard],
+  },
+
   {
     path: 'admin',
     component: Admin,
     canActivate: [adminGuard],
   },
+
   {
     path: 'perfil',
     component: Perfil,
     canActivate: [authGuard],
   },
-  { path: '**', redirectTo: '' },
+
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

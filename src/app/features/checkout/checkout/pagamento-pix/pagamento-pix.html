@@ -1,0 +1,524 @@
+<div class="pagina-pagamento">
+  <div class="breadcrumb">
+    <a routerLink="/checkout">
+      ← Voltar ao checkout
+    </a>
+
+    <span>/</span>
+    <span>PIX</span>
+  </div>
+
+  @if (!sucesso()) {
+    <div class="cabecalho-pagamento">
+      <div>
+        <span class="eyebrow">
+          PAGAMENTO SIMULADO
+        </span>
+
+        <h1>
+          Pagamento via Pix
+        </h1>
+
+        <p>
+          QR Code e Pix Copia e Cola fictícios para
+          demonstrar uma experiência de pagamento completa.
+        </p>
+      </div>
+
+      <div class="pix-marca">
+        <svg
+          viewBox="0 0 40 40"
+          aria-hidden="true"
+        >
+          <path
+            d="M11.6 10.3 17 4.9a4.3 4.3 0 0 1 6.1 0l5.3 5.4m.3 19.5L23 35.1a4.3 4.3 0 0 1-6.1 0l-5.3-5.3M4.9 17l5.4-5.4a4.3 4.3 0 0 1 6.1 0l3.7 3.7m15.1 7.4-5.4 5.3a4.3 4.3 0 0 1-6.1 0l-3.7-3.7"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3.4"
+          />
+
+          <path
+            d="m14 20 6-6 6 6-6 6-6-6Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3.2"
+          />
+        </svg>
+
+        <strong>Pix</strong>
+      </div>
+    </div>
+
+    <div class="layout-pagamento">
+      <section class="painel-pix">
+        <div class="pix-topo">
+          <div>
+            <span class="numero-etapa">
+              01
+            </span>
+
+            <h2>
+              Escaneie o QR Code
+            </h2>
+
+            <p>
+              Este código é propositalmente fictício.
+            </p>
+          </div>
+
+          <span class="badge-falso">
+            QR CODE SIMULADO
+          </span>
+        </div>
+
+        <div class="qr-area">
+          <div class="qr-code">
+            <div
+              class="qr-linha"
+              *ngFor="let linha of qrCode"
+            >
+              <span
+                *ngFor="let celula of linha"
+                [class.preta]="celula"
+              ></span>
+            </div>
+
+            <div class="qr-centro">
+              <strong>PIX</strong>
+            </div>
+          </div>
+
+          <div class="qr-info">
+            <strong>
+              Abra o aplicativo do banco
+            </strong>
+
+            <span>
+              Na simulação, basta clicar em
+              "Simular pagamento aprovado".
+            </span>
+          </div>
+        </div>
+
+        <div class="separador-ou">
+          <span>ou</span>
+        </div>
+
+        <div class="codigo-area">
+          <label>
+            Pix Copia e Cola
+          </label>
+
+          <div class="codigo">
+            {{ codigoPix }}
+          </div>
+
+          <button
+            type="button"
+            class="botao-copiar"
+            (click)="copiarPix()"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <rect
+                x="8"
+                y="8"
+                width="11"
+                height="11"
+                rx="2"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+
+              <path
+                d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+            </svg>
+
+            {{
+              codigoCopiado()
+                ? 'Código copiado'
+                : 'Copiar código Pix'
+            }}
+          </button>
+        </div>
+
+        <div class="campo">
+          <label for="cpf">
+            CPF do comprador
+          </label>
+
+          <input
+            id="cpf"
+            type="text"
+            inputmode="numeric"
+            maxlength="14"
+            formControlName="cpf"
+            placeholder="000.000.000-00"
+            autocomplete="off"
+            [formControl]="formulario.controls.cpf"
+            (input)="mascararCpf($event)"
+          />
+
+          @if (
+            formulario.controls.cpf.touched &&
+            formulario.controls.cpf.invalid
+          ) {
+            <small>
+              Informe um CPF válido.
+            </small>
+          }
+        </div>
+
+        @if (erro()) {
+          <div class="mensagem-erro">
+            {{ erro() }}
+          </div>
+        }
+
+        <button
+          class="botao-pagar"
+          type="button"
+          [disabled]="processando()"
+          (click)="simularPagamento()"
+        >
+          @if (processando()) {
+            <span class="spinner"></span>
+            Confirmando pagamento...
+          } @else {
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="m5 12 4 4L19 6"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+            </svg>
+
+            Simular pagamento aprovado
+          }
+        </button>
+      </section>
+
+      <aside class="painel-resumo">
+        <div class="resumo-titulo">
+          <div>
+            <span>
+              RESUMO DA COMPRA
+            </span>
+
+            <h2>
+              Seu pedido
+            </h2>
+          </div>
+
+          <div class="icone-resumo">
+            <span>✓</span>
+          </div>
+        </div>
+
+        <div class="comprador">
+          <span>COMPRADOR</span>
+
+          <strong>
+            {{ compradorLogado() }}
+          </strong>
+
+          <small>
+            {{ emailLogado() }}
+          </small>
+        </div>
+
+        <div class="itens">
+          <span class="label">
+            ITENS DO CARRINHO
+          </span>
+
+          <div
+            class="item"
+            *ngFor="
+              let item of carrinhoFacade.itens()
+            "
+          >
+            <div>
+              <strong>
+                {{ item.nome }}
+              </strong>
+
+              <small>
+                {{ item.quantidade || 1 }} ×
+                {{ formatarMoeda(item.preco) }}
+              </small>
+            </div>
+
+            <strong>
+              {{
+                formatarMoeda(
+                  item.preco *
+                  (item.quantidade || 1)
+                )
+              }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="financeiro">
+          <div>
+            <span>
+              Itens
+            </span>
+
+            <strong>
+              {{ quantidadeTotalItens() }}
+            </strong>
+          </div>
+
+          <div class="total">
+            <span>
+              Total da compra
+            </span>
+
+            <strong>
+              {{
+                formatarMoeda(
+                  carrinhoFacade.total()
+                )
+              }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="status-resumo">
+          <span>PIX</span>
+
+          <div>
+            <strong>
+              Pagamento instantâneo • Simulação
+            </strong>
+
+            <small>
+              QR Code e Pix Copia e Cola fictícios.
+            </small>
+          </div>
+        </div>
+
+        <div class="endereco">
+          <span>
+            CHECKOUT
+          </span>
+
+          <strong>
+            Endereço de cobrança validado
+          </strong>
+
+          <small>
+            A forma de pagamento só foi liberada depois
+            da confirmação do endereço no checkout.
+          </small>
+        </div>
+      </aside>
+    </div>
+  } @else {
+    <div class="sucesso">
+      <div class="sucesso-titulo">
+        <div class="selo">
+          ✓
+        </div>
+
+        <div>
+          <span class="eyebrow">
+            SIMULAÇÃO CONCLUÍDA
+          </span>
+
+          <h1>
+            Pix aprovado
+          </h1>
+
+          <p>
+            Pagamento fictício confirmado com sucesso.
+          </p>
+        </div>
+      </div>
+
+      <article class="comprovante">
+        <div class="comprovante-topo">
+          <div>
+            <span>
+              CARIBE'S GAMING
+            </span>
+
+            <h2>
+              Comprovante de pagamento
+            </h2>
+
+            <strong>
+              PIX SIMULADO • SEM VALIDADE FISCAL
+            </strong>
+          </div>
+
+          <div class="status-pago">
+            ✓
+            <span>PAGO</span>
+          </div>
+        </div>
+
+        <div class="aviso">
+          Documento criado exclusivamente para
+          demonstração do MVP. Não representa um
+          comprovante bancário real.
+        </div>
+
+        <div class="metadados">
+          <div>
+            <span>Pedido</span>
+            <strong>{{ numeroPedido() }}</strong>
+          </div>
+
+          <div>
+            <span>Nota fiscal</span>
+            <strong>
+              {{ numeroNotaFiscal() }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Autorização</span>
+            <strong>
+              {{ codigoAutorizacao() }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Data</span>
+            <strong>
+              {{ dataPagamento() }}
+            </strong>
+          </div>
+        </div>
+
+        <section>
+          <h3>COMPRADOR</h3>
+
+          <div class="dados-comprador">
+            <div>
+              <span>Nome</span>
+              <strong>
+                {{ nomeComprador() }}
+              </strong>
+            </div>
+
+            <div>
+              <span>E-mail</span>
+              <strong>
+                {{ emailComprador() }}
+              </strong>
+            </div>
+
+            <div>
+              <span>CPF</span>
+              <strong>
+                {{ cpfComprador() }}
+              </strong>
+            </div>
+
+            <div>
+              <span>Forma</span>
+              <strong>Pix • Simulação</strong>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h3>ITENS DA COMPRA</h3>
+
+          <div
+            class="linha-item"
+            *ngFor="let item of itensCompra()"
+          >
+            <span>
+              {{ item.nome }}
+            </span>
+
+            <span>
+              {{ item.quantidade || 1 }} ×
+            </span>
+
+            <strong>
+              {{
+                formatarMoeda(
+                  item.preco *
+                  (item.quantidade || 1)
+                )
+              }}
+            </strong>
+          </div>
+        </section>
+
+        <div class="total-pago">
+          <span>
+            TOTAL PAGO
+          </span>
+
+          <strong>
+            {{ formatarMoeda(totalCompra()) }}
+          </strong>
+        </div>
+
+        <div class="qr-comprovante">
+          <div class="qr-code pequeno">
+            <div
+              class="qr-linha"
+              *ngFor="let linha of qrCode"
+            >
+              <span
+                *ngFor="let celula of linha"
+                [class.preta]="celula"
+              ></span>
+            </div>
+          </div>
+
+          <div>
+            <strong>
+              QR Code demonstrativo
+            </strong>
+
+            <p>
+              Não realiza cobrança e não representa
+              uma transação financeira.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <div class="acoes">
+        <button
+          type="button"
+          class="botao-imprimir"
+          (click)="imprimirComprovante()"
+        >
+          Imprimir comprovante
+        </button>
+
+        <a
+          routerLink="/jogos"
+          class="botao-continuar"
+        >
+          Continuar comprando
+        </a>
+      </div>
+    </div>
+  }
+</div>

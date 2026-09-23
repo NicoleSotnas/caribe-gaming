@@ -2,28 +2,55 @@
   display: block;
   min-height: 100vh;
   box-sizing: border-box;
+
   padding: 132px 24px 40px;
+
   color: var(--text-light, #f8fafc);
+
   background:
-    linear-gradient(rgba(8, 14, 26, 0.88), rgba(8, 14, 26, 0.96)),
-    linear-gradient(135deg, var(--ocean-blue, #0088ff), var(--sea-deep, #0b1425) 60%);
+    linear-gradient(
+      rgba(8, 14, 26, 0.88),
+      rgba(8, 14, 26, 0.96)
+    ),
+    linear-gradient(
+      135deg,
+      var(--ocean-blue, #0088ff),
+      var(--sea-deep, #0b1425) 60%
+    );
 }
 
 .checkout-titulo {
   max-width: 1100px;
   margin: 0 auto 24px;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
+
+  font-size: clamp(
+    1.8rem,
+    4vw,
+    2.8rem
+  );
+
   color: var(--gold, #f4c95d);
+
   font-weight: 800;
 }
 
-/* Grid principal em 2 colunas no Desktop */
+/* =========================================
+   GRID
+========================================= */
+
 .checkout-grid {
   display: grid;
-  grid-template-columns: 1fr 420px;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    420px;
+
   gap: 28px;
+
   max-width: 1100px;
+
   margin: 0 auto;
+
   align-items: start;
 }
 
@@ -33,206 +60,785 @@
   gap: 20px;
 }
 
+/* =========================================
+   CARDS
+========================================= */
+
 .checkout-resumo,
 .checkout-form {
   width: 100%;
+
   box-sizing: border-box;
+
   padding: 24px;
-  border: 1px solid rgba(59, 175, 212, 0.35);
+
+  border:
+    1px solid
+    rgba(59, 175, 212, 0.35);
+
   border-radius: 12px;
-  background: linear-gradient(145deg, #12243b, #0b1425);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
+
+  background:
+    linear-gradient(
+      145deg,
+      #12243b,
+      #0b1425
+    );
+
+  box-shadow:
+    0 12px 30px
+    rgba(0, 0, 0, 0.3);
+
+  backdrop-filter:
+    blur(8px);
 }
+
+/* =========================================
+   TÍTULOS
+========================================= */
 
 .checkout-form h3,
 .checkout-resumo h3 {
   margin-top: 0;
   margin-bottom: 20px;
-  color: var(--cyan, #3bafd4);
+
+  color:
+    var(--cyan, #3bafd4);
+
   font-size: 1.25rem;
+
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 
-/* Labels e Campos de Formulário */
+.titulo-icone {
+  width: 22px;
+  height: 22px;
+
+  flex-shrink: 0;
+}
+
+/* =========================================
+   CAMPOS
+========================================= */
+
 .field-group {
   margin-bottom: 18px;
 }
 
 .field-label {
   display: block;
+
   font-size: 0.88rem;
+
   font-weight: 600;
+
   color: #cbd5e1;
+
   margin-bottom: 6px;
 }
 
 .checkout-form input {
   width: 100%;
+
   box-sizing: border-box;
+
   padding: 13px 15px;
-  border: 1px solid #31516b;
+
+  border:
+    1px solid
+    #31516b;
+
   border-radius: 7px;
+
   background: #081321;
+
   color: #ffffff;
+
   font-size: 0.95rem;
+
   outline: none;
+
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease;
 }
 
+.checkout-form input::placeholder {
+  color: #627b90;
+}
+
 .checkout-form input:focus {
-  border-color: var(--cyan, #3bafd4);
-  box-shadow: 0 0 0 3px rgba(59, 175, 212, 0.2);
+  border-color:
+    var(--cyan, #3bafd4);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(59, 175, 212, 0.2);
 }
 
 .checkout-form input.input-erro {
-  border-color: var(--danger, #ef4444);
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  border-color:
+    var(--danger, #ef4444);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(239, 68, 68, 0.2);
 }
 
 .checkout-form small {
-  display: block;
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 6px;
+
   margin-top: 6px;
+
   color: #fca5a5;
-  font-size: 0.85rem;
+
+  font-size: 0.82rem;
+
+  line-height: 1.4;
 }
 
-/* Métodos de Pagamento */
+/* =========================================
+   AVISO ENDEREÇO
+========================================= */
+
+.aviso-endereco {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin:
+    -3px 0 14px;
+
+  padding: 10px 12px;
+
+  border:
+    1px solid
+    rgba(244, 201, 93, 0.25);
+
+  border-radius: 8px;
+
+  background:
+    rgba(244, 201, 93, 0.05);
+
+  color: #cbb879;
+
+  font-size: 0.75rem;
+
+  line-height: 1.4;
+}
+
+.aviso-endereco svg {
+  width: 17px;
+  height: 17px;
+
+  flex-shrink: 0;
+}
+
+/* =========================================
+   MÉTODOS
+========================================= */
+
 .metodos-pagamento {
   display: grid;
+
   grid-template-columns: 1fr;
+
   gap: 12px;
-  margin-bottom: 24px;
+
+  margin-bottom: 18px;
 }
 
 .metodo-card {
+  width: 100%;
+
   display: flex;
+
   align-items: center;
+
   gap: 14px;
-  padding: 14px 18px;
+
+  padding: 15px 18px;
+
   background: #081321;
-  border: 2px solid #233e5b;
+
+  border:
+    2px solid
+    #233e5b;
+
   border-radius: 9px;
+
   color: #ffffff;
+
   cursor: pointer;
+
   text-align: left;
-  transition: all 0.2s ease;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 }
 
-.metodo-card:hover {
-  border-color: var(--cyan, #3bafd4);
-  background: rgba(59, 175, 212, 0.08);
+.metodo-card:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  border-color:
+    var(--cyan, #3bafd4);
+
+  background:
+    rgba(59, 175, 212, 0.08);
+
+  box-shadow:
+    0 8px 20px
+    rgba(0, 0, 0, 0.16);
 }
 
-.metodo-card.selecionado {
-  border-color: var(--gold, #f4c95d);
-  background: rgba(244, 201, 93, 0.12);
-  box-shadow: 0 0 12px rgba(244, 201, 93, 0.2);
+/*
+ * Não existe mais estado `.selecionado`.
+ * Nenhum método começa destacado.
+ */
+
+.metodo-card:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.42;
+
+  transform: none;
+
+  box-shadow: none;
 }
 
 .metodo-icon {
-  font-size: 1.6rem;
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 11px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.04);
+}
+
+.metodo-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* =========================================
+   ÍCONE PIX
+========================================= */
+
+.metodo-pix {
+  color: #25d3a3;
+
+  background:
+    rgba(37, 211, 163, 0.08);
+}
+
+.metodo-pix svg {
+  width: 29px;
+  height: 29px;
+}
+
+/* =========================================
+   ÍCONE CARTÃO
+========================================= */
+
+.metodo-cartao {
+  color: #60a5fa;
+
+  background:
+    rgba(96, 165, 250, 0.08);
+}
+
+/* =========================================
+   ÍCONE BOLETO
+========================================= */
+
+.metodo-boleto {
+  color: #f4c95d;
+
+  background:
+    rgba(244, 201, 93, 0.08);
 }
 
 .metodo-info {
+  flex: 1;
+
   display: flex;
+
   flex-direction: column;
+
+  gap: 3px;
 }
 
 .metodo-info strong {
   font-size: 0.95rem;
+
   color: #ffffff;
 }
 
 .metodo-info span {
   font-size: 0.8rem;
+
   color: #94a3b8;
 }
 
-/* Resumo de Itens Detalhado */
+.metodo-seta {
+  width: 18px;
+  height: 18px;
+
+  color: #4e738f;
+
+  flex-shrink: 0;
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.metodo-card:hover:not(:disabled)
+.metodo-seta {
+  color:
+    var(--cyan, #3bafd4);
+
+  transform:
+    translateX(3px);
+}
+
+.metodo-card:disabled
+.metodo-seta {
+  color: #385068;
+}
+
+/* =========================================
+   MERCADO PAGO
+========================================= */
+
+.mercado-pago-info {
+  display: grid;
+
+  grid-template-columns:
+    45px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 14px;
+
+  padding: 13px 14px;
+
+  border:
+    1px solid
+    rgba(59, 175, 212, 0.25);
+
+  border-radius: 10px;
+
+  background:
+    rgba(59, 175, 212, 0.06);
+}
+
+.mercado-pago-icon {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background:
+    rgba(59, 175, 212, 0.1);
+
+  color:
+    var(--cyan, #3bafd4);
+}
+
+.mercado-pago-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mercado-pago-info > div:nth-child(2) {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.mercado-pago-info strong {
+  color: #ffffff;
+
+  font-size: 0.85rem;
+}
+
+.mercado-pago-info span {
+  color: #94a3b8;
+
+  font-size: 0.73rem;
+}
+
+.badge-real {
+  padding: 5px 8px;
+
+  border:
+    1px solid
+    rgba(74, 222, 128, 0.35);
+
+  border-radius: 20px;
+
+  background:
+    rgba(74, 222, 128, 0.08);
+
+  color: #4ade80;
+
+  font-size: 0.65rem;
+
+  font-weight: 900;
+
+  letter-spacing: 0.5px;
+}
+
+/* =========================================
+   BOTÃO FINAL
+========================================= */
+
+.btn-finalizar {
+  width: 100% !important;
+
+  margin-top: 4px !important;
+
+  font-size: 1.05rem !important;
+
+  padding: 15px !important;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--ocean-blue, #0088ff),
+      var(--cyan, #3bafd4)
+    );
+
+  color: #ffffff;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+}
+
+.btn-finalizar svg {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-finalizar:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 22px
+    rgba(59, 175, 212, 0.35);
+}
+
+.btn-finalizar:disabled {
+  cursor: not-allowed !important;
+
+  opacity: 0.5 !important;
+
+  transform: none !important;
+
+  box-shadow: none !important;
+}
+
+.spinner-icon {
+  animation:
+    spinner-rotation
+    0.8s linear infinite;
+}
+
+@keyframes spinner-rotation {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================
+   ERRO
+========================================= */
+
+.erro-pagamento {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 9px;
+
+  margin: 12px 0 0;
+
+  padding: 11px 13px;
+
+  border:
+    1px solid
+    rgba(239, 68, 68, 0.3);
+
+  border-radius: 8px;
+
+  background:
+    rgba(127, 29, 29, 0.14);
+
+  color: #fca5a5;
+
+  font-size: 0.82rem;
+
+  line-height: 1.45;
+}
+
+.erro-pagamento svg {
+  width: 17px;
+  height: 17px;
+
+  flex-shrink: 0;
+
+  color: #f87171;
+}
+
+/* =========================================
+   SEGURANÇA
+========================================= */
+
+.compra-segura {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-top: 12px;
+
+  color: #8498aa;
+
+  font-size: 0.74rem;
+
+  text-align: center;
+}
+
+.compra-segura svg {
+  width: 16px;
+  height: 16px;
+
+  color: #4ade80;
+}
+
+/* =========================================
+   RESUMO
+========================================= */
+
 .resumo-itens {
   display: flex;
+
   flex-direction: column;
+
   gap: 12px;
+
   max-height: 280px;
+
   overflow-y: auto;
+
   padding-right: 6px;
+
   margin-bottom: 18px;
 }
 
 .checkout-item-detalhado {
   display: flex;
+
   align-items: center;
+
   gap: 12px;
+
   padding: 10px 0;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+
+  border-bottom:
+    1px solid
+    rgba(148, 163, 184, 0.15);
 }
 
 .item-thumb {
   width: 50px;
   height: 50px;
+
+  flex-shrink: 0;
+
   object-fit: cover;
+
   border-radius: 6px;
-  border: 1px solid rgba(59, 175, 212, 0.3);
+
+  border:
+    1px solid
+    rgba(59, 175, 212, 0.3);
+}
+
+.item-thumb-vazio {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #081321;
+
+  color: #3bafd4;
+}
+
+.item-thumb-vazio svg {
+  width: 22px;
+  height: 22px;
 }
 
 .item-detalhes {
   flex: 1;
+
+  min-width: 0;
+
   display: flex;
+
   flex-direction: column;
 }
 
 .item-nome {
+  overflow: hidden;
+
   font-size: 0.95rem;
+
   font-weight: 700;
+
   color: #ffffff;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
 }
 
 .item-meta {
   font-size: 0.8rem;
+
   color: #94a3b8;
 }
 
 .item-preco {
-  color: var(--gold, #f4c95d);
-  font-size: 1rem;
+  color:
+    var(--gold, #f4c95d);
+
+  font-size: 0.95rem;
+
   font-weight: 700;
+
   white-space: nowrap;
 }
 
-/* Cálculo de Totais */
+/* =========================================
+   CÁLCULOS
+========================================= */
+
 .checkout-calculo {
-  border-top: 1px solid rgba(59, 175, 212, 0.2);
+  border-top:
+    1px solid
+    rgba(59, 175, 212, 0.2);
+
   padding-top: 14px;
 }
 
 .linha-calculo {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
+  gap: 10px;
+
   font-size: 0.9rem;
+
   color: #cbd5e1;
+
   margin-bottom: 8px;
 }
 
 .badge-gratis {
   color: #4ade80;
+
   font-weight: 700;
-  font-size: 0.85rem;
+
+  font-size: 0.78rem;
+
+  white-space: nowrap;
 }
 
 .checkout-total-box {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
+  gap: 15px;
+
   margin-top: 14px;
+
   padding-top: 14px;
-  border-top: 2px solid rgba(59, 175, 212, 0.35);
-  font-size: 1.25rem;
+
+  border-top:
+    2px solid
+    rgba(59, 175, 212, 0.35);
+
+  font-size: 1.2rem;
+
   font-weight: 700;
 }
 
@@ -241,172 +847,376 @@
 }
 
 .checkout-total {
-  color: var(--gold, #f4c95d);
+  color:
+    var(--gold, #f4c95d);
+
   font-size: 1.35rem;
+
+  white-space: nowrap;
 }
 
-/* Bloco de Segurança Pirata */
+/* =========================================
+   SEGURANÇA PIRATA
+========================================= */
+
 .pirate-security {
-  background: rgba(8, 14, 26, 0.75);
-  border: 1px solid rgba(59, 175, 212, 0.35);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(8px);
   overflow: hidden;
-  transition: border-color 0.3s ease;
+
+  background:
+    rgba(8, 14, 26, 0.75);
+
+  border:
+    1px solid
+    rgba(59, 175, 212, 0.35);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 8px 24px
+    rgba(0, 0, 0, 0.25);
+
+  backdrop-filter:
+    blur(8px);
 }
 
 .pirate-security:hover {
-  border-color: rgba(244, 201, 93, 0.5);
+  border-color:
+    rgba(244, 201, 93, 0.5);
 }
 
 .security-header {
+  width: 100%;
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
+  gap: 12px;
+
   padding: 14px 18px;
+
+  border: none;
+
+  background: transparent;
+
+  color: inherit;
+
   cursor: pointer;
-  user-select: none;
+
+  text-align: left;
 }
 
 .security-title {
   display: flex;
+
   align-items: center;
+
   gap: 12px;
+
+  min-width: 0;
 }
 
 .pirate-icon {
-  font-size: 1.5rem;
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background:
+    rgba(244, 201, 93, 0.08);
+
+  color:
+    var(--gold, #f4c95d);
+}
+
+.pirate-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
 .security-title h4 {
-  margin: 0 0 2px 0;
+  margin: 0 0 2px;
+
   font-size: 0.95rem;
-  color: var(--gold, #f4c95d);
+
+  color:
+    var(--gold, #f4c95d);
+
   font-weight: 700;
 }
 
 .security-title p {
   margin: 0;
-  font-size: 0.8rem;
+
+  font-size: 0.75rem;
+
   color: #94a3b8;
 }
 
-.arrow {
-  font-size: 1.5rem;
-  color: var(--cyan, #3bafd4);
-  transition: transform 0.3s ease;
+.security-arrow {
+  width: 19px;
+  height: 19px;
+
+  flex-shrink: 0;
+
+  color:
+    var(--cyan, #3bafd4);
+
+  transition:
+    transform 0.2s ease;
 }
 
-.arrow.rotacionada {
-  transform: rotate(90deg);
+.pirate-security.aberto
+.security-arrow {
+  transform:
+    rotate(180deg);
 }
 
 .payment-security {
   padding: 0 18px 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.08);
 }
 
 .payment-security p {
   color: #cbd5e1;
-  font-size: 0.85rem;
+
+  font-size: 0.82rem;
+
   line-height: 1.5;
-  margin: 10px 0 12px;
+
+  margin: 10px 0;
 }
 
 .security-badge {
   display: inline-flex;
+
   align-items: center;
+
   gap: 6px;
-  background: rgba(59, 175, 212, 0.12);
-  border: 1px solid rgba(59, 175, 212, 0.4);
+
+  background:
+    rgba(59, 175, 212, 0.12);
+
+  border:
+    1px solid
+    rgba(59, 175, 212, 0.4);
+
   color: #38bdf8;
+
   padding: 6px 12px;
+
   border-radius: 20px;
-  font-size: 0.8rem;
+
+  font-size: 0.76rem;
+
   font-weight: 600;
 }
 
-/* Botões */
-.btn-finalizar {
-  width: 100% !important;
-  margin-top: 14px !important;
-  font-size: 1.05rem !important;
-  padding: 15px !important;
+.security-badge svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* =========================================
+   BOTÕES
+========================================= */
+
+.btn-acao {
+  min-height: 45px;
+
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 8px;
-  border: 0;
+
+  padding: 0 18px;
+
   border-radius: 7px;
-  background: linear-gradient(135deg, var(--ocean-blue, #0088ff), var(--cyan, #3bafd4));
-  color: #ffffff;
+
+  font-size: 0.9rem;
+
   font-weight: 800;
+
   cursor: pointer;
+
+  text-decoration: none;
+
   transition:
     transform 180ms ease,
-    box-shadow 180ms ease;
+    box-shadow 180ms ease,
+    filter 180ms ease;
 }
 
-.btn-finalizar:hover:not(:disabled) {
+.btn-acao svg {
+  width: 19px;
+  height: 19px;
+}
+
+.btn-primary {
+  border: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--ocean-blue, #0088ff),
+      var(--cyan, #3bafd4)
+    );
+
+  color: #ffffff;
+}
+
+.btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(59, 175, 212, 0.35);
+
+  filter: brightness(1.06);
+
+  box-shadow:
+    0 8px 18px
+    rgba(59, 175, 212, 0.25);
 }
 
-.btn-finalizar:disabled {
-  cursor: not-allowed !important;
-  opacity: 0.5 !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
+/* =========================================
+   SUCESSO / VAZIO
+========================================= */
 
-/* Sucesso e Vazio */
 .checkout-sucesso,
 .checkout-vazio {
   max-width: 600px;
+
   box-sizing: border-box;
+
   margin: 40px auto;
+
   padding: 36px 28px;
+
   border-radius: 16px;
+
   text-align: center;
-  background: rgba(8, 14, 26, 0.85);
-  border: 1px solid rgba(59, 175, 212, 0.3);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
+
+  background:
+    rgba(8, 14, 26, 0.85);
+
+  border:
+    1px solid
+    rgba(59, 175, 212, 0.3);
+
+  box-shadow:
+    0 20px 40px
+    rgba(0, 0, 0, 0.4);
+
+  backdrop-filter:
+    blur(10px);
 }
 
 .checkout-sucesso {
-  border-left: 4px solid #4ade80;
+  border-left:
+    4px solid #4ade80;
+}
+
+.sucesso-icon,
+.vazio-icon {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin:
+    0 auto 14px;
+
+  border-radius: 50%;
 }
 
 .sucesso-icon {
-  font-size: 2.5rem;
-  margin-bottom: 12px;
+  width: 68px;
+  height: 68px;
+
+  background:
+    rgba(74, 222, 128, 0.08);
+
+  border:
+    1px solid
+    rgba(74, 222, 128, 0.25);
+
+  color: #4ade80;
 }
 
-.checkout-sucesso h3 {
-  color: var(--gold, #f4c95d);
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+.vazio-icon {
+  width: 64px;
+  height: 64px;
+
+  background:
+    rgba(239, 68, 68, 0.07);
+
+  border:
+    1px solid
+    rgba(239, 68, 68, 0.2);
+
+  color: #f87171;
 }
 
-.checkout-sucesso p {
+.sucesso-icon svg,
+.vazio-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.selo-sucesso {
+  color: #4ade80;
+
+  font-size: 0.68rem;
+
+  font-weight: 900;
+
+  letter-spacing: 1.4px;
+}
+
+.checkout-sucesso h3,
+.checkout-vazio h3 {
+  color:
+    var(--gold, #f4c95d);
+
+  margin:
+    9px 0 10px;
+
+  font-size: 1.45rem;
+}
+
+.checkout-sucesso p,
+.checkout-vazio p {
   color: #cbd5e1;
+
   margin-bottom: 24px;
+
   line-height: 1.6;
 }
 
 .checkout-vazio {
-  border-left: 4px solid var(--danger, #ef4444);
+  border-left:
+    4px solid
+    var(--danger, #ef4444);
 }
 
-.checkout-vazio p {
-  color: #fca5a5;
-  font-size: 1.1rem;
-  margin-bottom: 20px;
-}
+/* =========================================
+   RESPONSIVO
+========================================= */
 
-/* Responsividade */
 @media (max-width: 960px) {
   .checkout-grid {
     grid-template-columns: 1fr;
@@ -415,11 +1225,36 @@
 
 @media (max-width: 600px) {
   :host {
-    padding: 107px 16px 24px;
+    padding:
+      107px
+      16px
+      24px;
   }
 
   .checkout-resumo,
   .checkout-form {
     padding: 18px;
+  }
+
+  .mercado-pago-info {
+    grid-template-columns:
+      42px
+      minmax(0, 1fr);
+  }
+
+  .badge-real {
+    grid-column: 2;
+
+    justify-self: start;
+  }
+
+  .checkout-total-box {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .checkout-total {
+    font-size: 1.5rem;
   }
 }
