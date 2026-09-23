@@ -1,15 +1,19 @@
 <div class="pagina-pagamento">
+
   <div class="breadcrumb">
     <a routerLink="/checkout">
       ← Voltar ao checkout
     </a>
 
     <span>/</span>
+
     <span>PIX</span>
   </div>
 
   @if (!sucesso()) {
+
     <div class="cabecalho-pagamento">
+
       <div>
         <span class="eyebrow">
           PAGAMENTO SIMULADO
@@ -20,12 +24,13 @@
         </h1>
 
         <p>
-          QR Code e Pix Copia e Cola fictícios para
-          demonstrar uma experiência de pagamento completa.
+          Experiência de pagamento demonstrativa
+          com QR Code e Pix Copia e Cola fictícios.
         </p>
       </div>
 
       <div class="pix-marca">
+
         <svg
           viewBox="0 0 40 40"
           aria-hidden="true"
@@ -47,14 +52,22 @@
           />
         </svg>
 
-        <strong>Pix</strong>
+        <strong>
+          Pix
+        </strong>
+
       </div>
+
     </div>
 
     <div class="layout-pagamento">
+
       <section class="painel-pix">
+
         <div class="pix-topo">
+
           <div>
+
             <span class="numero-etapa">
               01
             </span>
@@ -64,42 +77,62 @@
             </h2>
 
             <p>
-              Este código é propositalmente fictício.
+              QR Code exclusivamente demonstrativo.
             </p>
+
           </div>
 
           <span class="badge-falso">
-            QR CODE SIMULADO
+            SIMULAÇÃO
           </span>
+
         </div>
 
         <div class="qr-area">
+
           <div class="qr-code">
-            <div
-              class="qr-linha"
-              *ngFor="let linha of qrCode"
-            >
-              <span
-                *ngFor="let celula of linha"
-                [class.preta]="celula"
-              ></span>
-            </div>
+
+            @for (
+              linha of qrCode;
+              track $index
+            ) {
+
+              <div class="qr-linha">
+
+                @for (
+                  celula of linha;
+                  track $index
+                ) {
+
+                  <span
+                    [class.preta]="celula"
+                  ></span>
+
+                }
+
+              </div>
+
+            }
 
             <div class="qr-centro">
-              <strong>PIX</strong>
+              PIX
             </div>
+
           </div>
 
           <div class="qr-info">
+
             <strong>
-              Abra o aplicativo do banco
+              QR Code Pix simulado
             </strong>
 
             <span>
-              Na simulação, basta clicar em
-              "Simular pagamento aprovado".
+              Este código não realiza uma cobrança
+              e não representa uma transação bancária.
             </span>
+
           </div>
+
         </div>
 
         <div class="separador-ou">
@@ -107,6 +140,7 @@
         </div>
 
         <div class="codigo-area">
+
           <label>
             Pix Copia e Cola
           </label>
@@ -120,6 +154,7 @@
             class="botao-copiar"
             (click)="copiarPix()"
           >
+
             <svg
               viewBox="0 0 24 24"
               aria-hidden="true"
@@ -148,52 +183,37 @@
                 ? 'Código copiado'
                 : 'Copiar código Pix'
             }}
+
           </button>
-        </div>
 
-        <div class="campo">
-          <label for="cpf">
-            CPF do comprador
-          </label>
-
-          <input
-            id="cpf"
-            type="text"
-            inputmode="numeric"
-            maxlength="14"
-            formControlName="cpf"
-            placeholder="000.000.000-00"
-            autocomplete="off"
-            [formControl]="formulario.controls.cpf"
-            (input)="mascararCpf($event)"
-          />
-
-          @if (
-            formulario.controls.cpf.touched &&
-            formulario.controls.cpf.invalid
-          ) {
-            <small>
-              Informe um CPF válido.
-            </small>
-          }
         </div>
 
         @if (erro()) {
-          <div class="mensagem-erro">
+
+          <div
+            class="mensagem-erro"
+            role="alert"
+          >
             {{ erro() }}
           </div>
+
         }
 
         <button
-          class="botao-pagar"
           type="button"
+          class="botao-pagar"
           [disabled]="processando()"
           (click)="simularPagamento()"
         >
+
           @if (processando()) {
+
             <span class="spinner"></span>
+
             Confirmando pagamento...
+
           } @else {
+
             <svg
               viewBox="0 0 24 24"
               aria-hidden="true"
@@ -209,13 +229,19 @@
             </svg>
 
             Simular pagamento aprovado
+
           }
+
         </button>
+
       </section>
 
       <aside class="painel-resumo">
+
         <div class="resumo-titulo">
+
           <div>
+
             <span>
               RESUMO DA COMPRA
             </span>
@@ -223,15 +249,20 @@
             <h2>
               Seu pedido
             </h2>
+
           </div>
 
           <div class="icone-resumo">
-            <span>✓</span>
+            ✓
           </div>
+
         </div>
 
         <div class="comprador">
-          <span>COMPRADOR</span>
+
+          <span>
+            COMPRADOR
+          </span>
 
           <strong>
             {{ compradorLogado() }}
@@ -240,53 +271,76 @@
           <small>
             {{ emailLogado() }}
           </small>
+
         </div>
 
         <div class="itens">
+
           <span class="label">
             ITENS DO CARRINHO
           </span>
 
-          <div
-            class="item"
-            *ngFor="
-              let item of carrinhoFacade.itens()
-            "
-          >
-            <div>
+          @for (
+            item of carrinhoFacade.itens();
+            track $index
+          ) {
+
+            <div class="item">
+
+              <div>
+
+                <strong>
+                  {{ item.nome }}
+                </strong>
+
+                <small>
+                  {{
+                    item.quantidade || 1
+                  }}
+                  ×
+                  {{
+                    formatarMoeda(
+                      item.preco
+                    )
+                  }}
+                </small>
+
+              </div>
+
               <strong>
-                {{ item.nome }}
+                {{
+                  formatarMoeda(
+                    item.preco *
+                    (
+                      item.quantidade ||
+                      1
+                    )
+                  )
+                }}
               </strong>
 
-              <small>
-                {{ item.quantidade || 1 }} ×
-                {{ formatarMoeda(item.preco) }}
-              </small>
             </div>
 
-            <strong>
-              {{
-                formatarMoeda(
-                  item.preco *
-                  (item.quantidade || 1)
-                )
-              }}
-            </strong>
-          </div>
+          }
+
         </div>
 
         <div class="financeiro">
+
           <div>
+
             <span>
-              Itens
+              Quantidade
             </span>
 
             <strong>
               {{ quantidadeTotalItens() }}
             </strong>
+
           </div>
 
           <div class="total">
+
             <span>
               Total da compra
             </span>
@@ -298,47 +352,68 @@
                 )
               }}
             </strong>
+
           </div>
+
         </div>
 
         <div class="status-resumo">
-          <span>PIX</span>
+
+          <div class="status-icone">
+            ✓
+          </div>
 
           <div>
+
             <strong>
-              Pagamento instantâneo • Simulação
+              PIX
             </strong>
 
             <small>
-              QR Code e Pix Copia e Cola fictícios.
+              Pagamento instantâneo • Simulação
             </small>
+
           </div>
+
         </div>
 
         <div class="endereco">
-          <span>
-            CHECKOUT
-          </span>
 
-          <strong>
-            Endereço de cobrança validado
-          </strong>
+          <div class="status-icone">
+            ✓
+          </div>
 
-          <small>
-            A forma de pagamento só foi liberada depois
-            da confirmação do endereço no checkout.
-          </small>
+          <div>
+
+            <strong>
+              Endereço de cobrança validado
+            </strong>
+
+            <small>
+              O pagamento foi liberado após
+              o preenchimento do checkout.
+            </small>
+
+          </div>
+
         </div>
+
       </aside>
+
     </div>
+
   } @else {
+
     <div class="sucesso">
+
       <div class="sucesso-titulo">
+
         <div class="selo">
           ✓
         </div>
 
         <div>
+
           <span class="eyebrow">
             SIMULAÇÃO CONCLUÍDA
           </span>
@@ -350,12 +425,17 @@
           <p>
             Pagamento fictício confirmado com sucesso.
           </p>
+
         </div>
+
       </div>
 
       <article class="comprovante">
+
         <div class="comprovante-topo">
+
           <div>
+
             <span>
               CARIBE'S GAMING
             </span>
@@ -367,28 +447,38 @@
             <strong>
               PIX SIMULADO • SEM VALIDADE FISCAL
             </strong>
+
           </div>
 
           <div class="status-pago">
             ✓
-            <span>PAGO</span>
+
+            <span>
+              PAGO
+            </span>
           </div>
+
         </div>
 
         <div class="aviso">
           Documento criado exclusivamente para
-          demonstração do MVP. Não representa um
+          demonstração do MVP. Não representa
           comprovante bancário real.
         </div>
 
         <div class="metadados">
+
           <div>
             <span>Pedido</span>
-            <strong>{{ numeroPedido() }}</strong>
+
+            <strong>
+              {{ numeroPedido() }}
+            </strong>
           </div>
 
           <div>
             <span>Nota fiscal</span>
+
             <strong>
               {{ numeroNotaFiscal() }}
             </strong>
@@ -396,6 +486,7 @@
 
           <div>
             <span>Autorização</span>
+
             <strong>
               {{ codigoAutorizacao() }}
             </strong>
@@ -403,18 +494,25 @@
 
           <div>
             <span>Data</span>
+
             <strong>
               {{ dataPagamento() }}
             </strong>
           </div>
+
         </div>
 
         <section>
-          <h3>COMPRADOR</h3>
+
+          <h3>
+            COMPRADOR
+          </h3>
 
           <div class="dados-comprador">
+
             <div>
               <span>Nome</span>
+
               <strong>
                 {{ nomeComprador() }}
               </strong>
@@ -422,52 +520,65 @@
 
             <div>
               <span>E-mail</span>
+
               <strong>
                 {{ emailComprador() }}
               </strong>
             </div>
 
             <div>
-              <span>CPF</span>
+              <span>Pagamento</span>
+
               <strong>
-                {{ cpfComprador() }}
+                PIX • Simulação
               </strong>
             </div>
 
-            <div>
-              <span>Forma</span>
-              <strong>Pix • Simulação</strong>
-            </div>
           </div>
+
         </section>
 
         <section>
-          <h3>ITENS DA COMPRA</h3>
 
-          <div
-            class="linha-item"
-            *ngFor="let item of itensCompra()"
-          >
-            <span>
-              {{ item.nome }}
-            </span>
+          <h3>
+            ITENS DA COMPRA
+          </h3>
 
-            <span>
-              {{ item.quantidade || 1 }} ×
-            </span>
+          @for (
+            item of itensCompra();
+            track $index
+          ) {
 
-            <strong>
-              {{
-                formatarMoeda(
-                  item.preco *
-                  (item.quantidade || 1)
-                )
-              }}
-            </strong>
-          </div>
+            <div class="linha-item">
+
+              <span>
+                {{ item.nome }}
+              </span>
+
+              <span>
+                {{ item.quantidade || 1 }}
+              </span>
+
+              <strong>
+                {{
+                  formatarMoeda(
+                    item.preco *
+                    (
+                      item.quantidade ||
+                      1
+                    )
+                  )
+                }}
+              </strong>
+
+            </div>
+
+          }
+
         </section>
 
         <div class="total-pago">
+
           <span>
             TOTAL PAGO
           </span>
@@ -475,35 +586,56 @@
           <strong>
             {{ formatarMoeda(totalCompra()) }}
           </strong>
+
         </div>
 
         <div class="qr-comprovante">
+
           <div class="qr-code pequeno">
-            <div
-              class="qr-linha"
-              *ngFor="let linha of qrCode"
-            >
-              <span
-                *ngFor="let celula of linha"
-                [class.preta]="celula"
-              ></span>
-            </div>
+
+            @for (
+              linha of qrCode;
+              track $index
+            ) {
+
+              <div class="qr-linha">
+
+                @for (
+                  celula of linha;
+                  track $index
+                ) {
+
+                  <span
+                    [class.preta]="celula"
+                  ></span>
+
+                }
+
+              </div>
+
+            }
+
           </div>
 
           <div>
+
             <strong>
               QR Code demonstrativo
             </strong>
 
             <p>
-              Não realiza cobrança e não representa
-              uma transação financeira.
+              Não realiza cobrança e não possui
+              valor bancário.
             </p>
+
           </div>
+
         </div>
+
       </article>
 
       <div class="acoes">
+
         <button
           type="button"
           class="botao-imprimir"
@@ -518,7 +650,11 @@
         >
           Continuar comprando
         </a>
+
       </div>
+
     </div>
+
   }
+
 </div>

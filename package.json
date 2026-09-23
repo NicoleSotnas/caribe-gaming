@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
+    "dev": "npm run build && concurrently --kill-others-on-fail \"npm run serve:ssr:caribe-gaming\" \"ng serve --proxy-config proxy.conf.json\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "vitest run",
@@ -47,6 +48,7 @@
     "@types/node": "^20.17.19",
     "@vitest/coverage-v8": "^4.1.11",
     "@vercel/node": "^13.0.1",
+    "concurrently": "^9.2.1",
     "jsdom": "^28.1.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",

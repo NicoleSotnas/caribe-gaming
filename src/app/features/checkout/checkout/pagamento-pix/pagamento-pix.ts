@@ -1,4 +1,7 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import {
+  CommonModule,
+  isPlatformBrowser,
+} from '@angular/common';
 
 import {
   Component,
@@ -9,13 +12,6 @@ import {
 } from '@angular/core';
 
 import {
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-
-import {
   Router,
   RouterLink,
 } from '@angular/router';
@@ -24,68 +20,11 @@ import { CarrinhoFacade } from '../../../../core/facades/carrinho.facade';
 import { AuthFacade } from '../../../../core/facades/auth.facade';
 import { ItemCarrinho } from '../../../../core/models/item-carrinho';
 
-function cpfValido(valor: string): boolean {
-  const cpf = valor.replace(/\D/g, '');
-
-  if (
-    cpf.length !== 11 ||
-    /^(\d)\1{10}$/.test(cpf)
-  ) {
-    return false;
-  }
-
-  let soma = 0;
-
-  for (let i = 0; i < 9; i++) {
-    soma += Number(cpf[i]) * (10 - i);
-  }
-
-  let resto = soma % 11;
-  const primeiro =
-    resto < 2 ? 0 : 11 - resto;
-
-  if (
-    primeiro !== Number(cpf[9])
-  ) {
-    return false;
-  }
-
-  soma = 0;
-
-  for (let i = 0; i < 10; i++) {
-    soma += Number(cpf[i]) * (11 - i);
-  }
-
-  resto = soma % 11;
-
-  const segundo =
-    resto < 2 ? 0 : 11 - resto;
-
-  return (
-    segundo === Number(cpf[10])
-  );
-}
-
-function cpfValidator(): ValidatorFn {
-  return (control) => {
-    if (!control.value) {
-      return null;
-    }
-
-    return cpfValido(
-      String(control.value),
-    )
-      ? null
-      : { cpfInvalido: true };
-  };
-}
-
 @Component({
   selector: 'app-pagamento-pix',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     RouterLink,
   ],
   templateUrl: './pagamento-pix.html',
@@ -103,9 +42,6 @@ export class PagamentoPix {
 
   private readonly platformId =
     inject(PLATFORM_ID);
-
-  private readonly fb =
-    inject(FormBuilder);
 
   readonly sucesso =
     signal(false);
@@ -131,9 +67,6 @@ export class PagamentoPix {
   readonly emailComprador =
     signal('');
 
-  readonly cpfComprador =
-    signal('');
-
   readonly numeroPedido =
     signal('');
 
@@ -146,6 +79,12 @@ export class PagamentoPix {
   readonly dataPagamento =
     signal('');
 
+  /**
+   * Código Pix exclusivamente fictício.
+   *
+   * Não representa uma cobrança real
+   * e não possui validade bancária.
+   */
   readonly codigoPix =
     '00020101021226870014br.gov.bcb.pix2565pix.caribe-gaming.simulacao5204000053039865802BR5915CARIBE GAMING6009SAO PAULO62070503***6304ABCD';
 
@@ -161,21 +100,11 @@ export class PagamentoPix {
   readonly emailLogado =
     computed(
       () =>
-        this.authFacade.usuarioAtual()
+        this.authFacade
+          .usuarioAtual()
           ?.email
           ?.trim() || '',
     );
-
-  readonly formulario =
-    this.fb.nonNullable.group({
-      cpf: [
-        '',
-        [
-          Validators.required,
-          cpfValidator(),
-        ],
-      ],
-    });
 
   readonly qrCode =
     this.criarQrCode(
@@ -190,54 +119,6 @@ export class PagamentoPix {
       {
         style: 'currency',
         currency: 'BRL',
-      },
-    );
-  }
-
-  mascararCpf(
-    event: Event,
-  ): void {
-    const input =
-      event.target as HTMLInputElement;
-
-    const digits =
-      input.value
-        .replace(/\D/g, '')
-        .slice(0, 11);
-
-    let valor = digits;
-
-    if (digits.length > 3) {
-      valor =
-        `${digits.slice(0, 3)}.${digits.slice(3)}`;
-    }
-
-    if (digits.length > 6) {
-      valor =
-        `${digits.slice(0, 3)}.${digits.slice(
-          3,
-          6,
-        )}.${digits.slice(6)}`;
-    }
-
-    if (digits.length > 9) {
-      valor =
-        `${digits.slice(0, 3)}.${digits.slice(
-          3,
-          6,
-        )}.${digits.slice(
-          6,
-          9,
-        )}-${digits.slice(9)}`;
-    }
-
-    input.value =
-      valor;
-
-    this.formulario.controls.cpf.setValue(
-      valor,
-      {
-        emitEvent: true,
       },
     );
   }
@@ -269,15 +150,15 @@ export class PagamentoPix {
       this.codigoCopiado.set(true);
 
       window.setTimeout(
-        () =>
-          this.codigoCopiado.set(false),
+        () => {
+          this.codigoCopiado.set(false);
+        },
         1800,
       );
     };
 
     if (
-      navigator.clipboard
-        ?.writeText
+      navigator.clipboard?.writeText
     ) {
       navigator.clipboard
         .writeText(
@@ -330,22 +211,11 @@ export class PagamentoPix {
     }
 
     if (
-      this.carrinhoFacade.carrinhoVazio()
+      this.carrinhoFacade
+        .carrinhoVazio()
     ) {
       this.erro.set(
         'Seu carrinho está vazio.',
-      );
-
-      return;
-    }
-
-    if (
-      this.formulario.invalid
-    ) {
-      this.formulario.markAllAsTouched();
-
-      this.erro.set(
-        'Informe um CPF válido.',
       );
 
       return;
@@ -365,6 +235,21 @@ export class PagamentoPix {
     const total =
       this.carrinhoFacade.total();
 
+    if (
+      itens.length === 0 ||
+      total <= 0
+    ) {
+      this.erro.set(
+        'Não foi possível identificar os itens da compra.',
+      );
+
+      return;
+    }
+
+    /*
+     * Capturamos os dados da compra
+     * antes de limpar o carrinho.
+     */
     this.itensCompra.set(
       itens,
     );
@@ -379,10 +264,6 @@ export class PagamentoPix {
 
     this.emailComprador.set(
       this.emailLogado(),
-    );
-
-    this.cpfComprador.set(
-      this.formulario.controls.cpf.value,
     );
 
     this.numeroPedido.set(
@@ -417,18 +298,15 @@ export class PagamentoPix {
 
         this.sucesso.set(true);
 
-        this.carrinhoFacade.limparCarrinho();
-
-        this.formulario.reset({
-          cpf: '',
-        });
+        this.carrinhoFacade
+          .limparCarrinho();
 
         try {
           sessionStorage.removeItem(
             'caribe-checkout-validado',
           );
         } catch {
-          // Continua.
+          // Continua normalmente.
         }
       },
       1300,
@@ -466,6 +344,10 @@ export class PagamentoPix {
     )}`;
   }
 
+  /**
+   * Cria uma matriz visual para representar
+   * um QR Code exclusivamente demonstrativo.
+   */
   private criarQrCode(
     valor: string,
   ): boolean[][] {
@@ -508,53 +390,54 @@ export class PagamentoPix {
       [tamanho - 7, 0],
     ];
 
-    const eFinder =
-      (
-        linha: number,
-        coluna: number,
-      ):
-        | boolean
-        | null => {
-        for (
-          const [baseLinha, baseColuna] of buscadores
-        ) {
-          const dentro =
-            linha >= baseLinha &&
-            linha <
-              baseLinha + 7 &&
-            coluna >= baseColuna &&
-            coluna <
-              baseColuna + 7;
+    const eFinder = (
+      linha: number,
+      coluna: number,
+    ): boolean | null => {
+      for (
+        const [
+          baseLinha,
+          baseColuna,
+        ] of buscadores
+      ) {
+        const dentro =
+          linha >= baseLinha &&
+          linha <
+            baseLinha + 7 &&
+          coluna >= baseColuna &&
+          coluna <
+            baseColuna + 7;
 
-          if (!dentro) {
-            continue;
-          }
-
-          const relativaLinha =
-            linha - baseLinha;
-
-          const relativaColuna =
-            coluna - baseColuna;
-
-          const borda =
-            relativaLinha === 0 ||
-            relativaLinha === 6 ||
-            relativaColuna === 0 ||
-            relativaColuna === 6;
-
-          const centro =
-            relativaLinha >= 2 &&
-            relativaLinha <= 4 &&
-            relativaColuna >= 2 &&
-            relativaColuna <= 4;
-
-          return (
-            borda || centro
-          );
+        if (!dentro) {
+          continue;
         }
 
-        return null;
-      };
+        const relativaLinha =
+          linha - baseLinha;
+
+        const relativaColuna =
+          coluna - baseColuna;
+
+        const borda =
+          relativaLinha === 0 ||
+          relativaLinha === 6 ||
+          relativaColuna === 0 ||
+          relativaColuna === 6;
+
+        const centro =
+          relativaLinha >= 2 &&
+          relativaLinha <= 4 &&
+          relativaColuna >= 2 &&
+          relativaColuna <= 4;
+
+        return (
+          borda ||
+          centro
+        );
+      }
+
+      return null;
+    };
 
     for (
       let linha = 0;
@@ -590,10 +473,8 @@ export class PagamentoPix {
 
         matriz[linha][coluna] =
           (
-            estado %
-            100
-          ) <
-          44;
+            estado % 100
+          ) < 44;
       }
     }
 
