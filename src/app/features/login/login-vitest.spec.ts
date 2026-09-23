@@ -1,43 +1,53 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { render, screen, fireEvent } from '@testing-library/angular';
 import { Login } from './login';
 import { provideRouter } from '@angular/router';
-import { By } from '@angular/platform-browser';
 import { AuthService } from '../../core/services/auth';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
-// Simula o serviço de login para isolar o componente
 const mockAuthService = {
   loginAsync: vi.fn().mockResolvedValue({}),
   loginComGoogleAsync: vi.fn().mockResolvedValue({}),
   recuperarSenhaAsync: vi.fn().mockResolvedValue({}),
 };
 
-describe('Login - Caixa Branca (Estrutural)', () => {
-  let fixture: ComponentFixture<Login>;
-
-  // Roda antes de cada teste: "liga" o componente na memória
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Login],
+describe('Login - Caixa Preta (Comportamental)', () => {
+  it('deve encontrar e clicar no botão de login', async () => {
+    await render(Login, {
       providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthService }],
-    }).compileComponents();
+    });
 
-    fixture = TestBed.createComponent(Login);
-    fixture.detectChanges();
+    const loginButton = screen.getByRole('button', { name: /^entrar$/i });
+    expect(loginButton).toBeTruthy();
+
+    fireEvent.click(loginButton);
+    expect(loginButton).toBeDefined();
   });
 
-  // Teste 1: Verifica se a tag HTML do botão de login foi construída corretamente
-  it('deve conter a tag de envio (submit) no DOM', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const loginButton = compiled.querySelector('button[type="submit"]');
+  it('deve encontrar e interagir com o botão de esqueci a senha', async () => {
+    await render(Login, {
+      providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthService }],
+    });
 
-    expect(loginButton).toBeTruthy(); // Valida se a estrutura HTML existe
+    const forgotPasswordLink = screen.getByRole('button', { name: /esqueceu a senha/i });
+    expect(forgotPasswordLink).toBeTruthy();
+
+    fireEvent.click(forgotPasswordLink);
+    expect(forgotPasswordLink).toBeDefined();
   });
 
-  // Teste 2: Verifica se a classe CSS estrutural do botão de senha foi aplicada
-  it('deve conter a classe CSS correta para o botão de recuperar senha', () => {
-    const forgotPasswordEl = fixture.debugElement.query(By.css('button.link-esqueci'));
+  // 👇 COLE ESTE NOVO TESTE AQUI (dentro do describe principal)
+  it('deve permitir que o usuário digite o e-mail e a senha', async () => {
+    await render(Login, {
+      providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthService }],
+    });
 
-    expect(forgotPasswordEl).toBeTruthy(); // Valida a presença do seletor técnico
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const senhaInput = screen.getByLabelText(/senha/i) as HTMLInputElement;
+
+    fireEvent.input(emailInput, { target: { value: 'teste@email.com' } });
+    fireEvent.input(senhaInput, { target: { value: 'senha123' } });
+
+    expect(emailInput.value).toBe('teste@email.com');
+    expect(senhaInput.value).toBe('senha123');
   });
-});
+}); // Fim do describe

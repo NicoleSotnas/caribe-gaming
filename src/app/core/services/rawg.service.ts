@@ -39,7 +39,7 @@ export interface RawgScreenshotResponse {
 @Injectable({ providedIn: 'root' })
 export class RawgService {
   private http = inject(HttpClient);
-  private apiKey = '4e45dbce048d41c4adcfabbf27dbb16e';
+  private apiKey = '53cda31b968d4afea37f6db579e0ec8c';
   private baseUrl = 'https://api.rawg.io/api';
 
   obterDetalhesJogo(jogoIdOuSlug: string | number): Observable<RawgGameResponse> {
