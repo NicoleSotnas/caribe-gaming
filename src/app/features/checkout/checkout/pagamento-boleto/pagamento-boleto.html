@@ -1,0 +1,658 @@
+<div class="pagina-boleto">
+  <div class="breadcrumb">
+    <a routerLink="/checkout">
+      ← Voltar ao checkout
+    </a>
+
+    <span>/</span>
+
+    <span>Boleto</span>
+  </div>
+
+  @if (!sucesso()) {
+    <div class="cabecalho">
+      <div>
+        <span class="eyebrow">
+          PAGAMENTO SIMULADO
+        </span>
+
+        <h1>
+          Boleto bancário
+        </h1>
+
+        <p>
+          Documento demonstrativo completo com
+          linha digitável, código de barras,
+          vencimento e dados da compra.
+        </p>
+      </div>
+
+      <div class="badge">
+        DOCUMENTO SIMULADO
+      </div>
+    </div>
+
+    <div class="layout">
+      <section class="area-boleto">
+        <div class="boleto-documento">
+          <div class="boleto-faixa">
+            <div class="marca-ficticia">
+              CG
+            </div>
+
+            <div>
+              <strong>
+                CARIBE GAMING
+              </strong>
+
+              <span>
+                BOLETO BANCÁRIO • SIMULAÇÃO
+              </span>
+            </div>
+
+            <strong class="codigo-banco">
+              999
+            </strong>
+          </div>
+
+          <div class="boleto-aviso">
+            <strong>
+              SEM VALOR BANCÁRIO
+            </strong>
+
+            <span>
+              Este boleto foi criado apenas para
+              demonstração do fluxo de pagamento.
+            </span>
+          </div>
+
+          <div class="boleto-linhas">
+            <div>
+              <span>
+                Beneficiário
+              </span>
+
+              <strong>
+                Caribe's Gaming LTDA • CNPJ fictício
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Data de emissão
+              </span>
+
+              <strong>
+                {{ dataPagamento() }}
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Vencimento
+              </span>
+
+              <strong>
+                {{ vencimento() || '3 dias após a emissão' }}
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Valor do documento
+              </span>
+
+              <strong class="valor">
+                {{
+                  formatarMoeda(
+                    carrinhoFacade.total()
+                  )
+                }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="linha-principal">
+            <span>
+              LINHA DIGITÁVEL
+            </span>
+
+            <strong>
+              {{ linhaDigitavel() }}
+            </strong>
+          </div>
+
+          <div class="barcode">
+            <div class="barcode-barras"></div>
+
+            <span>
+              CÓDIGO DE BARRAS SIMULADO
+            </span>
+          </div>
+
+          <div class="boleto-rodape">
+            <div>
+              <span>
+                Nosso número
+              </span>
+
+              <strong>
+                999999999999
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Carteira
+              </span>
+
+              <strong>
+                09
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Espécie
+              </span>
+
+              <strong>
+                R$
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Aceite
+              </span>
+
+              <strong>
+                N
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="boleto-acoes">
+          <button
+            type="button"
+            class="botao-copiar"
+            (click)="copiarLinha()"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <rect
+                x="8"
+                y="8"
+                width="11"
+                height="11"
+                rx="2"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+
+              <path
+                d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+            </svg>
+
+            {{
+              codigoCopiado()
+                ? 'Linha copiada'
+                : 'Copiar linha digitável'
+            }}
+          </button>
+
+          <button
+            type="button"
+            class="botao-pagar"
+            [disabled]="processando()"
+            (click)="simularPagamento()"
+          >
+            @if (processando()) {
+              <span class="spinner"></span>
+              Registrando pagamento...
+            } @else {
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="m5 12 4 4L19 6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                />
+              </svg>
+
+              Simular pagamento aprovado
+            }
+          </button>
+        </div>
+
+        <div class="campo">
+          <label for="cpf">
+            CPF do comprador
+          </label>
+
+          <input
+            id="cpf"
+            type="text"
+            inputmode="numeric"
+            maxlength="14"
+            [formControl]="formulario.controls.cpf"
+            placeholder="000.000.000-00"
+            autocomplete="off"
+            (input)="mascararCpf($event)"
+          />
+
+          @if (
+            formulario.controls.cpf.touched &&
+            formulario.controls.cpf.invalid
+          ) {
+            <small>
+              Informe um CPF válido.
+            </small>
+          }
+        </div>
+
+        @if (erro()) {
+          <div class="erro">
+            {{ erro() }}
+          </div>
+        }
+      </section>
+
+      <aside class="resumo">
+        <div class="resumo-topo">
+          <div>
+            <span>
+              RESUMO DA COMPRA
+            </span>
+
+            <h2>
+              Seu pedido
+            </h2>
+          </div>
+
+          <div class="icone">
+            ✓
+          </div>
+        </div>
+
+        <div class="comprador">
+          <span>
+            COMPRADOR
+          </span>
+
+          <strong>
+            {{ compradorLogado() }}
+          </strong>
+
+          <small>
+            {{ emailLogado() }}
+          </small>
+        </div>
+
+        <div class="produtos">
+          <span>
+            ITENS
+          </span>
+
+          <div
+            class="produto"
+            *ngFor="
+              let item of carrinhoFacade.itens()
+            "
+          >
+            <div>
+              <strong>
+                {{ item.nome }}
+              </strong>
+
+              <small>
+                Qtd. {{ item.quantidade || 1 }}
+              </small>
+            </div>
+
+            <strong>
+              {{
+                formatarMoeda(
+                  item.preco *
+                  (item.quantidade || 1)
+                )
+              }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="resumo-total">
+          <div>
+            <span>
+              Quantidade de itens
+            </span>
+
+            <strong>
+              {{ quantidadeTotalItens() }}
+            </strong>
+          </div>
+
+          <div class="total-final">
+            <span>
+              Total do carrinho
+            </span>
+
+            <strong>
+              {{
+                formatarMoeda(
+                  carrinhoFacade.total()
+                )
+              }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="status">
+          <div class="status-icone">
+            B
+          </div>
+
+          <div>
+            <strong>
+              Boleto • Simulação
+            </strong>
+
+            <small>
+              Documento demonstrativo sem valor bancário.
+            </small>
+          </div>
+        </div>
+
+        <div class="endereco">
+          <span>
+            CHECKOUT
+          </span>
+
+          <strong>
+            Endereço de cobrança validado
+          </strong>
+
+          <small>
+            O pagamento ficou bloqueado até o endereço
+            ser preenchido no checkout.
+          </small>
+        </div>
+      </aside>
+    </div>
+  } @else {
+    <div class="sucesso">
+      <div class="sucesso-topo">
+        <div class="selo">
+          ✓
+        </div>
+
+        <div>
+          <span class="eyebrow">
+            SIMULAÇÃO CONCLUÍDA
+          </span>
+
+          <h1>
+            Boleto pago
+          </h1>
+
+          <p>
+            O pagamento fictício foi aprovado e o boleto
+            foi marcado como pago apenas para demonstração.
+          </p>
+        </div>
+      </div>
+
+      <article class="documento-final">
+        <div class="documento-cabecalho">
+          <div class="marca">
+            <div class="marca-simbolo">
+              CG
+            </div>
+
+            <div>
+              <strong>
+                CARIBE GAMING
+              </strong>
+
+              <span>
+                BOLETO BANCÁRIO SIMULADO
+              </span>
+            </div>
+          </div>
+
+          <div class="pago">
+            <span>
+              ✓
+            </span>
+
+            <strong>
+              PAGO
+            </strong>
+
+            <small>
+              SIMULAÇÃO
+            </small>
+          </div>
+        </div>
+
+        <div class="carimbo">
+          SEM VALOR BANCÁRIO
+        </div>
+
+        <div class="dados-boleto">
+          <div>
+            <span>
+              Nº DO PEDIDO
+            </span>
+
+            <strong>
+              {{ numeroPedido() }}
+            </strong>
+          </div>
+
+          <div>
+            <span>
+              NOSSO NÚMERO
+            </span>
+
+            <strong>
+              999999999999
+            </strong>
+          </div>
+
+          <div>
+            <span>
+              VENCIMENTO
+            </span>
+
+            <strong>
+              {{ vencimento() }}
+            </strong>
+          </div>
+
+          <div>
+            <span>
+              VALOR
+            </span>
+
+            <strong>
+              {{ formatarMoeda(totalCompra()) }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="beneficiario">
+          <div>
+            <span>
+              BENEFICIÁRIO
+            </span>
+
+            <strong>
+              CARIBE'S GAMING LTDA • DOCUMENTO FICTÍCIO
+            </strong>
+          </div>
+
+          <div>
+            <span>
+              CNPJ
+            </span>
+
+            <strong>
+              00.000.000/0000-00
+            </strong>
+          </div>
+        </div>
+
+        <div class="payer">
+          <h3>
+            PAGADOR
+          </h3>
+
+          <div class="payer-grid">
+            <div>
+              <span>Nome</span>
+
+              <strong>
+                {{ nomeComprador() }}
+              </strong>
+            </div>
+
+            <div>
+              <span>CPF</span>
+
+              <strong>
+                {{ cpfComprador() }}
+              </strong>
+            </div>
+
+            <div>
+              <span>E-mail</span>
+
+              <strong>
+                {{ emailComprador() }}
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="linha-destaque">
+          <span>
+            LINHA DIGITÁVEL
+          </span>
+
+          <strong>
+            {{ linhaDigitavel() }}
+          </strong>
+        </div>
+
+        <div class="barcode-final">
+          <div class="barcode-barras"></div>
+
+          <span>
+            CÓDIGO DE BARRAS — SEM VALOR DE COBRANÇA
+          </span>
+        </div>
+
+        <div class="itens-final">
+          <h3>
+            ITENS DA COMPRA
+          </h3>
+
+          <div
+            class="item-final"
+            *ngFor="let item of itensCompra()"
+          >
+            <span>
+              {{ item.nome }}
+            </span>
+
+            <span>
+              {{ item.quantidade || 1 }}
+            </span>
+
+            <strong>
+              {{
+                formatarMoeda(
+                  item.preco *
+                  (item.quantidade || 1)
+                )
+              }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="total-final-documento">
+          <span>
+            TOTAL PAGO
+          </span>
+
+          <strong>
+            {{ formatarMoeda(totalCompra()) }}
+          </strong>
+        </div>
+
+        <div class="nota-fiscal">
+          <div>
+            <span>
+              DOCUMENTO FISCAL DEMONSTRATIVO
+            </span>
+
+            <strong>
+              {{ numeroNotaFiscal() }}
+            </strong>
+          </div>
+
+          <div>
+            <span>
+              AUTORIZAÇÃO
+            </span>
+
+            <strong>
+              {{ codigoAutorizacao() }}
+            </strong>
+          </div>
+
+          <div>
+            <span>
+              DATA
+            </span>
+
+            <strong>
+              {{ dataPagamento() }}
+            </strong>
+          </div>
+        </div>
+      </article>
+
+      <div class="acoes">
+        <button
+          type="button"
+          class="botao-imprimir"
+          (click)="imprimirComprovante()"
+        >
+          Imprimir documento
+        </button>
+
+        <a
+          routerLink="/jogos"
+          class="botao-continuar"
+        >
+          Continuar comprando
+        </a>
+      </div>
+    </div>
+  }
+</div>

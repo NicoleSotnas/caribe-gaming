@@ -1,0 +1,995 @@
+<div class="pagina-pagamento">
+
+  <div class="breadcrumb">
+    <a routerLink="/checkout">
+      ← Voltar ao checkout
+    </a>
+
+    <span>/</span>
+
+    <span>Cartão</span>
+  </div>
+
+  @if (!sucesso()) {
+
+    <div class="cabecalho-pagamento">
+
+      <div>
+        <span class="eyebrow">
+          PAGAMENTO SIMULADO
+        </span>
+
+        <h1>
+          Pagamento via cartão
+        </h1>
+
+        <p>
+          Ambiente demonstrativo para validar os dados
+          do cartão. Nenhuma informação financeira é
+          enviada ao servidor ou armazenada.
+        </p>
+      </div>
+
+      <div class="badge-simulacao">
+        <span class="badge-dot"></span>
+        SIMULAÇÃO
+      </div>
+
+    </div>
+
+    <div class="layout-pagamento">
+
+      <!-- =================================================
+           FORMULÁRIO
+      ================================================== -->
+
+      <section class="painel-formulario">
+
+        <div class="painel-topo">
+
+          <div>
+            <span class="numero-etapa">
+              01
+            </span>
+
+            <h2>
+              Dados do cartão
+            </h2>
+          </div>
+
+          <div class="cartao-mini">
+            <span>
+              CARIBE CARD
+            </span>
+
+            <strong>
+              •••• •••• •••• ••••
+            </strong>
+
+            <small>
+              SIMULADO
+            </small>
+          </div>
+
+        </div>
+
+        <!-- SEGURANÇA -->
+
+        <div class="alerta-seguranca">
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 3 5 6v5c0 4.5 2.8 8.3 7 10 4.2-1.7 7-5.5 7-10V6l-7-3Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+
+            <path
+              d="m9.3 12 1.8 1.8 3.8-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+            />
+          </svg>
+
+          <div>
+
+            <strong>
+              Dados protegidos na simulação
+            </strong>
+
+            <span>
+              Número do cartão, validade e CVV ficam
+              somente na memória desta página. Eles
+              não são enviados ao servidor e não são
+              armazenados no navegador.
+            </span>
+
+          </div>
+
+        </div>
+
+        <form
+          [formGroup]="formulario"
+          (ngSubmit)="simularPagamento()"
+          novalidate
+        >
+
+          <!-- NOME -->
+
+          <div class="campo">
+
+            <label for="nomeTitular">
+              Nome no cartão
+            </label>
+
+            <input
+              id="nomeTitular"
+              type="text"
+              formControlName="nomeTitular"
+              autocomplete="off"
+              placeholder="Nome completo"
+              [class.input-erro]="
+                formulario.controls.nomeTitular.touched &&
+                formulario.controls.nomeTitular.invalid
+              "
+            />
+
+            @if (
+              formulario.controls.nomeTitular.touched
+            ) {
+
+              @if (
+                formulario.controls.nomeTitular.hasError(
+                  'required'
+                )
+              ) {
+                <small class="erro-campo">
+                  Informe o nome do titular.
+                </small>
+              }
+
+              @else if (
+                formulario.controls.nomeTitular.hasError(
+                  'minlength'
+                )
+              ) {
+                <small class="erro-campo">
+                  O nome deve possuir pelo menos 3 caracteres.
+                </small>
+              }
+
+              @else if (
+                formulario.controls.nomeTitular.hasError(
+                  'nomeInvalido'
+                )
+              ) {
+                <small class="erro-campo">
+                  Use somente letras, espaços e hífen.
+                </small>
+              }
+
+            }
+
+          </div>
+
+          <!-- CPF + CARTÃO -->
+
+          <div class="grid-dois">
+
+            <div class="campo">
+
+              <label for="cpf">
+                CPF do comprador
+              </label>
+
+              <input
+                id="cpf"
+                type="text"
+                inputmode="numeric"
+                maxlength="14"
+                formControlName="cpf"
+                autocomplete="off"
+                placeholder="000.000.000-00"
+                [class.input-erro]="
+                  formulario.controls.cpf.touched &&
+                  formulario.controls.cpf.invalid
+                "
+                (input)="mascararCpf($event)"
+              />
+
+              @if (
+                formulario.controls.cpf.touched
+              ) {
+
+                @if (
+                  formulario.controls.cpf.hasError(
+                    'required'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    Informe o CPF do comprador.
+                  </small>
+                }
+
+                @else if (
+                  formulario.controls.cpf.hasError(
+                    'cpfInvalido'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    CPF inválido. Confira os dígitos verificadores.
+                  </small>
+                }
+
+              }
+
+            </div>
+
+            <div class="campo">
+
+              <label for="numeroCartao">
+                Número do cartão
+              </label>
+
+              <input
+                id="numeroCartao"
+                type="text"
+                inputmode="numeric"
+                maxlength="23"
+                formControlName="numeroCartao"
+                autocomplete="off"
+                placeholder="0000 0000 0000 0000"
+                [class.input-erro]="
+                  formulario.controls.numeroCartao.touched &&
+                  formulario.controls.numeroCartao.invalid
+                "
+                (input)="mascararCartao($event)"
+              />
+
+              @if (
+                formulario.controls.numeroCartao.touched
+              ) {
+
+                @if (
+                  formulario.controls.numeroCartao.hasError(
+                    'required'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    Informe o número do cartão.
+                  </small>
+                }
+
+                @else if (
+                  formulario.controls.numeroCartao.hasError(
+                    'cartaoInvalido'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    Número de cartão inválido.
+                  </small>
+                }
+
+              }
+
+            </div>
+
+          </div>
+
+          <!-- VALIDADE + CVV -->
+
+          <div class="grid-dois">
+
+            <div class="campo">
+
+              <label for="validade">
+                Validade
+              </label>
+
+              <input
+                id="validade"
+                type="text"
+                inputmode="numeric"
+                maxlength="5"
+                formControlName="validade"
+                autocomplete="off"
+                placeholder="MM/AA"
+                [class.input-erro]="
+                  formulario.controls.validade.touched &&
+                  formulario.controls.validade.invalid
+                "
+                (input)="formatarValidade($event)"
+              />
+
+              @if (
+                formulario.controls.validade.touched
+              ) {
+
+                @if (
+                  formulario.controls.validade.hasError(
+                    'required'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    Informe a validade do cartão.
+                  </small>
+                }
+
+                @else if (
+                  formulario.controls.validade.hasError(
+                    'formatoValidadeInvalido'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    Use o formato MM/AA.
+                  </small>
+                }
+
+                @else if (
+                  formulario.controls.validade.hasError(
+                    'validadeExpirada'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    Este cartão está expirado.
+                  </small>
+                }
+
+              }
+
+            </div>
+
+            <div class="campo">
+
+              <label for="cvv">
+                CVV
+              </label>
+
+              <input
+                id="cvv"
+                type="password"
+                inputmode="numeric"
+                maxlength="4"
+                formControlName="cvv"
+                autocomplete="off"
+                placeholder="•••"
+                [class.input-erro]="
+                  formulario.controls.cvv.touched &&
+                  formulario.controls.cvv.invalid
+                "
+                (input)="limitarCvv($event)"
+              />
+
+              @if (
+                formulario.controls.cvv.touched
+              ) {
+
+                @if (
+                  formulario.controls.cvv.hasError(
+                    'required'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    Informe o CVV.
+                  </small>
+                }
+
+                @else if (
+                  formulario.controls.cvv.hasError(
+                    'pattern'
+                  )
+                ) {
+                  <small class="erro-campo">
+                    O CVV deve possuir 3 ou 4 números.
+                  </small>
+                }
+
+              }
+
+            </div>
+
+          </div>
+
+          <!-- ERRO GERAL -->
+
+          @if (erro()) {
+
+            <div
+              class="mensagem-erro"
+              role="alert"
+            >
+
+              <strong>
+                Pagamento não realizado
+              </strong>
+
+              <span>
+                {{ erro() }}
+              </span>
+
+            </div>
+
+          }
+
+          <!-- PAGAR -->
+
+          <button
+            class="botao-pagar"
+            type="submit"
+            [disabled]="processando()"
+          >
+
+            @if (processando()) {
+
+              <span class="spinner"></span>
+
+              Processando simulação...
+
+            } @else {
+
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="14"
+                  rx="2"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+
+                <path
+                  d="M3 10h18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+              </svg>
+
+              Simular pagamento aprovado
+
+            }
+
+          </button>
+
+        </form>
+
+      </section>
+
+      <!-- =================================================
+           RESUMO
+      ================================================== -->
+
+      <aside class="painel-resumo">
+
+        <div class="resumo-titulo">
+
+          <div>
+
+            <span>
+              RESUMO DA COMPRA
+            </span>
+
+            <h2>
+              Seu pedido
+            </h2>
+
+          </div>
+
+          <div class="resumo-check">
+            ✓
+          </div>
+
+        </div>
+
+        <!-- COMPRADOR -->
+
+        <div class="comprador-resumo">
+
+          <span>
+            COMPRADOR
+          </span>
+
+          <strong>
+            {{ compradorLogado() }}
+          </strong>
+
+          <small>
+            {{
+              emailLogado() ||
+              'E-mail da conta'
+            }}
+          </small>
+
+        </div>
+
+        <!-- ITENS -->
+
+        <div class="lista-itens">
+
+          <span class="resumo-label">
+            ITENS DA COMPRA
+          </span>
+
+          @for (
+            item of carrinhoFacade.itens();
+            track $index
+          ) {
+
+            <div class="item-resumo">
+
+              <div class="item-resumo-nome">
+
+                <strong>
+                  {{ item.nome }}
+                </strong>
+
+                <small>
+                  Qtd. {{ item.quantidade || 1 }}
+                  ×
+                  {{ formatarMoeda(item.preco) }}
+                </small>
+
+              </div>
+
+              <strong>
+                {{
+                  formatarMoeda(
+                    item.preco *
+                    (item.quantidade || 1)
+                  )
+                }}
+              </strong>
+
+            </div>
+
+          }
+
+        </div>
+
+        <!-- VALORES -->
+
+        <div class="resumo-financeiro">
+
+          <div>
+
+            <span>
+              Quantidade de itens
+            </span>
+
+            <strong>
+              {{ quantidadeTotalItens() }}
+            </strong>
+
+          </div>
+
+          <div class="linha-total">
+
+            <span>
+              Total da compra
+            </span>
+
+            <strong>
+              {{ formatarMoeda(totalAtual()) }}
+            </strong>
+
+          </div>
+
+        </div>
+
+        <!-- STATUS -->
+
+        <div class="resumo-status">
+
+          <span class="status-icone">
+            ✓
+          </span>
+
+          <div>
+
+            <strong>
+              Cartão • Simulação local
+            </strong>
+
+            <small>
+              Nenhum dado financeiro é enviado ao servidor.
+            </small>
+
+          </div>
+
+        </div>
+
+        <div class="endereco-confirmado">
+
+          <span>
+            CHECKOUT
+          </span>
+
+          <div>
+
+            <strong>
+              Endereço de cobrança validado
+            </strong>
+
+            <small>
+              A forma de pagamento foi liberada após
+              o preenchimento do checkout.
+            </small>
+
+          </div>
+
+        </div>
+
+        <a
+          class="link-voltar"
+          routerLink="/checkout"
+        >
+          ← Escolher outra forma de pagamento
+        </a>
+
+      </aside>
+
+    </div>
+
+  } @else {
+
+    <!-- ===================================================
+         COMPROVANTE
+    ==================================================== -->
+
+    <div class="sucesso-pagina">
+
+      <div class="sucesso-cabecalho">
+
+        <div class="selo-pago">
+
+          <span>
+            ✓
+          </span>
+
+          <small>
+            APROVADO
+          </small>
+
+        </div>
+
+        <div>
+
+          <span class="eyebrow">
+            SIMULAÇÃO CONCLUÍDA
+          </span>
+
+          <h1>
+            Pagamento aprovado
+          </h1>
+
+          <p>
+            A compra foi processada localmente para
+            demonstração do MVP.
+          </p>
+
+        </div>
+
+      </div>
+
+      <article class="nota-fiscal">
+
+        <div class="nf-topo">
+
+          <div>
+
+            <span>
+              CARIBE'S GAMING
+            </span>
+
+            <h2>
+              Comprovante de pagamento
+            </h2>
+
+            <strong>
+              NOTA FISCAL SIMULADA • SEM VALIDADE FISCAL
+            </strong>
+
+          </div>
+
+          <div class="nf-situacao">
+
+            <span>
+              ✓
+            </span>
+
+            <strong>
+              PAGO
+            </strong>
+
+            <small>
+              SIMULAÇÃO
+            </small>
+
+          </div>
+
+        </div>
+
+        <div class="nf-alerta">
+          Documento criado exclusivamente para
+          demonstração do MVP. Não possui valor
+          fiscal, bancário ou contábil.
+        </div>
+
+        <!-- METADADOS -->
+
+        <div class="nf-metadados">
+
+          <div>
+
+            <span>
+              Nº DO PEDIDO
+            </span>
+
+            <strong>
+              {{ numeroPedido() }}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>
+              NOTA FISCAL
+            </span>
+
+            <strong>
+              {{ numeroNotaFiscal() }}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>
+              AUTORIZAÇÃO
+            </span>
+
+            <strong>
+              {{ codigoAutorizacao() }}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>
+              DATA
+            </span>
+
+            <strong>
+              {{ dataPagamento() }}
+            </strong>
+
+          </div>
+
+        </div>
+
+        <!-- COMPRADOR -->
+
+        <section class="nf-secao">
+
+          <h3>
+            COMPRADOR
+          </h3>
+
+          <div class="nf-comprador">
+
+            <div>
+
+              <span>
+                Nome
+              </span>
+
+              <strong>
+                {{ nomeComprador() }}
+              </strong>
+
+            </div>
+
+            <div>
+
+              <span>
+                E-mail
+              </span>
+
+              <strong>
+                {{
+                  emailComprador() ||
+                  'Não informado'
+                }}
+              </strong>
+
+            </div>
+
+            <div>
+
+              <span>
+                CPF
+              </span>
+
+              <strong>
+                {{ cpfComprador() }}
+              </strong>
+
+            </div>
+
+            <div>
+
+              <span>
+                Pagamento
+              </span>
+
+              <strong>
+                Cartão • Simulação
+              </strong>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ITENS -->
+
+        <section class="nf-secao">
+
+          <h3>
+            ITENS DA COMPRA
+          </h3>
+
+          <div class="tabela-nf">
+
+            <div
+              class="tabela-nf-cabecalho"
+            >
+              <span>
+                Produto
+              </span>
+
+              <span>
+                Qtd.
+              </span>
+
+              <span>
+                Unitário
+              </span>
+
+              <span>
+                Total
+              </span>
+            </div>
+
+            @for (
+              item of itensCompra();
+              track $index
+            ) {
+
+              <div
+                class="tabela-nf-linha"
+              >
+
+                <span>
+                  {{ item.nome }}
+                </span>
+
+                <span>
+                  {{ item.quantidade || 1 }}
+                </span>
+
+                <span>
+                  {{
+                    formatarMoeda(
+                      item.preco
+                    )
+                  }}
+                </span>
+
+                <strong>
+                  {{
+                    formatarMoeda(
+                      item.preco *
+                      (item.quantidade || 1)
+                    )
+                  }}
+                </strong>
+
+              </div>
+
+            }
+
+          </div>
+
+        </section>
+
+        <!-- TOTAL -->
+
+        <div class="nf-total">
+
+          <span>
+            TOTAL PAGO
+          </span>
+
+          <strong>
+            {{ formatarMoeda(totalCompra()) }}
+          </strong>
+
+        </div>
+
+        <div class="nf-rodape">
+
+          <span>
+            CARIBE'S GAMING
+          </span>
+
+          <span>
+            DOCUMENTO DEMONSTRATIVO
+          </span>
+
+        </div>
+
+      </article>
+
+      <div class="acoes-sucesso">
+
+        <button
+          type="button"
+          class="botao-imprimir"
+          (click)="imprimirComprovante()"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 9V4h12v5M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+            />
+
+            <path
+              d="M6 14h12v6H6z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+          </svg>
+
+          Imprimir comprovante
+
+        </button>
+
+        <a
+          class="botao-continuar"
+          routerLink="/jogos"
+        >
+          Continuar comprando
+        </a>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>
