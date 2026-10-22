@@ -29,6 +29,7 @@ import { Cyberpunk2077 } from './features/produtos/cyberpunk-2077/cyberpunk-2077
 import { MarvelRivals } from './features/produtos/marvel-rivals/marvel-rivals';
 import { TheLastOfUsPartii } from './features/produtos/the-last-of-us-part-ii/the-last-of-us-part-ii';
 import { DetalheJogo } from './features/produtos/detalhe-jogo/detalhe-jogo';
+import { Sobrenos } from './features/sobrenos/sobrenos'; // <-- Importe o componente (ajuste o caminho se necessário)
 
 export const routes: Routes = [
   {
@@ -36,12 +37,12 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home/home').then((m) => m.Home),
   },
   {
-    path: 'jogos',
-    component: Produtos,
+    path: 'sobre-nos', // <-- Rota adicionada
+    component: Sobrenos,
   },
   {
-    path: 'produto/:id',
-    component: DetalheJogo,
+    path: 'jogos',
+    component: Produtos,
   },
   {
     path: 'jogos/grand-theft-auto-v',
@@ -79,7 +80,7 @@ export const routes: Routes = [
     path: 'jogos/hollow-knight',
     component: HollowKnight,
   },
-   {
+  {
     path: 'jogos/the-last-of-us-II',
     component: TheLastOfUsPartii,
   },
@@ -138,6 +139,7 @@ export const routes: Routes = [
   {
     path: 'checkout',
     component: Checkout,
+    canActivate: [authGuard],
   },
   {
     path: 'admin',

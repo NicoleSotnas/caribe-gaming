@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
   signOut,
   updateProfile,
   user,
@@ -30,6 +31,13 @@ export class AuthService {
       const provider = new GoogleAuthProvider();
       return from(signInWithPopup(this.auth, provider));
     });
+  }
+
+  // Certifique-se de incluir esta função:
+  recuperarSenha(email: string): Observable<void> {
+    return runInInjectionContext(this.injector, () =>
+      from(sendPasswordResetEmail(this.auth, email)),
+    );
   }
 
   registrar(email: string, senha: string, nome: string): Observable<any> {
