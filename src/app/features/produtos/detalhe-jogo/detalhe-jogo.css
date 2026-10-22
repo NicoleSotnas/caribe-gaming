@@ -13,7 +13,7 @@
 
 .pagina-detalhes {
   margin-top: 80px;
-  background: transparent; 
+  background: transparent;
   color: #ffffff;
   padding: 40px 40px 24px 40px;
   min-height: 100vh;
@@ -40,14 +40,8 @@
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
 /* ==========================================================================
@@ -60,9 +54,7 @@
   margin-bottom: 20px;
 }
 
-.cabecalho-navegacao .breadcrumb {
-  margin-bottom: 0;
-}
+.cabecalho-navegacao .breadcrumb { margin-bottom: 0; }
 
 .breadcrumb {
   font-size: 0.8rem;
@@ -152,22 +144,7 @@
   display: block;
 }
 
-.img-destaque.esgotado-img {
-  filter: grayscale(80%) opacity(0.6);
-}
-
-.badge-key {
-  background: linear-gradient(90deg, #ff9f43, #ee5253);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 0.8rem;
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 5;
-}
+.img-destaque.esgotado-img { filter: grayscale(80%) opacity(0.6); }
 
 .badge-esgotado {
   background: #ff4757;
@@ -185,7 +162,7 @@
 .badge-desconto {
   position: absolute;
   top: 12px;
-  left: 120px;
+  left: 12px;
   z-index: 10;
   background: #0088ff;
   color: #ffffff;
@@ -211,17 +188,12 @@
 }
 
 /* --- CORES DE CLASSIFICAÇÃO ETÁRIA --- */
-.badge-classificacao.livre { background: #4ade80; color: #06231a; }
-.badge-classificacao.dez   { background: #4fc3e8; color: #06232f; }
-.badge-classificacao.doze  { background: #ffd93d; color: #3a2c00; }
-.badge-classificacao.quatorze { background: #ffb454; color: #3a2200; }
+.badge-classificacao.livre     { background: #4ade80; color: #06231a; }
+.badge-classificacao.dez       { background: #4fc3e8; color: #06232f; }
+.badge-classificacao.doze      { background: #ffd93d; color: #3a2c00; }
+.badge-classificacao.quatorze  { background: #ffb454; color: #3a2200; }
 .badge-classificacao.dezesseis { background: #ff8a3d; color: #3a1800; }
-.badge-classificacao.dezoito { background: #ff5252; color: #ffffff; }
-
-.badge-gratis {
-  background: #4ade80;
-  color: #06231a;
-}
+.badge-classificacao.dezoito   { background: #ff5252; color: #ffffff; }
 
 .btn-seta {
   position: absolute;
@@ -250,7 +222,7 @@
 .btn-prev { left: 12px; }
 .btn-next { right: 12px; }
 
-/* --- CARROSSEL DE MINIATURAS --- */
+/* --- MINIATURAS --- */
 .fila-miniaturas {
   display: flex;
   flex-wrap: nowrap;
@@ -272,9 +244,7 @@
   border-radius: 10px;
 }
 
-.fila-miniaturas::-webkit-scrollbar-thumb:hover {
-  background: #4fc3e8;
-}
+.fila-miniaturas::-webkit-scrollbar-thumb:hover { background: #4fc3e8; }
 
 .thumb-item {
   flex: 0 0 140px;
@@ -332,9 +302,10 @@
 
 .estrelas { color: #f59e0b; }
 
-.card-compra, 
-.tabela-fatos, 
-.secao-detalhada, 
+/* Base "vidro" compartilhada pelos cards */
+.card-compra,
+.tabela-fatos,
+.secao-detalhada,
 .secao-avaliacoes {
   background: rgba(11, 28, 48, 0.75);
   backdrop-filter: blur(12px);
@@ -344,13 +315,14 @@
 }
 
 .card-compra {
-  padding: 20px;
+  background-color: #0f2a3a;
+  border: 1px solid #1a435b;
+  padding: 1.5rem;
   margin-bottom: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.card-esgotado {
-  border-color: rgba(255, 71, 87, 0.4);
-}
+.card-esgotado { border-color: rgba(255, 71, 87, 0.4); }
 
 .precos-linha {
   display: flex;
@@ -474,7 +446,7 @@
   margin-top: 10px;
 }
 
-/* --- TABELA DE FATOS DO JOGO --- */
+/* --- TABELA DE FATOS --- */
 .tabela-fatos { padding: 16px; }
 
 .fato-linha {
@@ -486,11 +458,11 @@
 }
 
 .fato-linha:last-child { border-bottom: none; }
-.fato-linha span { color: rgba(255, 255, 255, 0.65); }
+.fato-linha span   { color: rgba(255, 255, 255, 0.65); }
 .fato-linha strong { color: #ffffff; }
 
 /* ==========================================================================
-   6. SEÇÃO DA KEY DIGITAL (ESTILO ENEBA / NUUVEM)
+   6. SEÇÃO DA KEY DIGITAL
    ========================================================================== */
 .secao-info-key {
   background: rgba(13, 34, 56, 0.6);
@@ -523,9 +495,8 @@
 }
 
 .icone-key-box.verde { background: rgba(46, 213, 115, 0.15); color: #2ed573; }
-.icone-key-box.azul  { background: rgba(0, 210, 211, 0.15); color: #00d2d3; }
+.icone-key-box.azul  { background: rgba(0, 210, 211, 0.15);  color: #00d2d3; }
 .icone-key-box.roxo  { background: rgba(156, 136, 255, 0.15); color: #9c88ff; }
-.icone-key-box.amarelo { background: rgba(255, 171, 0, 0.15); color: #ffab00; }
 
 .texto-key-box {
   display: flex;
@@ -541,28 +512,21 @@
 
 .texto-key-box span { color: rgba(255, 255, 255, 0.7); }
 
-.link-destaque {
-  color: #ffab00;
-  cursor: pointer;
-  margin-top: 2px;
-  text-decoration: underline;
-}
-
 .texto-sucesso {
   color: #2ed573;
   font-weight: bold;
 }
 
 /* ==========================================================================
-   7. SEÇÃO SOBRE, REQUISITOS E DLCs
+   7. SOBRE, CARACTERÍSTICAS E REQUISITOS
    ========================================================================== */
-.secao-detalhada, 
+.secao-detalhada,
 .secao-avaliacoes {
   padding: 28px;
   margin-top: 32px;
 }
 
-.secao-detalhada h2, 
+.secao-detalhada h2,
 .secao-avaliacoes h2 {
   font-size: 1.1rem;
   margin-bottom: 14px;
@@ -574,6 +538,23 @@
   line-height: 1.6;
 }
 
+/* --- CARACTERÍSTICAS (Um jogador, Multijogador, Conquistas...) --- */
+.lista-caracteristicas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.item-caracteristica {
+  background: rgba(114, 236, 255, 0.1);
+  border: 1px solid rgba(114, 236, 255, 0.3);
+  color: #72ecff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+/* --- REQUISITOS --- */
 .grid-requisitos {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -583,52 +564,19 @@
 
 .texto-req {
   font-size: 0.88rem;
-  color: rgba(255,255,255,0.8);
-  white-space: pre-line;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: normal;
   line-height: 1.6;
 }
 
-.grid-dlcs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
-  margin-top: 15px;
+/* O conteúdo do [innerHTML] vem da Steam, por isso precisa de ::ng-deep */
+:host ::ng-deep .texto-req ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-
-.card-dlc {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card-dlc:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 210, 211, 0.3);
-}
-
-.card-dlc img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-}
-
-.info-dlc { padding: 10px; }
-
-.info-dlc h4 {
-  font-size: 0.9rem;
-  margin: 0 0 5px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.preco-dlc {
-  color: #00d2d3;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
+:host ::ng-deep .texto-req li     { margin-bottom: 6px; }
+:host ::ng-deep .texto-req strong { color: #ffffff; }
 
 /* ==========================================================================
    8. AVALIAÇÕES E MODAL
@@ -664,38 +612,6 @@
   display: block;
   margin-top: 4px;
   margin-bottom: 20px;
-}
-
-.barras-avaliacao {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 20px;
-  text-align: left;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.linha-barra {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.linha-barra span:first-child { width: 55px; }
-
-.barra-fundo {
-  flex: 1;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.barra-progresso {
-  height: 100%;
-  background: #0088ff;
-  border-radius: 3px;
 }
 
 .btn-escrever-avaliacao {
@@ -743,7 +659,7 @@
   align-items: center;
   justify-content: center;
   margin-right: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .info-autor { flex: 1; }
@@ -794,7 +710,7 @@
 
 .btn-reacao:hover { background: rgba(255, 255, 255, 0.15); }
 
-/* --- MODAL DE AVALIAÇÕES --- */
+/* --- MODAL DE AVALIAÇÃO --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -905,11 +821,8 @@
 }
 
 /* ==========================================================================
-   9. ANIMAÇÃO DE CARREGAMENTO (BARCO PIRATA) E ERRO
+   9. ANIMAÇÃO DE CARREGAMENTO (BARCO PIRATA)
    ========================================================================== */
-
-   
-/* ===== ANIMAÇÃO PIRATA DE CARREGAMENTO ===== */
 .carregando-container {
   display: flex;
   flex-direction: column;
@@ -975,25 +888,23 @@
 }
 
 @keyframes navegar {
-  0% { transform: translateY(0) rotate(-6deg); }
-  50% { transform: translateY(-12px) rotate(0deg); }
+  0%   { transform: translateY(0) rotate(-6deg); }
+  50%  { transform: translateY(-12px) rotate(0deg); }
   100% { transform: translateY(0) rotate(6deg); }
 }
 
 @keyframes ondular {
-  0% { transform: translateX(0); }
+  0%   { transform: translateX(0); }
   100% { transform: translateX(-300px); }
 }
 
 /* ==========================================================================
-   10. REGRAS DE RESPONSIVIDADE (MEDIA QUERIES)
+   10. RESPONSIVIDADE
    ========================================================================== */
 
-/* Tablets e notebooks menores (Até 1024px) */
+/* Tablets e notebooks menores (até 1024px) */
 @media (max-width: 1024px) {
-  .pagina-detalhes {
-    padding: 30px 20px 20px 20px;
-  }
+  .pagina-detalhes { padding: 30px 20px 20px 20px; }
 
   .grid-principal {
     grid-template-columns: 1fr;
@@ -1004,13 +915,9 @@
     grid-template-columns: 1fr;
     gap: 20px;
   }
-
-  .resumo-avaliacoes-card {
-    max-width: 100%;
-  }
 }
 
-/* Dispositivos Móveis (Até 768px) */
+/* Celulares (até 768px) */
 @media (max-width: 768px) {
   .pagina-detalhes {
     margin-top: 60px;
@@ -1022,9 +929,7 @@
     gap: 10px;
   }
 
-  .titulo-jogo {
-    font-size: 1.6rem;
-  }
+  .titulo-jogo { font-size: 1.6rem; }
 
   .thumb-item {
     flex: 0 0 110px;
@@ -1037,16 +942,15 @@
     font-size: 1rem;
   }
 
-  .secao-detalhada, 
+  .secao-detalhada,
   .secao-avaliacoes {
     padding: 18px;
     margin-top: 20px;
   }
 
-  /* Requisitos de Sistema em uma coluna única */
   .grid-requisitos {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .toast-notificacao {
@@ -1057,26 +961,16 @@
   }
 }
 
-/* Telas Pequenas de Celular (Até 480px) */
+/* Celulares pequenos (até 480px) */
 @media (max-width: 480px) {
-  .acoes-botoes {
-    flex-direction: row;
-  }
-
   .btn-adicionar {
     font-size: 0.85rem;
     padding: 10px;
   }
 
-  .preco-promo {
-    font-size: 1.5rem;
-  }
+  .preco-promo { font-size: 1.5rem; }
 
-  .modal-card {
-    max-width: 95%;
-  }
+  .modal-card { max-width: 95%; }
 
-  .modal-body {
-    padding: 16px;
-  }
+  .modal-body { padding: 16px; }
 }

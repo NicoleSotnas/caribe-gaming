@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/steam/:path*", "destination": "https://store.steampowered.com/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
-} 
+}

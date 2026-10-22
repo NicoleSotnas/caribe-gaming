@@ -1,0 +1,8 @@
+{
+  "/steam": {
+    "target": "https://store.steampowered.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": { "^/steam": "" }
+  }
+}

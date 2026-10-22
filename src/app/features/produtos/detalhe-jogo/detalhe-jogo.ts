@@ -2,10 +2,10 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RawgService } from '../../../core/services/rawg.service';
+import { JogosApiService } from '../../../core/services/jogos-api.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
-import { DetalhesJogo, Comentario, Produto } from '../../../core/models/jogo';
+import { DetalhesJogo, Comentario } from '../../../core/models/jogo';
 
 @Component({
   selector: 'app-detalhe-jogo',
@@ -19,7 +19,7 @@ export class DetalheJogo implements OnInit {
   private router = inject(Router);
   private location = inject(Location);
   private cdr = inject(ChangeDetectorRef);
-  private rawgService = inject(RawgService);
+  private jogosApi = inject(JogosApiService);
   private carrinhoFacade = inject(CarrinhoFacade);
   private favoritosService = inject(FavoritosService);
 
@@ -34,12 +34,13 @@ export class DetalheJogo implements OnInit {
   favorito: boolean = false;
   mensagemToast: string | null = null;
 
-  precoOriginalFormatado: string = 'R$ 199,90';
-  precoFormatado: string = 'R$ 99,95';
-  desconto: number = 50;
-  genero: string = 'Ação / Aventura';
-  notaMetacritic: string = '4.8';
-  totalAvaliacoes: number = 2450;
+  precoOriginalFormatado: string = '';
+  precoFormatado: string = '';
+  precoNumero: number = 0;
+  desconto: number = 0;
+  genero: string = '';
+  notaMetacritic: string = '—';
+  totalAvaliacoes: number = 0;
 
   requisitosMinimos: string = '';
   requisitosRecomendados: string = '';
@@ -65,19 +66,41 @@ export class DetalheJogo implements OnInit {
   private resetarEstado(): void {
     this.carregando = true;
     this.erro = false;
+    this.jogo = null;
     this.galeriaImagens = [];
     this.indiceAtivo = 0;
+    this.precoOriginalFormatado = '';
+    this.precoFormatado = '';
+    this.precoNumero = 0;
+    this.desconto = 0;
+    this.notaMetacritic = '—';
+    this.totalAvaliacoes = 0;
+    this.requisitosMinimos = '';
+    this.requisitosRecomendados = '';
   }
 
   private carregarTudo(): void {
     this.favorito = this.favoritosService.ehFavorito(this.jogoIdOuSlug);
-    this.emEstoque = this.jogoIdOuSlug !== '15' && this.jogoIdOuSlug !== 'the-last-of-us-part-i';
-
     this.carregarAvaliacoes();
 
-    this.rawgService.obterDetalhesJogo(this.jogoIdOuSlug).subscribe({
-      next: (dados) => {
-        this.jogo = dados;
+    this.jogosApi.obterJogo(this.jogoIdOuSlug).subscribe({
+      next: (d) => {
+        this.jogo = d;
+        this.galeriaImagens = d.imagens ?? [];
+        this.genero = d.generos ?? '';
+        this.emEstoque = d.estoque ?? true;
+
+        this.desconto = d.preco?.desconto ?? 0;
+        this.precoFormatado = d.gratis ? 'Grátis' : (d.preco?.atual ?? 'Indisponível');
+        this.precoOriginalFormatado = d.preco?.original ?? '';
+        this.precoNumero = d.gratis ? 0 : (d.preco?.valor ?? 0);
+
+        this.notaMetacritic = d.avaliacao?.nota ?? '—';
+        this.totalAvaliacoes = d.avaliacao?.total ?? 0;
+
+        this.requisitosMinimos = d.requisitos?.minimos ?? '';
+        this.requisitosRecomendados = d.requisitos?.recomendados ?? '';
+
         this.carregando = false;
         this.cdr.markForCheck();
       },
@@ -87,30 +110,9 @@ export class DetalheJogo implements OnInit {
         this.cdr.markForCheck();
       }
     });
-
-    this.rawgService.obterScreenshots(this.jogoIdOuSlug).subscribe({
-      next: (res) => {
-        if (res.results?.length > 0) {
-          this.galeriaImagens = res.results.map((item: any) => item.image);
-        }
-      }
-    });
-
-    this.rawgService.obterGameRaw(this.jogoIdOuSlug).subscribe({
-      next: (raw: any) => {
-        this.genero = raw.genres?.map((g: any) => g.name).join(', ') || 'Ação';
-        this.notaMetacritic = raw.metacritic ? (raw.metacritic / 20).toFixed(1) : '4.8';
-
-        const pcPlatform = raw.platforms?.find((p: any) => p.platform.slug === 'pc');
-        if (pcPlatform?.requirements) {
-          this.requisitosMinimos = this.formatarRequisitos(pcPlatform.requirements.minimum);
-          this.requisitosRecomendados = this.formatarRequisitos(pcPlatform.requirements.recommended);
-        }
-      }
-    });
   }
 
-  // Tratamento automático de erro de imagem (Fallback para RAWG se Steam falhar)
+  // Fallback: se a screenshot falhar, usa a imagem de capa
   tratarErroImagem(event: Event): void {
     const imgElem = event.target as HTMLImageElement;
     if (this.jogo?.background_image && imgElem.src !== this.jogo.background_image) {
@@ -141,19 +143,6 @@ export class DetalheJogo implements OnInit {
       case '+10': return 'dez';
       default: return 'livre';
     }
-  }
-
-  private formatarRequisitos(req: string): string {
-    if (!req) return 'Consulte as especificações recomendadas na Steam.';
-    return req
-      .replace(/<[^>]*>/g, '')
-      .replace(/Minimum:/gi, '')
-      .replace(/Recommended:/gi, '')
-      .replace(/OS:/gi, 'Sistema Operacional:')
-      .replace(/Processor:/gi, 'Processador:')
-      .replace(/Memory:/gi, 'Memória:')
-      .replace(/Graphics:/gi, 'Placa de Vídeo:')
-      .replace(/Storage:/gi, 'Armazenamento:');
   }
 
   private get chaveAvaliacoes(): string { return `caribe_avaliacoes_${this.jogoIdOuSlug}`; }
@@ -212,8 +201,14 @@ export class DetalheJogo implements OnInit {
   irParaHome(): void { this.router.navigate(['/']); }
   irParaJogos(): void { this.router.navigate(['/jogos']); }
 
-  proximaFoto(): void { this.indiceAtivo = (this.indiceAtivo + 1) % this.galeriaImagens.length; }
-  fotoAnterior(): void { this.indiceAtivo = (this.indiceAtivo - 1 + this.galeriaImagens.length) % this.galeriaImagens.length; }
+  proximaFoto(): void {
+    if (!this.galeriaImagens.length) return;
+    this.indiceAtivo = (this.indiceAtivo + 1) % this.galeriaImagens.length;
+  }
+  fotoAnterior(): void {
+    if (!this.galeriaImagens.length) return;
+    this.indiceAtivo = (this.indiceAtivo - 1 + this.galeriaImagens.length) % this.galeriaImagens.length;
+  }
   selecionarIndice(i: number): void { this.indiceAtivo = i; }
 
   adicionarAoCarrinho(): void {
@@ -221,7 +216,7 @@ export class DetalheJogo implements OnInit {
     this.carrinhoFacade.adicionarProduto({
       id: Number(this.jogo.id) || Date.now(),
       nome: this.jogo.nome,
-      preco: 99.95,
+      preco: this.precoNumero,
       quantidade: 1,
       imagemUrl: this.galeriaImagens[0] || this.jogo.background_image || '',
       plataforma: this.jogo.plataformas || 'PC',

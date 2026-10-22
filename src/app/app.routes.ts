@@ -17,11 +17,7 @@ export const routes: Routes = [
     path: 'jogos',
     component: Produtos,
   },
-  {
-    // Rota única e dinâmica para qualquer jogo
-    path: 'produto/:id',
-    component: DetalheJogo,
-  },
+   { path: 'produtos/:id', component: DetalheJogo },
   {
     path: 'login',
     component: Login,

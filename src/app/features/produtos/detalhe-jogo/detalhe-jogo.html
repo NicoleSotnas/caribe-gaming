@@ -181,17 +181,27 @@
       <p class="descricao-paragrafo">{{ jogo.descricao }}</p>
     </div>
 
-    <!-- REQUISITOS DE SISTEMA -->
+    <!-- CARACTERÍSTICAS (novo) -->
+    <div class="secao-detalhada" *ngIf="jogo.caracteristicas?.length">
+      <h2>CARACTERÍSTICAS</h2>
+      <div class="lista-caracteristicas">
+        <span class="item-caracteristica" *ngFor="let item of jogo.caracteristicas">{{ item }}</span>
+      </div>
+    </div>
+
+    <!-- REQUISITOS DE SISTEMA (atualizado) -->
     <div class="secao-detalhada secao-requisitos">
       <h2>REQUISITOS DE SISTEMA (PC)</h2>
       <div class="grid-requisitos">
         <div class="req-coluna">
           <h3 class="subtitulo-req">Mínimos:</h3>
-          <p class="texto-req">{{ requisitosMinimos || 'Windows 10/11 (64-bit), 8GB RAM, Placa de vídeo GTX 1050 / Radeon RX 560.' }}</p>
+          <div class="texto-req" *ngIf="requisitosMinimos" [innerHTML]="requisitosMinimos"></div>
+          <p class="texto-req" *ngIf="!requisitosMinimos">Não informado.</p>
         </div>
         <div class="req-coluna">
           <h3 class="subtitulo-req">Recomendados:</h3>
-          <p class="texto-req">{{ requisitosRecomendados || 'Windows 10/11 (64-bit), 16GB RAM, Placa de vídeo GTX 1660 / Radeon RX 580.' }}</p>
+          <div class="texto-req" *ngIf="requisitosRecomendados" [innerHTML]="requisitosRecomendados"></div>
+          <p class="texto-req" *ngIf="!requisitosRecomendados">Não informado.</p>
         </div>
       </div>
     </div>
