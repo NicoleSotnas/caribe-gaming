@@ -7,11 +7,16 @@ import { Admin } from './features/admin/admin';
 import { adminGuard } from './core/guards/admin-guard';
 import { authGuard } from './core/guards/auth-guard';
 import { DetalheJogo } from './features/produtos/detalhe-jogo/detalhe-jogo';
+import { Sobrenos } from './features/sobrenos/sobrenos'; // <-- Importe o componente (ajuste o caminho se necessário)
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./home/home/home').then((m) => m.Home),
+  },
+  {
+    path: 'sobre-nos', // <-- Rota adicionada
+    component: Sobrenos,
   },
   {
     path: 'jogos',
@@ -35,6 +40,7 @@ export const routes: Routes = [
   {
     path: 'checkout',
     component: Checkout,
+    canActivate: [authGuard],
   },
   {
     path: 'admin',
