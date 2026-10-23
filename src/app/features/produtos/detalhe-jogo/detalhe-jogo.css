@@ -1,7 +1,19 @@
-/* --- CONTAINER GERAL DA PÁGINA --- */
+/* ==========================================================================
+   1. CONTAINER GERAL DA PÁGINA
+   ========================================================================== */
+.pagina-detalhes-container {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #0d2238;
+  color: #ffffff;
+  padding: 20px;
+}
+
 .pagina-detalhes {
   margin-top: 80px;
-  background: transparent; 
+  background: transparent;
   color: #ffffff;
   padding: 40px 40px 24px 40px;
   min-height: 100vh;
@@ -9,7 +21,9 @@
   box-sizing: border-box;
 }
 
-/* --- MENSAGEM FLUTUANTE (TOAST) --- */
+/* ==========================================================================
+   2. MENSAGEM FLUTUANTE (TOAST)
+   ========================================================================== */
 .toast-notificacao {
   position: fixed;
   bottom: 24px;
@@ -26,15 +40,21 @@
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
+
+/* ==========================================================================
+   3. CABEÇALHO E BREADCRUMB
+   ========================================================================== */
+.cabecalho-navegacao {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.cabecalho-navegacao .breadcrumb { margin-bottom: 0; }
 
 .breadcrumb {
   font-size: 0.8rem;
@@ -52,6 +72,43 @@
   text-decoration: underline;
 }
 
+.btn-voltar {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.icon-pirata {
+  width: 18px;
+  height: 18px;
+  stroke: #ffffff;
+  transition: transform 0.3s ease, stroke 0.2s ease;
+}
+
+.btn-voltar:hover {
+  background: rgba(114, 236, 255, 0.15);
+  border-color: #72ecff;
+  color: #72ecff;
+}
+
+.btn-voltar:hover .icon-pirata {
+  stroke: #72ecff;
+  transform: rotate(-45deg);
+}
+
+/* ==========================================================================
+   4. GRID PRINCIPAL E MÍDIA
+   ========================================================================== */
 .grid-principal {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
@@ -87,6 +144,21 @@
   display: block;
 }
 
+.img-destaque.esgotado-img { filter: grayscale(80%) opacity(0.6); }
+
+.badge-esgotado {
+  background: #ff4757;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+}
+
 .badge-desconto {
   position: absolute;
   top: 12px;
@@ -115,6 +187,14 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* --- CORES DE CLASSIFICAÇÃO ETÁRIA --- */
+.badge-classificacao.livre     { background: #4ade80; color: #06231a; }
+.badge-classificacao.dez       { background: #4fc3e8; color: #06232f; }
+.badge-classificacao.doze      { background: #ffd93d; color: #3a2c00; }
+.badge-classificacao.quatorze  { background: #ffb454; color: #3a2200; }
+.badge-classificacao.dezesseis { background: #ff8a3d; color: #3a1800; }
+.badge-classificacao.dezoito   { background: #ff5252; color: #ffffff; }
+
 .btn-seta {
   position: absolute;
   top: 50%;
@@ -142,6 +222,7 @@
 .btn-prev { left: 12px; }
 .btn-next { right: 12px; }
 
+/* --- MINIATURAS --- */
 .fila-miniaturas {
   display: flex;
   flex-wrap: nowrap;
@@ -158,19 +239,12 @@
   background: transparent;
 }
 
-.fila-miniaturas::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 .fila-miniaturas::-webkit-scrollbar-thumb {
   background: rgba(79, 195, 232, 0.3);
   border-radius: 10px;
-  transition: background 0.2s ease;
 }
 
-.fila-miniaturas::-webkit-scrollbar-thumb:hover {
-  background: #4fc3e8;
-}
+.fila-miniaturas::-webkit-scrollbar-thumb:hover { background: #4fc3e8; }
 
 .thumb-item {
   flex: 0 0 140px;
@@ -185,9 +259,7 @@
   transition: all 0.2s;
 }
 
-.thumb-item:hover {
-  opacity: 0.85;
-}
+.thumb-item:hover { opacity: 0.85; }
 
 .thumb-item.ativo {
   border-color: #00d2ff;
@@ -201,9 +273,10 @@
   object-fit: cover;
 }
 
-.secao-info {
-  width: 100%;
-}
+/* ==========================================================================
+   5. INFORMAÇÕES DO JOGO E CARD DE COMPRA
+   ========================================================================== */
+.secao-info { width: 100%; }
 
 .titulo-jogo {
   font-size: 2.2rem;
@@ -218,9 +291,7 @@
   margin-bottom: 12px;
 }
 
-.categoria-tag {
-  color: #72ecff;
-}
+.categoria-tag { color: #72ecff; }
 
 .avaliacao-container {
   display: flex;
@@ -229,31 +300,12 @@
   margin-bottom: 20px;
 }
 
-.estrelas {
-  color: #f59e0b;
-}
+.estrelas { color: #f59e0b; }
 
-.destaques-lista {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 24px 0;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.destaques-lista li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 0;
-}
-
-.card-compra, 
-.tabela-fatos, 
-.secao-detalhada, 
+/* Base "vidro" compartilhada pelos cards */
+.card-compra,
+.tabela-fatos,
+.secao-detalhada,
 .secao-avaliacoes {
   background: rgba(11, 28, 48, 0.75);
   backdrop-filter: blur(12px);
@@ -263,9 +315,14 @@
 }
 
 .card-compra {
-  padding: 20px;
+  background-color: #0f2a3a;
+  border: 1px solid #1a435b;
+  padding: 1.5rem;
   margin-bottom: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
+
+.card-esgotado { border-color: rgba(255, 71, 87, 0.4); }
 
 .precos-linha {
   display: flex;
@@ -284,6 +341,29 @@
   font-size: 1.8rem;
   font-weight: 800;
   color: #72ecff;
+}
+
+.status-estoque-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 71, 87, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.icone-esgotado { font-size: 2rem; }
+
+.texto-esgotado strong {
+  color: #ff4757;
+  display: block;
+}
+
+.texto-esgotado p {
+  font-size: 0.8rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .acoes-botoes {
@@ -326,18 +406,10 @@
   transition: color 0.2s, transform 0.2s;
 }
 
-.btn-favorito:hover {
-  transform: scale(1.1);
-}
+.btn-favorito:hover { transform: scale(1.1); }
+.btn-favorito.favoritado { color: #ff4757; }
 
-.icon-heart {
-  width: 24px;
-  height: 24px;
-}
-
-.btn-favorito.favoritado {
-  color: #ff4757;
-}
+.icon-heart { width: 24px; height: 24px; }
 
 .btn-comprar {
   width: 100%;
@@ -356,6 +428,17 @@
   transform: translateY(-2px);
 }
 
+.btn-indisponivel {
+  width: 100%;
+  padding: 14px;
+  background: #2f3542;
+  color: #a4b0be;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: not-allowed;
+}
+
 .compra-segura {
   text-align: center;
   font-size: 0.75rem;
@@ -363,9 +446,8 @@
   margin-top: 10px;
 }
 
-.tabela-fatos {
-  padding: 16px;
-}
+/* --- TABELA DE FATOS --- */
+.tabela-fatos { padding: 16px; }
 
 .fato-linha {
   display: flex;
@@ -375,25 +457,76 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.fato-linha:last-child {
-  border-bottom: none;
+.fato-linha:last-child { border-bottom: none; }
+.fato-linha span   { color: rgba(255, 255, 255, 0.65); }
+.fato-linha strong { color: #ffffff; }
+
+/* ==========================================================================
+   6. SEÇÃO DA KEY DIGITAL
+   ========================================================================== */
+.secao-info-key {
+  background: rgba(13, 34, 56, 0.6);
+  border: 1px solid rgba(0, 210, 211, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 25px 0;
 }
 
-.fato-linha span {
-  color: rgba(255, 255, 255, 0.65);
+.grid-info-key {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
-.fato-linha strong {
+.card-info-key {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.icone-key-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icone-key-box.verde { background: rgba(46, 213, 115, 0.15); color: #2ed573; }
+.icone-key-box.azul  { background: rgba(0, 210, 211, 0.15);  color: #00d2d3; }
+.icone-key-box.roxo  { background: rgba(156, 136, 255, 0.15); color: #9c88ff; }
+
+.texto-key-box {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.85rem;
+}
+
+.texto-key-box strong {
   color: #ffffff;
+  font-size: 0.95rem;
 }
 
-.secao-detalhada, 
+.texto-key-box span { color: rgba(255, 255, 255, 0.7); }
+
+.texto-sucesso {
+  color: #2ed573;
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   7. SOBRE, CARACTERÍSTICAS E REQUISITOS
+   ========================================================================== */
+.secao-detalhada,
 .secao-avaliacoes {
   padding: 28px;
   margin-top: 32px;
 }
 
-.secao-detalhada h2, 
+.secao-detalhada h2,
 .secao-avaliacoes h2 {
   font-size: 1.1rem;
   margin-bottom: 14px;
@@ -405,9 +538,50 @@
   line-height: 1.6;
 }
 
-.secao-avaliacoes {
-  margin-bottom: 40px;
+/* --- CARACTERÍSTICAS (Um jogador, Multijogador, Conquistas...) --- */
+.lista-caracteristicas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
+
+.item-caracteristica {
+  background: rgba(114, 236, 255, 0.1);
+  border: 1px solid rgba(114, 236, 255, 0.3);
+  color: #72ecff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+/* --- REQUISITOS --- */
+.grid-requisitos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.texto-req {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: normal;
+  line-height: 1.6;
+}
+
+/* O conteúdo do [innerHTML] vem da Steam, por isso precisa de ::ng-deep */
+:host ::ng-deep .texto-req ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+:host ::ng-deep .texto-req li     { margin-bottom: 6px; }
+:host ::ng-deep .texto-req strong { color: #ffffff; }
+
+/* ==========================================================================
+   8. AVALIAÇÕES E MODAL
+   ========================================================================== */
+.secao-avaliacoes { margin-bottom: 40px; }
 
 .grid-avaliacoes {
   display: grid;
@@ -440,46 +614,6 @@
   margin-bottom: 20px;
 }
 
-.barras-avaliacao {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 20px;
-  text-align: left;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.linha-barra {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.linha-barra span:first-child {
-  width: 55px;
-}
-
-.barra-fundo {
-  flex: 1;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.barra-progresso {
-  height: 100%;
-  background: #0088ff;
-  border-radius: 3px;
-}
-
-.votos-num {
-  width: 35px;
-  text-align: right;
-  color: rgba(255, 255, 255, 0.5);
-}
-
 .btn-escrever-avaliacao {
   width: 100%;
   background: transparent;
@@ -492,9 +626,7 @@
   transition: all 0.2s;
 }
 
-.btn-escrever-avaliacao:hover {
-  background: rgba(0, 136, 255, 0.15);
-}
+.btn-escrever-avaliacao:hover { background: rgba(0, 136, 255, 0.15); }
 
 .lista-comentarios {
   display: flex;
@@ -517,21 +649,20 @@
 }
 
 .avatar-autor {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: #0088ff;
-  color: #ffffff;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 0.9rem;
+  margin-right: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.info-autor {
-  flex: 1;
-}
+.info-autor { flex: 1; }
 
 .info-autor strong {
   display: block;
@@ -574,19 +705,12 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
-.btn-reacao:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
+.btn-reacao:hover { background: rgba(255, 255, 255, 0.15); }
 
-.btn-reacao.ativo {
-  background: rgba(0, 240, 255, 0.2);
-  border-color: #00f0ff;
-  color: #00f0ff;
-}
-
+/* --- MODAL DE AVALIAÇÃO --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -670,43 +794,6 @@
   border-color: #00f0ff;
 }
 
-.seletor-estrelas-botoes {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.btn-estrela-opcao {
-  background: transparent;
-  border: none;
-  font-size: 1.6rem;
-  color: rgba(255, 255, 255, 0.25);
-  cursor: pointer;
-  transition: transform 0.15s ease, color 0.15s ease;
-  padding: 0;
-  line-height: 1;
-}
-
-.btn-estrela-opcao:hover,
-.btn-estrela-opcao.selecionado {
-  color: #f59e0b;
-}
-
-.btn-estrela-opcao:hover {
-  transform: scale(1.25);
-}
-
-.texto-nota-selecionada {
-  margin-left: auto;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #72ecff;
-}
-
 .modal-acoes {
   display: flex;
   justify-content: flex-end;
@@ -721,11 +808,6 @@
   padding: 10px 18px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-cancelar:hover {
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .btn-enviar {
@@ -736,87 +818,318 @@
   padding: 10px 18px;
   border-radius: 8px;
   cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-enviar:hover {
-  opacity: 0.9;
-}
-
-.estado-alternativo {
-  text-align: center;
-  padding: 80px 20px;
-  color: #ffffff;
-  font-size: 1.1rem;
-}
-
-.cabecalho-navegacao {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.cabecalho-navegacao .breadcrumb {
-  margin-bottom: 0;
-}
-
-.btn-voltar {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-}
-
-.icon-pirata {
-  width: 18px;
-  height: 18px;
-  stroke: #ffffff;
-  transition: transform 0.3s ease, stroke 0.2s ease;
-}
-
-.btn-voltar:hover {
-  background: rgba(114, 236, 255, 0.15);
-  border-color: #72ecff;
-  color: #72ecff;
-}
-
-.btn-voltar:hover .icon-pirata {
-  stroke: #72ecff;
-  transform: rotate(-45deg);
-}
-
-/* --- CORES DE CLASSIFICAÇÃO ETÁRIA --- */
-.badge-classificacao.livre { background: #4ade80; color: #06231a; }
-.badge-classificacao.dez   { background: #4fc3e8; color: #06232f; }
-.badge-classificacao.doze  { background: #ffd93d; color: #3a2c00; }
-.badge-classificacao.quatorze { background: #ffb454; color: #3a2200; }
-.badge-classificacao.dezesseis { background: #ff8a3d; color: #3a1800; }
-.badge-classificacao.dezoito { background: #ff5252; color: #ffffff; }
-
-.badge-gratis {
-  background: #4ade80;
-  color: #06231a;
 }
 
 /* ==========================================================================
-   --- REGRAS DE RESPONSIVIDADE (MEDIA QUERIES) ---
+   9. ANIMAÇÃO DE CARREGAMENTO (BARCO PIRATA)
+   ========================================================================== */
+.carregando-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.cenario-pirata-loader {
+  position: relative;
+  width: 180px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.navio-pirata {
+  font-size: 3.5rem;
+  z-index: 2;
+  animation: navegar 2.5s ease-in-out infinite alternate;
+}
+
+.mar-animado {
+  position: absolute;
+  bottom: 0;
+  width: 200%;
+  height: 24px;
+}
+
+.onda {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeat-x url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C150,90 350,-40 500,40 C650,120 900,10 1200,40 L1200,120 L0,120 Z' fill='%2300d2d3' opacity='0.7'%3E%3C/path%3E%3C/svg%3E");
+  background-size: 300px 24px;
+}
+
+.onda1 {
+  animation: ondular 3s linear infinite;
+  z-index: 3;
+  opacity: 0.8;
+}
+
+.onda2 {
+  animation: ondular 2s linear infinite reverse;
+  z-index: 1;
+  opacity: 0.4;
+  bottom: 4px;
+}
+
+.texto-carregando {
+  margin-top: 15px;
+  font-size: 0.95rem;
+  color: #72ecff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+
+@keyframes navegar {
+  0%   { transform: translateY(0) rotate(-6deg); }
+  50%  { transform: translateY(-12px) rotate(0deg); }
+  100% { transform: translateY(0) rotate(6deg); }
+}
+
+@keyframes ondular {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-300px); }
+}
+
+
+/* ==========================================================================
+   AJUSTES
    ========================================================================== */
 
-/* Tablets e notebooks menores (Até 1024px) */
+/* Fundo: deixa aparecer o degradê azul do site */
+.pagina-detalhes-container { background: transparent; }
+
+/* Classificação indicativa: cores oficiais */
+.badge-classificacao {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 800;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+.badge-classificacao.livre     { background: #00a651; color: #ffffff; }
+.badge-classificacao.dez       { background: #0a9ad9; color: #ffffff; }
+.badge-classificacao.doze      { background: #f9d71c; color: #3a2c00; }
+.badge-classificacao.quatorze  { background: #f7941d; color: #ffffff; }
+.badge-classificacao.dezesseis { background: #e8112d; color: #ffffff; }
+.badge-classificacao.dezoito   { background: #000000; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.5); }
+
+/* Ícone da Steam */
+.icone-key-box i { font-size: 1.3rem; }
+
+/* Títulos e textos longos sem ficar apertados */
+.titulo-jogo {
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.subtitulos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  line-height: 1.5;
+}
+.subtitulos > span + span::before {
+  content: '•';
+  margin-right: 14px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.breadcrumb { overflow-wrap: anywhere; line-height: 1.4; }
+.avaliacao-container { flex-wrap: wrap; }
+.precos-linha { flex-wrap: wrap; }
+
+.fato-linha {
+  gap: 16px;
+  align-items: flex-start;
+}
+.fato-linha span { flex-shrink: 0; }
+.fato-linha strong {
+  text-align: right;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* Gráfico de avaliações */
+.barras-avaliacao {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  text-align: left;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+.linha-barra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.linha-barra span:first-child { width: 62px; flex-shrink: 0; }
+.linha-barra .qtd { width: 28px; text-align: right; flex-shrink: 0; }
+.barra-fundo {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.barra-progresso {
+  height: 100%;
+  background: #0088ff;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* Expansões e DLCs */
+.grid-dlcs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.card-dlc {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card-dlc:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 210, 211, 0.25);
+}
+.card-dlc img {
+  width: 100%;
+  aspect-ratio: 460 / 215;
+  object-fit: cover;
+  display: block;
+}
+.info-dlc {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.info-dlc h4 {
+  font-size: 0.88rem;
+  margin: 0;
+  line-height: 1.3;
+  min-height: 2.6em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.linha-preco-dlc {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+.badge-desconto-mini {
+  background: #0088ff;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.preco-dlc-original { font-size: 0.75rem; color: rgba(255, 255, 255, 0.45); }
+.preco-dlc { color: #72ecff; font-weight: 800; font-size: 0.95rem; }
+.btn-dlc {
+  background: #0088ff;
+  color: #ffffff;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-dlc:hover { background: #0066cc; }
+
+/* Jogos parecidos */
+.grid-recomendados {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+.card-rec {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.card-rec:hover { transform: translateY(-4px); border-color: #4fc3e8; }
+.rec-capa {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0a1626;
+  margin-bottom: 8px;
+}
+.rec-capa img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rec-desconto {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #0088ff;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 6px;
+}
+.card-rec h4 {
+  font-size: 0.82rem;
+  margin: 0 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rec-preco {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+.rec-preco s { color: rgba(255, 255, 255, 0.45); font-size: 0.72rem; }
+.rec-preco strong { color: #4ade80; }
+
+
+
+/* ==========================================================================
+   10. RESPONSIVIDADE
+   ========================================================================== */
+
+/* Tablets e notebooks menores (até 1024px) */
 @media (max-width: 1024px) {
-  .pagina-detalhes {
-    padding: 30px 20px 20px 20px;
-  }
+  .pagina-detalhes { padding: 30px 20px 20px 20px; }
 
   .grid-principal {
     grid-template-columns: 1fr;
@@ -827,13 +1140,9 @@
     grid-template-columns: 1fr;
     gap: 20px;
   }
-
-  .resumo-avaliacoes-card {
-    max-width: 100%;
-  }
 }
 
-/* Dispositivos Móveis (Até 768px) */
+/* Celulares (até 768px) */
 @media (max-width: 768px) {
   .pagina-detalhes {
     margin-top: 60px;
@@ -845,9 +1154,7 @@
     gap: 10px;
   }
 
-  .titulo-jogo {
-    font-size: 1.6rem;
-  }
+  .titulo-jogo { font-size: 1.6rem; }
 
   .thumb-item {
     flex: 0 0 110px;
@@ -860,16 +1167,15 @@
     font-size: 1rem;
   }
 
-  .secao-detalhada, 
+  .secao-detalhada,
   .secao-avaliacoes {
     padding: 18px;
     margin-top: 20px;
   }
 
-  /* Requisitos de Sistema em uma coluna única */
   .grid-requisitos {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .toast-notificacao {
@@ -880,34 +1186,16 @@
   }
 }
 
-/* Telas Pequenas de Celular (Até 480px) */
+/* Celulares pequenos (até 480px) */
 @media (max-width: 480px) {
-  .acoes-botoes {
-    flex-direction: row;
-  }
-
   .btn-adicionar {
     font-size: 0.85rem;
     padding: 10px;
   }
 
-  .preco-promo {
-    font-size: 1.5rem;
-  }
+  .preco-promo { font-size: 1.5rem; }
 
-  .modal-card {
-    max-width: 95%;
-  }
+  .modal-card { max-width: 95%; }
 
-  .modal-body {
-    padding: 16px;
-  }
-
-  .seletor-estrelas-botoes {
-    justify-content: space-between;
-  }
-
-  .btn-estrela-opcao {
-    font-size: 1.3rem;
-  }
+  .modal-body { padding: 16px; }
 }
