@@ -1,48 +1,62 @@
-  <div class="toast-notificacao" *ngIf="mensagemToast">{{ mensagemToast }}</div>
+<div class="toast-notificacao" *ngIf="mensagemToast">{{ mensagemToast }}</div>
 
 <div class="pagina-produtos">
 
-
-
   <!-- 1. Sidebar de Filtros -->
   <aside class="sidebar-filtros">
-    <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
+    <div class="filtros-cabecalho">
+      <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
+      <button class="btn-limpar-filtros" *ngIf="filtrosAtivos > 0" (click)="limparFiltros()">
+        Limpar ({{ filtrosAtivos }})
+      </button>
+    </div>
+
+    <div class="filtro-grupo">
+      <h4>Ordenar por</h4>
+      <select
+        class="select-ordenacao"
+        [ngModel]="ordenacao"
+        (ngModelChange)="ordenacao = $event; aplicarFiltros()">
+        <option *ngFor="let o of opcoesOrdenacao" [value]="o.id">{{ o.nome }}</option>
+      </select>
+    </div>
+
+    <div class="filtro-grupo">
+      <label class="switch-linha">
+        <input
+          type="checkbox"
+          [ngModel]="apenasPromocao"
+          (ngModelChange)="apenasPromocao = $event; aplicarFiltros()">
+        <span class="switch"></span>
+        <span>Só em promoção</span>
+      </label>
+    </div>
 
     <div class="filtro-grupo">
       <h4>Preço</h4>
-      <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'todos'" (change)="definirFaixaPreco('todos')">
-        Todos os preços
-      </label>
-      <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'gratis'" (change)="definirFaixaPreco('gratis')">
-        Grátis
-      </label>
-      <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === '0-50'" (change)="definirFaixaPreco('0-50')">
-        R$0 - R$50
-      </label>
-      <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === '50-100'" (change)="definirFaixaPreco('50-100')">
-        R$50 - R$100
-      </label>
-      <label>
-        <input type="radio" name="preco" [checked]="faixaPrecoAtiva === 'acima-100'" (change)="definirFaixaPreco('acima-100')">
-        Acima de R$100
-      </label>
+      <div class="chips">
+        <button
+          *ngFor="let f of faixasPreco"
+          class="chip"
+          [class.ativo]="faixaPrecoAtiva === f.id"
+          (click)="definirFaixaPreco(f.id)">
+          {{ f.nome }}
+        </button>
+      </div>
     </div>
 
     <div class="filtro-grupo">
       <h4>Plataforma</h4>
-      <label>
-        <input type="checkbox" (change)="togglePlataforma('PC')"> PC
-      </label>
-      <label>
-        <input type="checkbox" (change)="togglePlataforma('PS5')"> PlayStation
-      </label>
+      <div class="plat-botoes">
+        <button
+          *ngFor="let p of plataformasFiltro"
+          class="plat-btn"
+          [class.ativo]="plataformasSelecionadas.includes(p.id)"
+          (click)="togglePlataforma(p.id)">
+          <i [class]="p.icone"></i> {{ p.nome }}
+        </button>
+      </div>
     </div>
-
-   
   </aside>
 
   <!-- 2. Conteúdo Principal -->
@@ -76,7 +90,7 @@
             {{ obterNomeCategoriaAtiva() }}
             <span class="seta-icone" [class.aberto]="menuCategoriasAberto">▼</span>
           </button>
-          
+
           <div class="menu-categorias-conteudo" [class.mostrar]="menuCategoriasAberto">
             <button
               class="item-categoria"
@@ -104,8 +118,8 @@
         </div>
 
         <div class="acoes-direita-topo">
-          <button 
-            class="btn-limpar-favoritos" 
+          <button
+            class="btn-limpar-favoritos"
             *ngIf="abaAtiva === 'favoritos' && produtosExibidos.length > 0"
             (click)="limparFavoritos()">
             🗑️ Limpar Favoritos
@@ -117,15 +131,24 @@
 
     <!-- 3. Cards de Produtos -->
     <div class="grid-produtos" *ngIf="produtosExibidos.length > 0">
-      <div *ngFor="let produto of produtosExibidos" class="card-produto">
-
-        <div class="card-badges">
-          <span class="badge-desconto" *ngIf="produto.desconto > 0">-{{ produto.desconto }}%</span>
-          <span class="badge-plataforma">{{ produto.plataforma }}</span>
-        </div>
+      <div *ngFor="let produto of produtosExibidos; trackBy: rastrear" class="card-produto">
 
         <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
-          <img [src]="produto.imagem" [alt]="produto.nome" [style.object-position]="produto.imagemPosicao" />
+          <img
+            [src]="produto.imagem"
+            [alt]="produto.nome"
+            [style.object-position]="produto.imagemPosicao"
+            [class.esgotado-img]="produto.estoque === false"
+            (error)="imagemFalhou($event, produto)" />
+
+          <div class="card-badges">
+            <span class="badge-desconto" *ngIf="temDesconto(produto.desconto) && produto.estoque !== false">
+              {{ textoDesconto(produto.desconto) }}
+            </span>
+            <span class="badge-esgotado" *ngIf="produto.estoque === false">ESGOTADO</span>
+
+            <app-plataforma-icones [plataformas]="produto.plataforma"></app-plataforma-icones>
+          </div>
         </div>
 
         <div class="card-conteudo">
@@ -135,13 +158,21 @@
           <span class="produto-genero">{{ produto.genero }}</span>
 
           <div class="produto-precos">
-            <span class="preco-original" *ngIf="produto.desconto > 0">{{ produto.precoOriginal }}</span>
-            <span class="preco-promocional">{{ produto.precoPromocional }}</span>
+            <span class="preco-original" *ngIf="temDesconto(produto.desconto)">
+              {{ produto.precoOriginal }}
+            </span>
+            <span class="preco-promocional" [class.indisponivel]="estaIndisponivel(produto)">
+              {{ produto.precoPromocional }}
+            </span>
           </div>
 
           <div class="card-actions">
-            <button class="btn-carrinho" (click)="adicionarAoCarrinho(produto)">
-              <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+            <button
+              class="btn-carrinho"
+              [disabled]="produto.estoque === false"
+              (click)="adicionarAoCarrinho(produto)">
+              <i class="fas fa-shopping-cart"></i>
+              {{ produto.estoque === false ? 'Esgotado' : 'Adicionar ao Carrinho' }}
             </button>
 
             <button
@@ -167,10 +198,16 @@
       </div>
     </div>
 
-    <!-- Estado vazio -->
+    <!-- Estado vazio: favoritos -->
     <div class="favoritos-vazio" *ngIf="abaAtiva === 'favoritos' && produtosExibidos.length === 0">
       <p>Você ainda não favoritou nenhum jogo.</p>
       <button class="btn-carrinho" (click)="selecionarAba('todos')">Ver Jogos</button>
+    </div>
+
+    <!-- Estado vazio: filtros sem resultado -->
+    <div class="favoritos-vazio" *ngIf="abaAtiva === 'todos' && produtos.length > 0 && produtosExibidos.length === 0">
+      <p>Nenhum jogo encontrado com esses filtros.</p>
+      <button class="btn-carrinho" (click)="limparFiltros()">Limpar filtros</button>
     </div>
 
   </div>
