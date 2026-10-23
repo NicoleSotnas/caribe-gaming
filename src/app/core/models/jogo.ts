@@ -40,6 +40,7 @@ export interface DetalhesJogo {
   } | null;
   avaliacao?: { nota: string; total: number } | null;
   caracteristicas?: string[];
+  dlcIds?: number[];
 }
 
 export interface Produto {
@@ -87,6 +88,19 @@ export interface JogoCatalogo {
   categorias: string[];
   gratis?: boolean;
   estoque?: boolean;
+}
+
+export interface Dlc {
+  id: number;
+  nome: string;
+  imagem: string;
+  gratis: boolean;
+  preco: {
+    atual: string;
+    original: string | null;
+    desconto: number;
+    valor: number;
+  } | null;
 }
 
 export const CATALOGO: JogoCatalogo[] = [

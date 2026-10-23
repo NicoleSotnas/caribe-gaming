@@ -2,10 +2,12 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs';
 import { JogosApiService } from '../../../core/services/jogos-api.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
-import { DetalhesJogo, Comentario } from '../../../core/models/jogo';
+import { DetalhesJogo, Comentario, JogoCard, Dlc } from '../../../core/models/jogo';
+import { comentariosDoJogo } from '../comentarios';
 
 @Component({
   selector: 'app-detalhe-jogo',
@@ -39,17 +41,29 @@ export class DetalheJogo implements OnInit {
   precoNumero: number = 0;
   desconto: number = 0;
   genero: string = '';
-  notaMetacritic: string = '—';
-  totalAvaliacoes: number = 0;
+
+  // Nota da Steam (aparece ao lado do título)
+  notaSteam: string = '—';
+  notaSteamNum: number = 0;
+  totalSteam: number = 0;
 
   requisitosMinimos: string = '';
   requisitosRecomendados: string = '';
 
+  // Seções extras
+  recomendados: JogoCard[] = [];
+  dlcs: Dlc[] = [];
+
+  // Avaliações do site
   exibirModalAvaliacao: boolean = false;
   novoNome: string = '';
   novoTexto: string = '';
   novaNota: number = 5;
   listaComentarios: Comentario[] = [];
+  totalSite: number = 0;
+  mediaSite: string = '—';
+  mediaSiteNum: number = 0;
+  distribuicao: { estrelas: number; qtd: number; pct: number }[] = [];
 
   readonly coresAvatares = ['#00d2d3', '#ff9f43', '#ee5253', '#0abde3', '#10ac84', '#5f27cd'];
 
@@ -73,15 +87,19 @@ export class DetalheJogo implements OnInit {
     this.precoFormatado = '';
     this.precoNumero = 0;
     this.desconto = 0;
-    this.notaMetacritic = '—';
-    this.totalAvaliacoes = 0;
+    this.notaSteam = '—';
+    this.notaSteamNum = 0;
+    this.totalSteam = 0;
     this.requisitosMinimos = '';
     this.requisitosRecomendados = '';
+    this.recomendados = [];
+    this.dlcs = [];
+    this.listaComentarios = [];
+    this.recalcularResumo();
   }
 
   private carregarTudo(): void {
     this.favorito = this.favoritosService.ehFavorito(this.jogoIdOuSlug);
-    this.carregarAvaliacoes();
 
     this.jogosApi.obterJogo(this.jogoIdOuSlug).subscribe({
       next: (d) => {
@@ -95,13 +113,17 @@ export class DetalheJogo implements OnInit {
         this.precoOriginalFormatado = d.preco?.original ?? '';
         this.precoNumero = d.gratis ? 0 : (d.preco?.valor ?? 0);
 
-        this.notaMetacritic = d.avaliacao?.nota ?? '—';
-        this.totalAvaliacoes = d.avaliacao?.total ?? 0;
+        this.notaSteam = d.avaliacao?.nota ?? '—';
+        this.notaSteamNum = d.avaliacao ? Number(d.avaliacao.nota) : 0;
+        this.totalSteam = d.avaliacao?.total ?? 0;
 
         this.requisitosMinimos = d.requisitos?.minimos ?? '';
         this.requisitosRecomendados = d.requisitos?.recomendados ?? '';
 
         this.carregando = false;
+        this.carregarAvaliacoes();
+        this.carregarRecomendados(d);
+        this.carregarDlcs(d);
         this.cdr.markForCheck();
       },
       error: () => {
@@ -112,7 +134,65 @@ export class DetalheJogo implements OnInit {
     });
   }
 
-  // Fallback: se a screenshot falhar, usa a imagem de capa
+  // --- JOGOS PARECIDOS: mesmas categorias/gêneros do catálogo ---
+  private carregarRecomendados(d: DetalhesJogo): void {
+    const idAtual = Number(d.id);
+
+    this.jogosApi.listar().pipe(take(1)).subscribe((lista) => {
+      const atual = lista.find((j) => j.id === idAtual);
+      const cats = new Set(atual?.categorias ?? []);
+      const gens = new Set(atual?.generos ?? []);
+
+      this.recomendados = lista
+        .filter((j) => j.id !== idAtual)
+        .map((j) => ({
+          j,
+          pontos:
+            j.categorias.filter((c) => cats.has(c)).length * 2 +
+            j.generos.filter((g) => gens.has(g)).length
+        }))
+        .sort((a, b) => b.pontos - a.pontos)
+        .slice(0, 6)
+        .map((x) => x.j);
+
+      this.cdr.markForCheck();
+    });
+  }
+
+  // --- EXPANSÕES E DLCs (vêm da própria Steam) ---
+  private carregarDlcs(d: DetalhesJogo): void {
+    if (!d.dlcIds?.length) return;
+
+    this.jogosApi.obterDlcs(Number(d.id), d.dlcIds).subscribe((lista) => {
+      if (this.jogoIdOuSlug !== String(d.id)) return; // o usuário já foi para outro jogo
+      this.dlcs = lista;
+      this.cdr.markForCheck();
+    });
+  }
+
+  abrirJogo(id: number): void {
+    this.router.navigate(['/produto', id]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  adicionarDlcAoCarrinho(dlc: Dlc): void {
+    if (!dlc.preco) return;
+    this.carrinhoFacade.adicionarProduto({
+      id: dlc.id,
+      nome: dlc.nome,
+      preco: dlc.preco.valor,
+      quantidade: 1,
+      imagemUrl: dlc.imagem,
+      plataforma: this.jogo?.plataformas || 'PC',
+      categoria: 'DLC / Expansão'
+    });
+    this.exibirToast('🔑 Expansão adicionada ao carrinho!');
+  }
+
+  rastrearRec(_i: number, j: JogoCard): number { return j.id; }
+  rastrearBarra(_i: number, b: { estrelas: number }): number { return b.estrelas; }
+
+  // --- FALLBACK DE IMAGEM ---
   tratarErroImagem(event: Event): void {
     const imgElem = event.target as HTMLImageElement;
     if (this.jogo?.background_image && imgElem.src !== this.jogo.background_image) {
@@ -120,60 +200,94 @@ export class DetalheJogo implements OnInit {
     }
   }
 
+  // --- CLASSIFICAÇÃO INDICATIVA (padrão do Ministério da Justiça) ---
+  private nivelClassificacao(valor?: string): string {
+    if (!valor) return 'L';
+    const v = valor.toLowerCase().trim();
+    const n = parseInt(v.replace(/\D/g, ''), 10);
+
+    if (!isNaN(n)) {
+      if (n >= 18) return '18';
+      if (n >= 16) return '16';
+      if (n >= 14) return '14';
+      if (n >= 12) return '12';
+      if (n >= 10) return '10';
+      return 'L';
+    }
+    if (v.includes('mature') || v.includes('adults')) return '18';
+    if (v.includes('teen')) return '14';
+    return 'L';
+  }
+
   formatarClassificacao(classificacao?: string): string {
-    if (!classificacao) return 'Livre';
-    const lower = classificacao.toLowerCase();
-
-    if (lower.includes('18') || lower.includes('mature') || lower.includes('adults')) return '+18';
-    if (lower.includes('16')) return '+16';
-    if (lower.includes('14') || lower.includes('teen')) return '+14';
-    if (lower.includes('12')) return '+12';
-    if (lower.includes('10') || lower.includes('everyone 10+')) return '+10';
-
-    return 'Livre';
+    return this.nivelClassificacao(classificacao);
   }
 
   obterClasseClassificacao(classificacao?: string): string {
-    const formatada = this.formatarClassificacao(classificacao);
-    switch (formatada) {
-      case '+18': return 'dezoito';
-      case '+16': return 'dezesseis';
-      case '+14': return 'quatorze';
-      case '+12': return 'doze';
-      case '+10': return 'dez';
+    switch (this.nivelClassificacao(classificacao)) {
+      case '18': return 'dezoito';
+      case '16': return 'dezesseis';
+      case '14': return 'quatorze';
+      case '12': return 'doze';
+      case '10': return 'dez';
       default: return 'livre';
     }
   }
 
-  private get chaveAvaliacoes(): string { return `caribe_avaliacoes_${this.jogoIdOuSlug}`; }
+  // --- TEXTOS AUXILIARES ---
+  formatarMilhar(n: number): string {
+    return n.toLocaleString('pt-BR');
+  }
+
+  // "A, B, C" -> "A +2" (evita subtítulos enormes)
+  resumoLista(texto: string | undefined, max = 1): string {
+    const itens = (texto ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+    if (itens.length <= max) return itens.join(', ');
+    return `${itens.slice(0, max).join(', ')} +${itens.length - max}`;
+  }
+
+  getEstrelasTexto(n: number): string {
+    const r = Math.max(0, Math.min(5, Math.round(n)));
+    return '★'.repeat(r) + '☆'.repeat(5 - r);
+  }
+
+  // --- AVALIAÇÕES DO SITE ---
+  private get chaveAvaliacoes(): string { return `caribe_avaliacoes_v2_${this.jogoIdOuSlug}`; }
+
+  private comentariosPadrao(): Comentario[] {
+    if (!this.jogo) return [];
+    const primeiroGenero = (this.jogo.generos ?? '').split(',')[0]?.trim() ?? '';
+    return comentariosDoJogo(Number(this.jogo.id), this.jogo.nome, primeiroGenero);
+  }
 
   carregarAvaliacoes(): void {
     try {
       const salvas = localStorage.getItem(this.chaveAvaliacoes);
-      if (salvas) {
-        this.listaComentarios = JSON.parse(salvas);
-      } else {
-        this.listaComentarios = [
-          {
-            id: 1,
-            autor: 'GeraltDeRivia_BR',
-            avatar: 'G',
-            corAvatar: '#00d2d3',
-            estrelas: 5,
-            texto: 'Chave entregue na hora! Funcional e com suporte rápido da Caribe Gaming.',
-            data: '18/05/2026',
-            likes: 142,
-            dislikes: 3
-          }
-        ];
-      }
-    } catch {}
+      this.listaComentarios = salvas ? JSON.parse(salvas) : this.comentariosPadrao();
+    } catch {
+      this.listaComentarios = this.comentariosPadrao();
+    }
+    this.recalcularResumo();
   }
 
   salvarAvaliacoes(): void {
     try {
       localStorage.setItem(this.chaveAvaliacoes, JSON.stringify(this.listaComentarios));
     } catch {}
+  }
+
+  // Nota grande e barras do gráfico, calculadas a partir das avaliações do site
+  private recalcularResumo(): void {
+    const total = this.listaComentarios.length;
+    const soma = this.listaComentarios.reduce((acc, c) => acc + c.estrelas, 0);
+
+    this.totalSite = total;
+    this.mediaSiteNum = total ? soma / total : 0;
+    this.mediaSite = total ? this.mediaSiteNum.toFixed(1) : '—';
+    this.distribuicao = [5, 4, 3, 2, 1].map((estrelas) => {
+      const qtd = this.listaComentarios.filter((c) => c.estrelas === estrelas).length;
+      return { estrelas, qtd, pct: total ? (qtd / total) * 100 : 0 };
+    });
   }
 
   enviarAvaliacao(): void {
@@ -193,10 +307,12 @@ export class DetalheJogo implements OnInit {
 
     this.listaComentarios.unshift(nova);
     this.salvarAvaliacoes();
+    this.recalcularResumo();
     this.fecharModal();
     this.exibirToast('⭐ Sua avaliação foi publicada com sucesso!');
   }
 
+  // --- NAVEGAÇÃO E GALERIA ---
   voltarPagina(): void { this.location.back(); }
   irParaHome(): void { this.router.navigate(['/']); }
   irParaJogos(): void { this.router.navigate(['/jogos']); }
@@ -211,6 +327,7 @@ export class DetalheJogo implements OnInit {
   }
   selecionarIndice(i: number): void { this.indiceAtivo = i; }
 
+  // --- COMPRA E FAVORITOS ---
   adicionarAoCarrinho(): void {
     if (!this.jogo || !this.emEstoque) return;
     this.carrinhoFacade.adicionarProduto({
@@ -245,7 +362,6 @@ export class DetalheJogo implements OnInit {
 
   darLike(c: Comentario): void { c.likes++; this.salvarAvaliacoes(); }
   darDislike(c: Comentario): void { c.dislikes++; this.salvarAvaliacoes(); }
-  getEstrelasTexto(n: number): string { return '★'.repeat(n) + '☆'.repeat(5 - n); }
 
   private exibirToast(msg: string): void {
     this.mensagemToast = msg;

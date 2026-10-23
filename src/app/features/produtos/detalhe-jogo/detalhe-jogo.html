@@ -3,9 +3,9 @@
 </div>
 
 <div class="pagina-detalhes-container">
-  
+
   <div class="pagina-detalhes" *ngIf="!carregando && !erro && jogo">
-    
+
     <!-- CABEÇALHO / BREADCRUMB COM TIMÃO PIRATA -->
     <div class="cabecalho-navegacao">
       <button class="btn-voltar" (click)="voltarPagina()">
@@ -42,31 +42,32 @@
         <div class="container-imagem-destaque">
           <span class="badge-desconto" *ngIf="desconto > 0 && emEstoque">-{{ desconto }}%</span>
           <span class="badge-esgotado" *ngIf="!emEstoque">ESGOTADO</span>
-          
-          <span 
-            class="badge-classificacao" 
-            [ngClass]="obterClasseClassificacao(jogo.classificacaoEtaria)">
+
+          <span
+            class="badge-classificacao"
+            [ngClass]="obterClasseClassificacao(jogo.classificacaoEtaria)"
+            title="Classificação indicativa">
             {{ formatarClassificacao(jogo.classificacaoEtaria) }}
           </span>
 
           <button class="btn-seta btn-prev" (click)="fotoAnterior()" *ngIf="galeriaImagens.length > 1">❮</button>
-          
-          <!-- IMAGEM COM FALLBACK AUTOMÁTICO SE A STEAM FALHAR -->
-          <img 
-            *ngIf="galeriaImagens.length > 0" 
-            [src]="galeriaImagens[indiceAtivo]" 
-            [alt]="jogo.nome" 
-            class="img-destaque" 
-            [class.esgotado-img]="!emEstoque" 
-            (error)="tratarErroImagem($event)" 
+
+          <!-- IMAGEM COM FALLBACK AUTOMÁTICO -->
+          <img
+            *ngIf="galeriaImagens.length > 0"
+            [src]="galeriaImagens[indiceAtivo]"
+            [alt]="jogo.nome"
+            class="img-destaque"
+            [class.esgotado-img]="!emEstoque"
+            (error)="tratarErroImagem($event)"
           />
-          <img 
-            *ngIf="galeriaImagens.length === 0" 
-            [src]="jogo.background_image" 
-            [alt]="jogo.nome" 
-            class="img-destaque" 
-            [class.esgotado-img]="!emEstoque" 
-            (error)="tratarErroImagem($event)" 
+          <img
+            *ngIf="galeriaImagens.length === 0"
+            [src]="jogo.background_image"
+            [alt]="jogo.nome"
+            class="img-destaque"
+            [class.esgotado-img]="!emEstoque"
+            (error)="tratarErroImagem($event)"
           />
 
           <button class="btn-seta btn-next" (click)="proximaFoto()" *ngIf="galeriaImagens.length > 1">❯</button>
@@ -81,20 +82,22 @@
 
       <div class="secao-info">
         <h1 class="titulo-jogo">{{ jogo.nome }}</h1>
+
         <div class="subtitulos">
-          <span>{{ jogo.desenvolvedoras }}</span> • <span>{{ jogo.plataformas }}</span> •
+          <span>{{ resumoLista(jogo.desenvolvedoras) }}</span>
+          <span>{{ jogo.plataformas }}</span>
           <span class="categoria-tag">{{ genero }}</span>
         </div>
 
-        <div class="avaliacao-container">
-          <div class="estrelas">★★★★★</div>
-          <span class="nota-numero">{{ notaMetacritic }}</span>
-          <span class="total-avaliacoes">({{ totalAvaliacoes }} avaliações)</span>
+        <div class="avaliacao-container" *ngIf="totalSteam > 0">
+          <div class="estrelas">{{ getEstrelasTexto(notaSteamNum) }}</div>
+          <span class="nota-numero">{{ notaSteam }}</span>
+          <span class="total-avaliacoes">({{ formatarMilhar(totalSteam) }} avaliações na Steam)</span>
         </div>
 
         <!-- CARD DE COMPRA / ESGOTADO -->
         <div class="card-compra" [class.card-esgotado]="!emEstoque">
-          
+
           <div class="precos-linha" *ngIf="emEstoque">
             <span class="preco-original" *ngIf="desconto > 0">{{ precoOriginalFormatado }}</span>
             <span class="preco-promo">{{ precoFormatado }}</span>
@@ -112,9 +115,9 @@
             <button class="btn-adicionar" (click)="adicionarAoCarrinho()">
               🛒 Adicionar ao carrinho
             </button>
-            <button 
-              class="btn-favorito" 
-              [class.favoritado]="favorito" 
+            <button
+              class="btn-favorito"
+              [class.favoritado]="favorito"
               (click)="toggleFavorito()"
               title="Adicionar aos Favoritos">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-heart">
@@ -155,7 +158,7 @@
 
         <div class="card-info-key">
           <div class="icone-key-box azul">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/></svg>
+            <i class="fab fa-steam"></i>
           </div>
           <div class="texto-key-box">
             <strong>Steam</strong>
@@ -181,7 +184,7 @@
       <p class="descricao-paragrafo">{{ jogo.descricao }}</p>
     </div>
 
-    <!-- CARACTERÍSTICAS (novo) -->
+    <!-- CARACTERÍSTICAS -->
     <div class="secao-detalhada" *ngIf="jogo.caracteristicas?.length">
       <h2>CARACTERÍSTICAS</h2>
       <div class="lista-caracteristicas">
@@ -189,7 +192,26 @@
       </div>
     </div>
 
-    <!-- REQUISITOS DE SISTEMA (atualizado) -->
+    <!-- EXPANSÕES E DLCs -->
+    <div class="secao-detalhada" *ngIf="dlcs.length > 0">
+      <h2>EXPANSÕES E CONTEÚDO EXTRA</h2>
+      <div class="grid-dlcs">
+        <div class="card-dlc" *ngFor="let d of dlcs">
+          <img [src]="d.imagem" [alt]="d.nome" loading="lazy" />
+          <div class="info-dlc">
+            <h4 [title]="d.nome">{{ d.nome }}</h4>
+            <div class="linha-preco-dlc">
+              <span class="badge-desconto-mini" *ngIf="(d.preco?.desconto ?? 0) > 0">-{{ d.preco?.desconto }}%</span>
+              <s class="preco-dlc-original" *ngIf="d.preco?.original">{{ d.preco?.original }}</s>
+              <span class="preco-dlc">{{ d.preco?.atual }}</span>
+            </div>
+            <button class="btn-dlc" (click)="adicionarDlcAoCarrinho(d)">🛒 Adicionar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REQUISITOS DE SISTEMA -->
     <div class="secao-detalhada secao-requisitos">
       <h2>REQUISITOS DE SISTEMA (PC)</h2>
       <div class="grid-requisitos">
@@ -211,9 +233,20 @@
       <h2>AVALIAÇÕES DOS JOGADORES</h2>
       <div class="grid-avaliacoes">
         <div class="resumo-avaliacoes-card">
-          <div class="nota-gigante">{{ notaMetacritic }}</div>
-          <div class="estrelas">★★★★★</div>
-          <span class="total-votos">{{ totalAvaliacoes }} avaliações</span>
+          <div class="nota-gigante">{{ mediaSite }}</div>
+          <div class="estrelas">{{ getEstrelasTexto(mediaSiteNum) }}</div>
+          <span class="total-votos">{{ totalSite }} {{ totalSite === 1 ? 'avaliação' : 'avaliações' }}</span>
+
+          <div class="barras-avaliacao">
+            <div class="linha-barra" *ngFor="let b of distribuicao; trackBy: rastrearBarra">
+              <span>{{ b.estrelas }} {{ b.estrelas === 1 ? 'estrela' : 'estrelas' }}</span>
+              <div class="barra-fundo">
+                <div class="barra-progresso" [style.width.%]="b.pct"></div>
+              </div>
+              <span class="qtd">{{ b.qtd }}</span>
+            </div>
+          </div>
+
           <button class="btn-escrever-avaliacao" (click)="abrirModal()">Escrever avaliação</button>
         </div>
 
@@ -233,6 +266,24 @@
               <button class="btn-reacao" (click)="darLike(c)">👍 {{ c.likes }}</button>
               <button class="btn-reacao" (click)="darDislike(c)">👎 {{ c.dislikes }}</button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOGOS PARECIDOS -->
+    <div class="secao-detalhada" *ngIf="recomendados.length > 0">
+      <h2>JOGOS PARECIDOS</h2>
+      <div class="grid-recomendados">
+        <div class="card-rec" *ngFor="let r of recomendados; trackBy: rastrearRec" (click)="abrirJogo(r.id)">
+          <div class="rec-capa">
+            <img [src]="r.capa" [alt]="r.nome" loading="lazy" />
+            <span class="rec-desconto" *ngIf="(r.preco?.desconto ?? 0) > 0">-{{ r.preco?.desconto }}%</span>
+          </div>
+          <h4 [title]="r.nome">{{ r.nome }}</h4>
+          <div class="rec-preco">
+            <s *ngIf="r.preco?.original">{{ r.preco?.original }}</s>
+            <strong>{{ r.gratis ? 'Grátis' : (r.preco?.atual ?? 'Indisponível') }}</strong>
           </div>
         </div>
       </div>
@@ -272,6 +323,12 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- ERRO AO CARREGAR -->
+  <div class="carregando-container" *ngIf="erro">
+    <p class="texto-carregando">😕 Não foi possível carregar este jogo.</p>
+    <button class="btn-voltar" (click)="irParaJogos()">Voltar para os jogos</button>
   </div>
 
   <!-- ESTADO DE CARREGAMENTO ANIMADO PIRATA -->

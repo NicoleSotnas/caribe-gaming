@@ -17,7 +17,9 @@ export const routes: Routes = [
     path: 'jogos',
     component: Produtos,
   },
-   { path: 'produtos/:id', component: DetalheJogo },
+  { path: 'produto/:id', component: DetalheJogo },
+  // rede de segurança: links antigos com "produtos/..." também funcionam
+  { path: 'produtos/:id', redirectTo: 'produto/:id' },
   {
     path: 'login',
     component: Login,
@@ -44,8 +46,8 @@ export const routes: Routes = [
     component: Perfil,
     canActivate: [authGuard],
   },
-  { 
-    path: '**', 
-    redirectTo: '' 
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];
