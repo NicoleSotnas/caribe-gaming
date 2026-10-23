@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: #0d2238;
+  background: transparent;
   color: #ffffff;
   padding: 20px;
 }
@@ -60,6 +60,8 @@
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 20px;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
 }
 
 .breadcrumb-link {
@@ -128,7 +130,7 @@
   aspect-ratio: 16 / 9;
   border-radius: 12px;
   overflow: hidden;
-  background: rgba(11, 28, 48, 0.85);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
@@ -140,8 +142,8 @@
 .img-destaque {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
+  object-position: center;
 }
 
 .img-destaque.esgotado-img { filter: grayscale(80%) opacity(0.6); }
@@ -178,22 +180,24 @@
   top: 12px;
   right: 12px;
   z-index: 10;
-  background: #000000;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 0.85rem;
-  padding: 4px 10px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 800;
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* --- CORES DE CLASSIFICAÇÃO ETÁRIA --- */
-.badge-classificacao.livre     { background: #4ade80; color: #06231a; }
-.badge-classificacao.dez       { background: #4fc3e8; color: #06232f; }
-.badge-classificacao.doze      { background: #ffd93d; color: #3a2c00; }
-.badge-classificacao.quatorze  { background: #ffb454; color: #3a2200; }
-.badge-classificacao.dezesseis { background: #ff8a3d; color: #3a1800; }
-.badge-classificacao.dezoito   { background: #ff5252; color: #ffffff; }
+.badge-classificacao.livre     { background: #00a651; color: #ffffff; }
+.badge-classificacao.dez       { background: #0a9ad9; color: #ffffff; }
+.badge-classificacao.doze      { background: #f9d71c; color: #3a2c00; }
+.badge-classificacao.quatorze  { background: #f7941d; color: #ffffff; }
+.badge-classificacao.dezesseis { background: #e8112d; color: #ffffff; }
+.badge-classificacao.dezoito   { background: #000000; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.5); }
 
 .btn-seta {
   position: absolute;
@@ -222,7 +226,7 @@
 .btn-prev { left: 12px; }
 .btn-next { right: 12px; }
 
-/* --- MINIATURAS --- */
+/* MINIATURAS */
 .fila-miniaturas {
   display: flex;
   flex-wrap: nowrap;
@@ -279,16 +283,29 @@
 .secao-info { width: 100%; }
 
 .titulo-jogo {
-  font-size: 2.2rem;
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
   font-weight: 800;
   margin: 0 0 8px 0;
   color: #ffffff;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
 }
 
 .subtitulos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.85rem;
   margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.subtitulos > span + span::before {
+  content: '•';
+  margin-right: 14px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .categoria-tag { color: #72ecff; }
@@ -296,13 +313,13 @@
 .avaliacao-container {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 20px;
 }
 
 .estrelas { color: #f59e0b; }
 
-/* Base "vidro" compartilhada pelos cards */
 .card-compra,
 .tabela-fatos,
 .secao-detalhada,
@@ -327,6 +344,7 @@
 .precos-linha {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -446,20 +464,22 @@
   margin-top: 10px;
 }
 
-/* --- TABELA DE FATOS --- */
+/* TABELA DE FATOS */
 .tabela-fatos { padding: 16px; }
 
 .fato-linha {
   display: flex;
   justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
   font-size: 0.85rem;
   padding: 10px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .fato-linha:last-child { border-bottom: none; }
-.fato-linha span   { color: rgba(255, 255, 255, 0.65); }
-.fato-linha strong { color: #ffffff; }
+.fato-linha span   { color: rgba(255, 255, 255, 0.65); flex-shrink: 0; }
+.fato-linha strong { color: #ffffff; text-align: right; line-height: 1.4; overflow-wrap: anywhere; }
 
 /* ==========================================================================
    6. SEÇÃO DA KEY DIGITAL
@@ -494,6 +514,7 @@
   flex-shrink: 0;
 }
 
+.icone-key-box i { font-size: 1.3rem; }
 .icone-key-box.verde { background: rgba(46, 213, 115, 0.15); color: #2ed573; }
 .icone-key-box.azul  { background: rgba(0, 210, 211, 0.15);  color: #00d2d3; }
 .icone-key-box.roxo  { background: rgba(156, 136, 255, 0.15); color: #9c88ff; }
@@ -505,17 +526,9 @@
   font-size: 0.85rem;
 }
 
-.texto-key-box strong {
-  color: #ffffff;
-  font-size: 0.95rem;
-}
-
-.texto-key-box span { color: rgba(255, 255, 255, 0.7); }
-
-.texto-sucesso {
-  color: #2ed573;
-  font-weight: bold;
-}
+.texto-key-box strong { color: #ffffff; font-size: 0.95rem; }
+.texto-key-box span   { color: rgba(255, 255, 255, 0.7); }
+.texto-sucesso { color: #2ed573; font-weight: bold; }
 
 /* ==========================================================================
    7. SOBRE, CARACTERÍSTICAS E REQUISITOS
@@ -538,7 +551,6 @@
   line-height: 1.6;
 }
 
-/* --- CARACTERÍSTICAS (Um jogador, Multijogador, Conquistas...) --- */
 .lista-caracteristicas {
   display: flex;
   flex-wrap: wrap;
@@ -554,7 +566,6 @@
   font-size: 0.8rem;
 }
 
-/* --- REQUISITOS --- */
 .grid-requisitos {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -569,7 +580,6 @@
   line-height: 1.6;
 }
 
-/* O conteúdo do [innerHTML] vem da Steam, por isso precisa de ::ng-deep */
 :host ::ng-deep .texto-req ul {
   list-style: none;
   padding: 0;
@@ -579,7 +589,107 @@
 :host ::ng-deep .texto-req strong { color: #ffffff; }
 
 /* ==========================================================================
-   8. AVALIAÇÕES E MODAL
+   8. CARROSSEL DE EXPANSÕES E DLCs
+   ========================================================================== */
+.secao-detalhada .grid-dlcs {
+  display: flex !important;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.secao-detalhada .grid-dlcs .card-dlc {
+  flex: 0 0 220px;
+  min-width: 220px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.secao-detalhada .grid-dlcs .card-dlc:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 210, 211, 0.25);
+}
+
+.card-dlc img {
+  width: 100%;
+  aspect-ratio: 460 / 215;
+  object-fit: cover;
+  display: block;
+}
+
+.info-dlc {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.info-dlc h4 {
+  font-size: 0.88rem;
+  margin: 0;
+  line-height: 1.3;
+  min-height: 2.6em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.linha-preco-dlc {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.badge-desconto-mini {
+  background: #0088ff;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.preco-dlc-original { font-size: 0.75rem; color: rgba(255, 255, 255, 0.45); }
+.preco-dlc { color: #72ecff; font-weight: 800; font-size: 0.95rem; }
+
+.btn-dlc {
+  background: #0088ff;
+  color: #ffffff;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-dlc:hover { background: #0066cc; }
+
+.secao-detalhada .grid-dlcs::-webkit-scrollbar { height: 8px; }
+.secao-detalhada .grid-dlcs::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+.secao-detalhada .grid-dlcs::-webkit-scrollbar-thumb {
+  background: #00d2d3;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   9. AVALIAÇÕES E MODAL
    ========================================================================== */
 .secao-avaliacoes { margin-bottom: 40px; }
 
@@ -612,6 +722,40 @@
   display: block;
   margin-top: 4px;
   margin-bottom: 20px;
+}
+
+.barras-avaliacao {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  text-align: left;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.linha-barra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.linha-barra span:first-child { width: 62px; flex-shrink: 0; }
+.linha-barra .qtd { width: 28px; text-align: right; flex-shrink: 0; }
+
+.barra-fundo {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.barra-progresso {
+  height: 100%;
+  background: #0088ff;
+  border-radius: 3px;
+  transition: width 0.4s ease;
 }
 
 .btn-escrever-avaliacao {
@@ -663,22 +807,10 @@
 }
 
 .info-autor { flex: 1; }
+.info-autor strong { display: block; font-size: 0.9rem; color: #ffffff; }
 
-.info-autor strong {
-  display: block;
-  font-size: 0.9rem;
-  color: #ffffff;
-}
-
-.estrelas-mini {
-  font-size: 0.75rem;
-  color: #f59e0b;
-}
-
-.data-comentario {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
-}
+.estrelas-mini { font-size: 0.75rem; color: #f59e0b; }
+.data-comentario { font-size: 0.75rem; color: rgba(255, 255, 255, 0.4); }
 
 .texto-comentario {
   font-size: 0.85rem;
@@ -710,371 +842,15 @@
 
 .btn-reacao:hover { background: rgba(255, 255, 255, 0.15); }
 
-/* --- MODAL DE AVALIAÇÃO --- */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.modal-card {
-  background: #0f1e31;
-  border: 1px solid rgba(79, 195, 232, 0.3);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-}
-
-.modal-header {
-  padding: 18px 24px;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  color: #00f0ff;
-}
-
-.btn-fechar-modal {
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.modal-body {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.campo-grupo {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.campo-grupo label {
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.campo-grupo input,
-.campo-grupo textarea {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: #fff;
-  font-family: inherit;
-  font-size: 0.9rem;
-}
-
-.campo-grupo input:focus,
-.campo-grupo textarea:focus {
-  outline: none;
-  border-color: #00f0ff;
-}
-
-.modal-acoes {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.btn-cancelar {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.btn-enviar {
-  background: #00f0ff;
-  color: #0a1626;
-  border: none;
-  font-weight: 800;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 /* ==========================================================================
-   9. ANIMAÇÃO DE CARREGAMENTO (BARCO PIRATA)
+   10. JOGOS PARECIDOS
    ========================================================================== */
-.carregando-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  text-align: center;
-}
-
-.cenario-pirata-loader {
-  position: relative;
-  width: 180px;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  overflow: hidden;
-}
-
-.navio-pirata {
-  font-size: 3.5rem;
-  z-index: 2;
-  animation: navegar 2.5s ease-in-out infinite alternate;
-}
-
-.mar-animado {
-  position: absolute;
-  bottom: 0;
-  width: 200%;
-  height: 24px;
-}
-
-.onda {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: repeat-x url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C150,90 350,-40 500,40 C650,120 900,10 1200,40 L1200,120 L0,120 Z' fill='%2300d2d3' opacity='0.7'%3E%3C/path%3E%3C/svg%3E");
-  background-size: 300px 24px;
-}
-
-.onda1 {
-  animation: ondular 3s linear infinite;
-  z-index: 3;
-  opacity: 0.8;
-}
-
-.onda2 {
-  animation: ondular 2s linear infinite reverse;
-  z-index: 1;
-  opacity: 0.4;
-  bottom: 4px;
-}
-
-.texto-carregando {
-  margin-top: 15px;
-  font-size: 0.95rem;
-  color: #72ecff;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-
-@keyframes navegar {
-  0%   { transform: translateY(0) rotate(-6deg); }
-  50%  { transform: translateY(-12px) rotate(0deg); }
-  100% { transform: translateY(0) rotate(6deg); }
-}
-
-@keyframes ondular {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-300px); }
-}
-
-
-/* ==========================================================================
-   AJUSTES
-   ========================================================================== */
-
-/* Fundo: deixa aparecer o degradê azul do site */
-.pagina-detalhes-container { background: transparent; }
-
-/* Classificação indicativa: cores oficiais */
-.badge-classificacao {
-  min-width: 34px;
-  height: 34px;
-  padding: 0 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 800;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
-.badge-classificacao.livre     { background: #00a651; color: #ffffff; }
-.badge-classificacao.dez       { background: #0a9ad9; color: #ffffff; }
-.badge-classificacao.doze      { background: #f9d71c; color: #3a2c00; }
-.badge-classificacao.quatorze  { background: #f7941d; color: #ffffff; }
-.badge-classificacao.dezesseis { background: #e8112d; color: #ffffff; }
-.badge-classificacao.dezoito   { background: #000000; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.5); }
-
-/* Ícone da Steam */
-.icone-key-box i { font-size: 1.3rem; }
-
-/* Títulos e textos longos sem ficar apertados */
-.titulo-jogo {
-  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-}
-
-.subtitulos {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 14px;
-  line-height: 1.5;
-}
-.subtitulos > span + span::before {
-  content: '•';
-  margin-right: 14px;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.breadcrumb { overflow-wrap: anywhere; line-height: 1.4; }
-.avaliacao-container { flex-wrap: wrap; }
-.precos-linha { flex-wrap: wrap; }
-
-.fato-linha {
-  gap: 16px;
-  align-items: flex-start;
-}
-.fato-linha span { flex-shrink: 0; }
-.fato-linha strong {
-  text-align: right;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
-
-/* Gráfico de avaliações */
-.barras-avaliacao {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 20px;
-  text-align: left;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-.linha-barra {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.linha-barra span:first-child { width: 62px; flex-shrink: 0; }
-.linha-barra .qtd { width: 28px; text-align: right; flex-shrink: 0; }
-.barra-fundo {
-  flex: 1;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.barra-progresso {
-  height: 100%;
-  background: #0088ff;
-  border-radius: 3px;
-  transition: width 0.4s ease;
-}
-
-/* Expansões e DLCs */
-.grid-dlcs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-}
-.card-dlc {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.card-dlc:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 210, 211, 0.25);
-}
-.card-dlc img {
-  width: 100%;
-  aspect-ratio: 460 / 215;
-  object-fit: cover;
-  display: block;
-}
-.info-dlc {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-}
-.info-dlc h4 {
-  font-size: 0.88rem;
-  margin: 0;
-  line-height: 1.3;
-  min-height: 2.6em;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.linha-preco-dlc {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: auto;
-}
-.badge-desconto-mini {
-  background: #0088ff;
-  color: #ffffff;
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-.preco-dlc-original { font-size: 0.75rem; color: rgba(255, 255, 255, 0.45); }
-.preco-dlc { color: #72ecff; font-weight: 800; font-size: 0.95rem; }
-.btn-dlc {
-  background: #0088ff;
-  color: #ffffff;
-  border: none;
-  padding: 8px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-dlc:hover { background: #0066cc; }
-
-/* Jogos parecidos */
 .grid-recomendados {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 16px;
 }
+
 .card-rec {
   cursor: pointer;
   background: rgba(255, 255, 255, 0.05);
@@ -1083,7 +859,9 @@
   padding: 10px;
   transition: transform 0.2s, border-color 0.2s;
 }
+
 .card-rec:hover { transform: translateY(-4px); border-color: #4fc3e8; }
+
 .rec-capa {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -1092,7 +870,9 @@
   background: #0a1626;
   margin-bottom: 8px;
 }
+
 .rec-capa img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
 .rec-desconto {
   position: absolute;
   top: 8px;
@@ -1104,6 +884,7 @@
   padding: 3px 7px;
   border-radius: 6px;
 }
+
 .card-rec h4 {
   font-size: 0.82rem;
   margin: 0 0 4px;
@@ -1111,6 +892,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .rec-preco {
   display: flex;
   align-items: baseline;
@@ -1118,84 +900,31 @@
   gap: 6px;
   font-size: 0.8rem;
 }
+
 .rec-preco s { color: rgba(255, 255, 255, 0.45); font-size: 0.72rem; }
 .rec-preco strong { color: #4ade80; }
 
-
-
 /* ==========================================================================
-   10. RESPONSIVIDADE
+   11. RESPONSIVIDADE
    ========================================================================== */
-
-/* Tablets e notebooks menores (até 1024px) */
 @media (max-width: 1024px) {
   .pagina-detalhes { padding: 30px 20px 20px 20px; }
-
-  .grid-principal {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .grid-avaliacoes {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
+  .grid-principal { grid-template-columns: 1fr; gap: 24px; }
+  .grid-avaliacoes { grid-template-columns: 1fr; gap: 20px; }
 }
 
-/* Celulares (até 768px) */
 @media (max-width: 768px) {
-  .pagina-detalhes {
-    margin-top: 60px;
-    padding: 16px;
-  }
-
-  .cabecalho-navegacao {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
+  .pagina-detalhes { margin-top: 60px; padding: 16px; }
+  .cabecalho-navegacao { flex-wrap: wrap; gap: 10px; }
   .titulo-jogo { font-size: 1.6rem; }
-
-  .thumb-item {
-    flex: 0 0 110px;
-    height: 65px;
-  }
-
-  .btn-seta {
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
-  }
-
-  .secao-detalhada,
-  .secao-avaliacoes {
-    padding: 18px;
-    margin-top: 20px;
-  }
-
-  .grid-requisitos {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .toast-notificacao {
-    bottom: 16px;
-    right: 16px;
-    left: 16px;
-    text-align: center;
-  }
+  .thumb-item { flex: 0 0 110px; height: 65px; }
+  .btn-seta { width: 32px; height: 32px; font-size: 1rem; }
+  .secao-detalhada, .secao-avaliacoes { padding: 18px; margin-top: 20px; }
+  .grid-requisitos { grid-template-columns: 1fr; gap: 16px; }
+  .toast-notificacao { bottom: 16px; right: 16px; left: 16px; text-align: center; }
 }
 
-/* Celulares pequenos (até 480px) */
 @media (max-width: 480px) {
-  .btn-adicionar {
-    font-size: 0.85rem;
-    padding: 10px;
-  }
-
+  .btn-adicionar { font-size: 0.85rem; padding: 10px; }
   .preco-promo { font-size: 1.5rem; }
-
-  .modal-card { max-width: 95%; }
-
-  .modal-body { padding: 16px; }
 }

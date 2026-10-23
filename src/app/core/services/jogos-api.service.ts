@@ -12,6 +12,9 @@ const TAMANHO_LOTE = 40;
 const capa = (appid: number) =>
   `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/library_600x900.jpg`;
 
+const header = (appid: number) =>
+  `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/header.jpg`;
+
 function formatarPreco(p: any) {
   if (!p) return null;
   return {
@@ -149,7 +152,7 @@ export class JogosApiService {
     return {
       id,
       nome: d.name,
-      imagem: d.header_image,
+      imagem: d.header_image || header(id),
       gratis: d.is_free === true,
       preco: formatarPreco(d.price_overview),
     };
@@ -177,12 +180,19 @@ export class JogosApiService {
           ? { nota: ((q.total_positive / q.total_reviews) * 5).toFixed(1), total: q.total_reviews }
           : null;
 
-        const imagens: string[] = (d.screenshots ?? []).map((s: any) => s.path_full);
+        // Captura as screenshots em RESOLUÇÃO MÁXIMA / ORIGINAL (path_full)
+        const screenshots: string[] = (d.screenshots ?? []).map((s: any) => s.path_full);
+
+        // Capa em alta definição oficial da Steam
+        const capaAltaQualidade = d.header_image || header(appid);
+
+        // Galeria com a capa na 1ª posição (0) + screenshots em 1080p/4K
+        const imagens = [capaAltaQualidade, ...screenshots];
 
         return {
           id: appid,
           nome: d.name,
-          background_image: imagens[0] ?? d.header_image,
+          background_image: capaAltaQualidade,
           descricao: d.short_description,
           plataformas: meta.plataformas.join(' / '),
           desenvolvedoras: (d.developers ?? []).join(', '),
