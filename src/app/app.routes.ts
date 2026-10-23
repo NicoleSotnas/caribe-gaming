@@ -24,7 +24,7 @@ export const routes: Routes = [
   },
   { path: 'produto/:id', component: DetalheJogo },
   // rede de segurança: links antigos com "produtos/..." também funcionam
-  { path: 'produtos/:id', redirectTo: 'produto/:id' },
+  { path: 'produto/:id', redirectTo: 'produto/:id' },
   {
     path: 'login',
     component: Login,

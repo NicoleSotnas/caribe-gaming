@@ -7,12 +7,13 @@ import { JogosApiService } from '../../../core/services/jogos-api.service';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { FavoritosService } from '../../../core/services/favoritos.service';
 import { DetalhesJogo, Comentario, JogoCard, Dlc } from '../../../core/models/jogo';
+import { LoaderBarco } from '../carregamento/cacrregamento-barco';
 import { comentariosDoJogo } from '../comentarios';
 
 @Component({
   selector: 'app-detalhe-jogo',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderBarco],
   templateUrl: './detalhe-jogo.html',
   styleUrls: ['./detalhe-jogo.css']
 })

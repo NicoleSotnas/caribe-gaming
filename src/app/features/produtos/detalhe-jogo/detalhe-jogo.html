@@ -325,22 +325,7 @@
 
   </div>
 
-  <!-- ERRO AO CARREGAR -->
-  <div class="carregando-container" *ngIf="erro">
-    <p class="texto-carregando">😕 Não foi possível carregar este jogo.</p>
-    <button class="btn-voltar" (click)="irParaJogos()">Voltar para os jogos</button>
-  </div>
-
-  <!-- ESTADO DE CARREGAMENTO ANIMADO PIRATA -->
-  <div class="carregando-container" *ngIf="carregando">
-    <div class="cenario-pirata-loader">
-      <div class="navio-pirata">⛵</div>
-      <div class="mar-animado">
-        <div class="onda onda1"></div>
-        <div class="onda onda2"></div>
-      </div>
-    </div>
-    <p class="texto-carregando">Navegando nos mares da Caribe's Gaming...</p>
-  </div>
+    <app-loader-barco *ngIf="carregando" texto="Navegando nos mares da Caribe"></app-loader-barco>
+    
 
 </div>
