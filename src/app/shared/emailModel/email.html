@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caribe's Gaming - Pedido Confirmado</title>
+</head>
+
+<body>
+
+    <div
+        style="
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #369ABC 0%, #369ABC 48%, #234A67 100%);
+            color: #F1F5F4;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 8px;
+        "
+    >
+
+        <!-- Cabeçalho -->
+        <div
+            style="
+                text-align: center;
+                border-bottom: 2px solid #234A67;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            "
+        >
+            <img 
+                src="https://caribe-gaming.vercel.app/img/logo-caribes.png" alt="logo caribe's gaming"
+                style="width: clamp(10vw, 100px, 40vw);"
+            >
+
+            <h1
+                style="
+                    color: #F1F5F4;
+                    margin: 0;
+                    font-size: 24px;
+                "
+            >
+                Sua Compra foi um Sucesso!
+            </h1>
+
+            <p
+                style="
+                    color: #B0C1CF;
+                    margin: 5px 0 0 0;
+                "
+            >
+                Pedido #{{order_number}}
+            </p>
+
+        </div>
+
+
+        <!-- Corpo do E-mail -->
+
+        <p
+            style="
+                font-size: 16px;
+                color: #F1F5F4;
+            "
+        >
+            Olá! Seu pagamento foi processado e sua chave digital já está disponível.
+        </p>
+
+
+        <!-- Bloco do Jogo -->
+
+        <div
+            style="
+                background-color: #0b1c30bf;
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(255,255,255,.15);
+                box-shadow: 0 8px 32px #00000040;
+                padding: 20px;
+                border-radius: 8px;
+                text-align: center;
+                margin-bottom: 25px;
+                border: 1px solid #234A67;
+            "
+        >
+
+            <img
+                src="{{game_image}}"
+                alt="{{game_name}}"
+                style="
+                    max-width: 180px;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.35);
+                    margin-bottom: 15px;
+                "
+            >
+
+            <h2
+                style="
+                    margin: 0;
+                    color: #F1F5F4;
+                    font-size: 20px;
+                "
+            >
+                {{game_name}}
+            </h2>
+
+            <p
+                style="
+                    color: #369ABC;
+                    margin: 5px 0 0 0;
+                    font-weight: bold;
+                "
+            >
+                Plataforma: Steam
+            </p>
+
+        </div>
+
+
+        <!-- Bloco da Chave -->
+
+        <div
+            style="
+                background-color: #14213A;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                border: 1px dashed #369ABC;
+                margin-bottom: 25px;
+            "
+        >
+
+            <p
+                style="
+                    margin: 0 0 10px 0;
+                    color: #B0C1CF;
+                    font-size: 14px;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                "
+            >
+                Sua Chave de Ativação:
+            </p>
+
+            <span
+                style="
+                    font-family: 'Courier New', monospace;
+                    font-size: 22px;
+                    font-weight: bold;
+                    color: #F1F5F4;
+                    background-color: #18243B;
+                    padding: 8px 15px;
+                    border-radius: 5px;
+                    display: inline-block;
+                    letter-spacing: 2px;
+                "
+            >
+                {{game_key}}
+            </span>
+
+        </div>
+
+
+        <!-- Instruções -->
+
+        <div
+            style="
+                font-size: 14px;
+                color: #B0C1CF;
+                line-height: 1.5;
+                background-color: #14213A;
+                padding: 15px;
+                border-radius: 8px;
+                border: 1px solid #234A67;
+            "
+        >
+
+            <strong
+                style="
+                    color: #369ABC;
+                "
+            >
+                Como resgatar seu jogo:
+            </strong>
+
+            <ol
+                style="
+                    margin: 5px 0 0 20px;
+                    padding: 0;
+                "
+            >
+
+                <li>
+                    Abra o <strong style="color: #F1F5F4;">Laucher</strong> no seu computador.
+                </li>
+
+                <li>
+                    No menu superior, clique em <strong style="color: #F1F5F4;">Jogos</strong>.
+                </li>
+
+                <li>
+                    Selecione <strong style="color: #F1F5F4;">"Ativar um código de produto…"</strong>
+                    e cole a chave acima.
+                </li>
+
+            </ol>
+
+        </div>
+
+
+        <!-- Rodapé -->
+
+        <div
+            style="
+                text-align: center;
+                margin-top: 30px;
+                font-size: 12px;
+                color: #B0C1CF;
+                border-top: 1px solid #234A67;
+                padding-top: 15px;
+            "
+        >
+
+            <p>
+                Este é um e-mail de confirmação de compra da Caribe's Gaming.
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+```
