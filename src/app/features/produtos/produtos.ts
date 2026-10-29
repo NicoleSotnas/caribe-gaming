@@ -20,7 +20,7 @@ export interface CategoriaItem {
   standalone: true,
   imports: [CommonModule, FormsModule, PlataformaIcones],
   templateUrl: './produtos.html',
-  styleUrls: ['./produtos.css']
+  styleUrls: ['./produtos.css'],
 })
 export class Produtos implements OnInit {
   private produtosService = inject(ProdutosService);
@@ -45,12 +45,15 @@ export class Produtos implements OnInit {
   categoriaAtiva: string | null = null;
   mensagemToast: string | null = null;
 
+  // Filtros recolhíveis (mobile)
+  filtrosAbertos: boolean = false;
+
   readonly faixasPreco = [
     { id: 'todos', nome: 'Todos' },
     { id: 'gratis', nome: 'Grátis' },
     { id: '0-50', nome: 'Até R$50' },
     { id: '50-100', nome: 'R$50 – R$100' },
-    { id: 'acima-100', nome: 'Acima de R$100' }
+    { id: 'acima-100', nome: 'Acima de R$100' },
   ];
 
   // "id" precisa ser igual ao usado em CATALOGO.plataformas
@@ -58,7 +61,7 @@ export class Produtos implements OnInit {
     { id: 'PC', nome: 'PC', icone: 'fa-brands fa-windows' },
     { id: 'PS', nome: 'PlayStation', icone: 'fa-brands fa-playstation' },
     { id: 'Xbox', nome: 'Xbox', icone: 'fa-brands fa-xbox' },
-    { id: 'Switch', nome: 'Switch', icone: 'fa-brands fa-nintendo-switch' }
+    { id: 'Switch', nome: 'Switch', icone: 'fa-brands fa-nintendo-switch' },
   ];
 
   readonly opcoesOrdenacao = [
@@ -66,7 +69,7 @@ export class Produtos implements OnInit {
     { id: 'menor-preco', nome: 'Menor preço' },
     { id: 'maior-preco', nome: 'Maior preço' },
     { id: 'maior-desconto', nome: 'Maior desconto' },
-    { id: 'az', nome: 'A – Z' }
+    { id: 'az', nome: 'A – Z' },
   ];
 
   // "id" precisa ser igual aos slugs de CATALOGO.categorias
@@ -78,7 +81,7 @@ export class Produtos implements OnInit {
     { id: 'simulator', nome: 'Simulação', icone: '🚗' },
     { id: 'sport', nome: 'Esportes', icone: '⚽' },
     { id: 'racing', nome: 'Corrida', icone: '🏁' },
-    { id: 'indie', nome: 'Indie', icone: '🎨' }
+    { id: 'indie', nome: 'Indie', icone: '🎨' },
   ];
 
   ngOnInit(): void {
@@ -96,7 +99,7 @@ export class Produtos implements OnInit {
           this.produtos = dados;
           this.aplicarFiltros();
         },
-        error: (err) => console.error('Erro ao carregar lista de jogos:', err)
+        error: (err) => console.error('Erro ao carregar lista de jogos:', err),
       });
   }
 
@@ -115,48 +118,50 @@ export class Produtos implements OnInit {
 
   // --- LÓGICA DE FILTRAGEM ---
   aplicarFiltros(): void {
-    let resultado = this.produtos.map(p => ({
+    let resultado = this.produtos.map((p) => ({
       ...p,
-      favorito: this.favoritosService.ehFavorito(p.id)
+      favorito: this.favoritosService.ehFavorito(p.id),
     }));
 
     // 1. Aba de Favoritos
     if (this.abaAtiva === 'favoritos') {
-      resultado = resultado.filter(p => p.favorito);
+      resultado = resultado.filter((p) => p.favorito);
     }
 
     // 2. Categoria
     if (this.categoriaAtiva) {
       const cat = this.categoriaAtiva;
-      resultado = resultado.filter(p => p.categorias?.includes(cat));
+      resultado = resultado.filter((p) => p.categorias?.includes(cat));
     }
 
     // 3. Só em promoção
     if (this.apenasPromocao) {
-      resultado = resultado.filter(p => this.temDesconto(p.desconto));
+      resultado = resultado.filter((p) => this.temDesconto(p.desconto));
     }
 
     // 4. Faixa de preço
     switch (this.faixaPrecoAtiva) {
       case 'gratis':
-        resultado = resultado.filter(p => this.ehGratis(p));
+        resultado = resultado.filter((p) => this.ehGratis(p));
         break;
       case '0-50':
-        resultado = resultado.filter(p => this.temPreco(p) && this.valorPreco(p) <= 50);
+        resultado = resultado.filter((p) => this.temPreco(p) && this.valorPreco(p) <= 50);
         break;
       case '50-100':
-        resultado = resultado.filter(p => this.temPreco(p) && this.valorPreco(p) > 50 && this.valorPreco(p) <= 100);
+        resultado = resultado.filter(
+          (p) => this.temPreco(p) && this.valorPreco(p) > 50 && this.valorPreco(p) <= 100,
+        );
         break;
       case 'acima-100':
-        resultado = resultado.filter(p => this.temPreco(p) && this.valorPreco(p) > 100);
+        resultado = resultado.filter((p) => this.temPreco(p) && this.valorPreco(p) > 100);
         break;
     }
 
     // 5. Plataforma (basta ter uma das selecionadas)
     if (this.plataformasSelecionadas.length > 0) {
-      resultado = resultado.filter(p => {
-        const lista = p.plataforma.split('/').map(x => x.trim());
-        return this.plataformasSelecionadas.some(sel => lista.includes(sel));
+      resultado = resultado.filter((p) => {
+        const lista = p.plataforma.split('/').map((x) => x.trim());
+        return this.plataformasSelecionadas.some((sel) => lista.includes(sel));
       });
     }
 
@@ -204,6 +209,10 @@ export class Produtos implements OnInit {
     this.aplicarFiltros();
   }
 
+      toggleFiltros(): void {
+    this.filtrosAbertos = !this.filtrosAbertos;
+  }
+
   selecionarAba(aba: 'todos' | 'favoritos'): void {
     this.abaAtiva = aba;
     this.aplicarFiltros();
@@ -221,7 +230,7 @@ export class Produtos implements OnInit {
 
   obterNomeCategoriaAtiva(): string {
     if (!this.categoriaAtiva) return '🏝️ Categorias';
-    const cat = this.categorias.find(c => c.id === this.categoriaAtiva);
+    const cat = this.categorias.find((c) => c.id === this.categoriaAtiva);
     return cat ? `${cat.icone} ${cat.nome}` : '🏝️ Categorias';
   }
 
@@ -259,7 +268,7 @@ export class Produtos implements OnInit {
       quantidade: 1,
       imagemUrl: produto.imagem || '',
       plataforma: produto.plataforma,
-      categoria: produto.genero
+      categoria: produto.genero,
     });
     this.exibirToast('🛒 Adicionado ao carrinho com sucesso!');
   }
@@ -268,16 +277,14 @@ export class Produtos implements OnInit {
     this.favoritosService.toggleFavorito(produto);
     produto.favorito = !produto.favorito;
 
-    this.exibirToast(
-      produto.favorito ? '❤️ Salvo nos favoritos!' : '💔 Removido dos favoritos!'
-    );
+    this.exibirToast(produto.favorito ? '❤️ Salvo nos favoritos!' : '💔 Removido dos favoritos!');
 
     this.aplicarFiltros();
   }
 
   limparFavoritos(): void {
     this.favoritosService.limparTodosFavoritos();
-    this.produtos.forEach(p => p.favorito = false);
+    this.produtos.forEach((p) => (p.favorito = false));
     this.aplicarFiltros();
     this.exibirToast('🗑️ Favoritos limpos com sucesso!');
   }

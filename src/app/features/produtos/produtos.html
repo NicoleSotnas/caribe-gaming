@@ -3,13 +3,21 @@
 <div class="pagina-produtos">
 
   <!-- 1. Sidebar de Filtros -->
-  <aside class="sidebar-filtros">
-    <div class="filtros-cabecalho">
-      <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
-      <button class="btn-limpar-filtros" *ngIf="filtrosAtivos > 0" (click)="limparFiltros()">
-        Limpar ({{ filtrosAtivos }})
-      </button>
-    </div>
+<aside class="sidebar-filtros" [class.aberto]="filtrosAbertos">
+  <div class="filtros-cabecalho" (click)="toggleFiltros()">
+    <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
+
+    <button
+      class="btn-limpar-filtros"
+      *ngIf="filtrosAtivos > 0"
+      (click)="limparFiltros(); $event.stopPropagation()">
+      Limpar ({{ filtrosAtivos }})
+    </button>
+
+    <span class="seta-filtros">▼</span>
+  </div>
+
+  <div class="filtros-corpo">
 
     <div class="filtro-grupo">
       <h4>Ordenar por</h4>
@@ -30,6 +38,26 @@
         <span class="switch"></span>
         <span>Só em promoção</span>
       </label>
+    </div>
+
+    <!-- NOVO: Categoria -->
+    <div class="filtro-grupo">
+      <h4>Categoria</h4>
+      <div class="chips">
+        <button
+          class="chip"
+          [class.ativo]="categoriaAtiva === null"
+          (click)="selecionarCategoria('')">
+          🏝️ Todas
+        </button>
+        <button
+          *ngFor="let cat of categorias"
+          class="chip"
+          [class.ativo]="categoriaAtiva === cat.id"
+          (click)="selecionarCategoria(cat.id)">
+          {{ cat.icone }} {{ cat.nome }}
+        </button>
+      </div>
     </div>
 
     <div class="filtro-grupo">
@@ -57,8 +85,9 @@
         </button>
       </div>
     </div>
-  </aside>
 
+  </div>
+</aside>
   <!-- 2. Conteúdo Principal -->
   <div class="conteudo-produtos">
 

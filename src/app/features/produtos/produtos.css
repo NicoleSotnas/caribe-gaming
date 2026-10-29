@@ -8,7 +8,11 @@
   padding: 30px;
   min-height: 100vh;
   color: #ffffff;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
   box-sizing: border-box;
   width: 100%;
 }
@@ -187,10 +191,13 @@
   font-size: 0.85rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
-.item-categoria:hover, .item-categoria.ativo {
+.item-categoria:hover,
+.item-categoria.ativo {
   background: rgba(79, 195, 232, 0.15);
   color: #4fc3e8;
   font-weight: bold;
@@ -274,7 +281,10 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
   width: 100%;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .card-produto:hover {
@@ -418,7 +428,8 @@
   height: 18px;
 }
 
-.btn-favorito:hover, .btn-favorito.favoritado {
+.btn-favorito:hover,
+.btn-favorito.favoritado {
   color: #ff6b6b;
 }
 
@@ -476,9 +487,22 @@
     gap: 20px;
   }
 
-  .sidebar-filtros {
-    width: 100%;
-    position: static;
+  filtros-titulo {
+    cursor: pointer;
+  }
+  .filtros-corpo {
+    display: none;
+  }
+  .sidebar-filtros.aberto .filtros-corpo {
+    display: block;
+  }
+
+  .seta-filtros {
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+  }
+  .sidebar-filtros.aberto .seta-filtros {
+    transform: rotate(180deg);
   }
 
   .grid-produtos {
@@ -543,7 +567,8 @@
     padding: 8px;
   }
 
-  .badge-desconto, .badge-plataforma {
+  .badge-desconto,
+  .badge-plataforma {
     font-size: 0.65rem;
     padding: 2px 4px;
   }
@@ -572,8 +597,6 @@
     text-align: center;
   }
 }
-
-
 
 /* ==========================================================================
    SIDEBAR DE FILTROS
@@ -626,8 +649,12 @@
   color: #ff4757;
 }
 
-.filtro-grupo { margin-bottom: 22px; }
-.filtro-grupo:last-child { margin-bottom: 0; }
+.filtro-grupo {
+  margin-bottom: 22px;
+}
+.filtro-grupo:last-child {
+  margin-bottom: 0;
+}
 
 .filtro-grupo h4 {
   font-size: 0.78rem;
@@ -695,9 +722,16 @@
   transition: transform 0.2s ease;
 }
 
-.switch-linha input:checked + .switch { background: #0e7fa8; }
-.switch-linha input:checked + .switch::after { transform: translateX(16px); }
-.switch-linha input:focus-visible + .switch { outline: 2px solid #4fc3e8; outline-offset: 2px; }
+.switch-linha input:checked + .switch {
+  background: #0e7fa8;
+}
+.switch-linha input:checked + .switch::after {
+  transform: translateX(16px);
+}
+.switch-linha input:focus-visible + .switch {
+  outline: 2px solid #4fc3e8;
+  outline-offset: 2px;
+}
 
 /* --- Chips de preço --- */
 .chips {
@@ -718,7 +752,10 @@
   transition: all 0.2s ease;
 }
 
-.chip:hover { border-color: #4fc3e8; color: #4fc3e8; }
+.chip:hover {
+  border-color: #4fc3e8;
+  color: #4fc3e8;
+}
 
 .chip.ativo {
   background: #0e7fa8;
@@ -750,8 +787,13 @@
   transition: all 0.2s ease;
 }
 
-.plat-btn i { font-size: 1rem; }
-.plat-btn:hover { border-color: #4fc3e8; color: #4fc3e8; }
+.plat-btn i {
+  font-size: 1rem;
+}
+.plat-btn:hover {
+  border-color: #4fc3e8;
+  color: #4fc3e8;
+}
 
 .plat-btn.ativo {
   background: rgba(79, 195, 232, 0.18);
