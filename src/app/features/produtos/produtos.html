@@ -1,111 +1,109 @@
 <div class="toast-notificacao" *ngIf="mensagemToast">{{ mensagemToast }}</div>
 
 <div class="pagina-produtos">
-
   <!-- 1. Sidebar de Filtros -->
-<aside class="sidebar-filtros" [class.aberto]="filtrosAbertos">
-  <div class="filtros-cabecalho" (click)="toggleFiltros()">
-    <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
+  <aside class="sidebar-filtros" [class.aberto]="filtrosAbertos">
+    <div class="filtros-cabecalho" (click)="toggleFiltros()">
+      <h3 class="filtros-titulo">🏴‍☠️ FILTROS</h3>
 
-    <button
-      class="btn-limpar-filtros"
-      *ngIf="filtrosAtivos > 0"
-      (click)="limparFiltros(); $event.stopPropagation()">
-      Limpar ({{ filtrosAtivos }})
-    </button>
+      <button
+        class="btn-limpar-filtros"
+        *ngIf="filtrosAtivos > 0"
+        (click)="limparFiltros(); $event.stopPropagation()"
+      >
+        Limpar ({{ filtrosAtivos }})
+      </button>
 
-    <span class="seta-filtros">▼</span>
-  </div>
-
-  <div class="filtros-corpo">
-
-    <div class="filtro-grupo">
-      <h4>Ordenar por</h4>
-      <select
-        class="select-ordenacao"
-        [ngModel]="ordenacao"
-        (ngModelChange)="ordenacao = $event; aplicarFiltros()">
-        <option *ngFor="let o of opcoesOrdenacao" [value]="o.id">{{ o.nome }}</option>
-      </select>
+      <span class="seta-filtros">▼</span>
     </div>
 
-    <div class="filtro-grupo">
-      <label class="switch-linha">
-        <input
-          type="checkbox"
-          [ngModel]="apenasPromocao"
-          (ngModelChange)="apenasPromocao = $event; aplicarFiltros()">
-        <span class="switch"></span>
-        <span>Só em promoção</span>
-      </label>
-    </div>
+    <div class="filtros-corpo">
+      <div class="filtro-grupo">
+        <h4>Ordenar por</h4>
+        <select
+          class="select-ordenacao"
+          [ngModel]="ordenacao"
+          (ngModelChange)="ordenacao = $event; aplicarFiltros()"
+        >
+          <option *ngFor="let o of opcoesOrdenacao" [value]="o.id">{{ o.nome }}</option>
+        </select>
+      </div>
 
-    <!-- NOVO: Categoria -->
-    <div class="filtro-grupo">
-      <h4>Categoria</h4>
-      <div class="chips">
-        <button
-          class="chip"
-          [class.ativo]="categoriaAtiva === null"
-          (click)="selecionarCategoria('')">
-          🏝️ Todas
-        </button>
-        <button
-          *ngFor="let cat of categorias"
-          class="chip"
-          [class.ativo]="categoriaAtiva === cat.id"
-          (click)="selecionarCategoria(cat.id)">
-          {{ cat.icone }} {{ cat.nome }}
-        </button>
+      <div class="filtro-grupo">
+        <label class="switch-linha">
+          <input
+            type="checkbox"
+            [ngModel]="apenasPromocao"
+            (ngModelChange)="apenasPromocao = $event; aplicarFiltros()"
+          />
+          <span class="switch"></span>
+          <span>Só em promoção</span>
+        </label>
+      </div>
+
+      <!-- NOVO: Categoria -->
+      <div class="filtro-grupo">
+        <h4>Categoria</h4>
+        <select
+          class="select-ordenacao"
+          [ngModel]="categoriaAtiva ?? ''"
+          (ngModelChange)="selecionarCategoria($event)"
+        >
+          <option value="">🏝️ Todas</option>
+          <option *ngFor="let cat of categorias" [value]="cat.id">
+            {{ cat.icone }} {{ cat.nome }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filtro-grupo">
+        <h4>Preço</h4>
+        <div class="chips">
+          <button
+            *ngFor="let f of faixasPreco"
+            class="chip"
+            [class.ativo]="faixaPrecoAtiva === f.id"
+            (click)="definirFaixaPreco(f.id)"
+          >
+            {{ f.nome }}
+          </button>
+        </div>
+      </div>
+
+      <div class="filtro-grupo">
+        <h4>Plataforma</h4>
+        <div class="plat-botoes">
+          <button
+            *ngFor="let p of plataformasFiltro"
+            class="plat-btn"
+            [class.ativo]="plataformasSelecionadas.includes(p.id)"
+            (click)="togglePlataforma(p.id)"
+          >
+            <i [class]="p.icone"></i> {{ p.nome }}
+          </button>
+        </div>
       </div>
     </div>
+  </aside>
 
-    <div class="filtro-grupo">
-      <h4>Preço</h4>
-      <div class="chips">
-        <button
-          *ngFor="let f of faixasPreco"
-          class="chip"
-          [class.ativo]="faixaPrecoAtiva === f.id"
-          (click)="definirFaixaPreco(f.id)">
-          {{ f.nome }}
-        </button>
-      </div>
-    </div>
-
-    <div class="filtro-grupo">
-      <h4>Plataforma</h4>
-      <div class="plat-botoes">
-        <button
-          *ngFor="let p of plataformasFiltro"
-          class="plat-btn"
-          [class.ativo]="plataformasSelecionadas.includes(p.id)"
-          (click)="togglePlataforma(p.id)">
-          <i [class]="p.icone"></i> {{ p.nome }}
-        </button>
-      </div>
-    </div>
-
-  </div>
-</aside>
   <!-- 2. Conteúdo Principal -->
   <div class="conteudo-produtos">
-
     <div class="topo-e-categorias">
-
       <div class="linha-controles-topo">
         <!-- Abas -->
         <div class="abas-produtos">
           <button
             class="aba-btn"
             [class.ativa]="abaAtiva === 'todos'"
-            (click)="selecionarAba('todos')">
+            (click)="selecionarAba('todos')"
+          >
             🎮 Todos os Jogos
           </button>
           <button
             class="aba-btn"
             [class.ativa]="abaAtiva === 'favoritos'"
-            (click)="selecionarAba('favoritos')">
+            (click)="selecionarAba('favoritos')"
+          >
             🤍 Favoritos
             <span class="badge-contador-fav" *ngIf="quantidadeFavoritos > 0">
               {{ quantidadeFavoritos }}
@@ -114,35 +112,17 @@
         </div>
 
         <!-- Botão de Categoria -->
-        <div class="dropdown-categorias" *ngIf="abaAtiva === 'todos'">
-          <button class="btn-dropdown-categoria" (click)="toggleMenuCategorias()">
-            {{ obterNomeCategoriaAtiva() }}
-            <span class="seta-icone" [class.aberto]="menuCategoriasAberto">▼</span>
-          </button>
-
-          <div class="menu-categorias-conteudo" [class.mostrar]="menuCategoriasAberto">
-            <button
-              class="item-categoria"
-              [class.ativo]="categoriaAtiva === null"
-              (click)="selecionarCategoria('')">
-              🏝️ Todas
-            </button>
-            <button
-              *ngFor="let cat of categorias"
-              class="item-categoria"
-              [class.ativo]="categoriaAtiva === cat.id"
-              (click)="selecionarCategoria(cat.id)">
-              {{ cat.icone }} {{ cat.nome }}
-            </button>
-          </div>
-        </div>
       </div>
 
       <div class="produtos-topo">
         <div class="bloco-titulo-pagina">
           <h2>{{ abaAtiva === 'favoritos' ? 'Meus Favoritos' : 'Todos os Jogos' }}</h2>
           <span class="produtos-subtitulo">
-            {{ abaAtiva === 'favoritos' ? 'Jogos que você salvou pra depois' : 'Encontre sua próxima aventura' }}
+            {{
+              abaAtiva === 'favoritos'
+                ? 'Jogos que você salvou pra depois'
+                : 'Encontre sua próxima aventura'
+            }}
           </span>
         </div>
 
@@ -150,7 +130,8 @@
           <button
             class="btn-limpar-favoritos"
             *ngIf="abaAtiva === 'favoritos' && produtosExibidos.length > 0"
-            (click)="limparFavoritos()">
+            (click)="limparFavoritos()"
+          >
             🗑️ Limpar Favoritos
           </button>
           <span class="produtos-contador">{{ produtosExibidos.length }} jogos encontrados</span>
@@ -161,17 +142,20 @@
     <!-- 3. Cards de Produtos -->
     <div class="grid-produtos" *ngIf="produtosExibidos.length > 0">
       <div *ngFor="let produto of produtosExibidos; trackBy: rastrear" class="card-produto">
-
-        <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
+        <div class="card-imagem" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer">
           <img
             [src]="produto.imagem"
             [alt]="produto.nome"
             [style.object-position]="produto.imagemPosicao"
             [class.esgotado-img]="produto.estoque === false"
-            (error)="imagemFalhou($event, produto)" />
+            (error)="imagemFalhou($event, produto)"
+          />
 
           <div class="card-badges">
-            <span class="badge-desconto" *ngIf="temDesconto(produto.desconto) && produto.estoque !== false">
+            <span
+              class="badge-desconto"
+              *ngIf="temDesconto(produto.desconto) && produto.estoque !== false"
+            >
               {{ textoDesconto(produto.desconto) }}
             </span>
             <span class="badge-esgotado" *ngIf="produto.estoque === false">ESGOTADO</span>
@@ -181,7 +165,7 @@
         </div>
 
         <div class="card-conteudo">
-          <h3 class="produto-nome" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer;">
+          <h3 class="produto-nome" (click)="irParaPaginaDoJogo(produto)" style="cursor: pointer">
             {{ produto.nome }}
           </h3>
           <span class="produto-genero">{{ produto.genero }}</span>
@@ -199,7 +183,8 @@
             <button
               class="btn-carrinho"
               [disabled]="produto.estoque === false"
-              (click)="adicionarAoCarrinho(produto)">
+              (click)="adicionarAoCarrinho(produto)"
+            >
               <i class="fas fa-shopping-cart"></i>
               {{ produto.estoque === false ? 'Esgotado' : 'Adicionar ao Carrinho' }}
             </button>
@@ -208,7 +193,8 @@
               class="btn-favorito"
               [class.favoritado]="produto.favorito"
               (click)="toggleFavorito(produto)"
-              title="Favoritar">
+              title="Favoritar"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -217,12 +203,14 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="icon-heart">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                class="icon-heart"
+              >
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                ></path>
               </svg>
             </button>
           </div>
-
         </div>
       </div>
     </div>
@@ -234,11 +222,12 @@
     </div>
 
     <!-- Estado vazio: filtros sem resultado -->
-    <div class="favoritos-vazio" *ngIf="abaAtiva === 'todos' && produtos.length > 0 && produtosExibidos.length === 0">
+    <div
+      class="favoritos-vazio"
+      *ngIf="abaAtiva === 'todos' && produtos.length > 0 && produtosExibidos.length === 0"
+    >
       <p>Nenhum jogo encontrado com esses filtros.</p>
       <button class="btn-carrinho" (click)="limparFiltros()">Limpar filtros</button>
     </div>
-
   </div>
-
 </div>

@@ -119,7 +119,7 @@ export const CATALOGO: JogoCatalogo[] = [
   { appid: 2195250, nome: 'EA Sports FC 24', plataformas: ['PC', 'PS'], generos: ['Esportes'], categorias: ['sport'] },
   { appid: 319630,  nome: 'Life is Strange', plataformas: ['PC'], generos: ['História Interativa'], categorias: ['adventure'] },
   { appid: 1888930, nome: 'The Last of Us Part I', plataformas: ['PC', 'PS'], generos: ['Ação', 'Sobrevivência'], categorias: ['action', 'adventure'], estoque: false },
-  { appid: 2108330, nome: 'F1 23', plataformas: ['PC', 'PS'], generos: ['Corrida'], categorias: ['racing', 'sport'] },
+  { appid: 1453566, nome: 'F1® 25: 2026 Season Edition', plataformas: ['PC', 'PS'], generos: ['Corrida'], categorias: ['racing', 'sport'] },
   { appid: 1245620, nome: 'Elden Ring', plataformas: ['PC', 'PS'], generos: ['RPG', 'Souls-like'], categorias: ['role-playing-rpg', 'action'] },
   { appid: 1091500, nome: 'Cyberpunk 2077', plataformas: ['PC'], generos: ['RPG', 'Sci-Fi'], categorias: ['role-playing-rpg', 'action'] },
   { appid: 2767030, nome: 'Marvel Rivals', plataformas: ['PC'], generos: ['Hero Shooter'], categorias: ['shooter'], gratis: true },

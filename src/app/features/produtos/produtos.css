@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LAYOUT COM FLEXBOX ISOLADO
+   1. LAYOUT GERAL
    ========================================================================== */
 .pagina-produtos {
   display: flex;
@@ -8,598 +8,19 @@
   padding: 30px;
   min-height: 100vh;
   color: #ffffff;
-  font-family:
-    'Inter',
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
   width: 100%;
 }
 
-/* ==========================================================================
-   SIDEBAR DE FILTROS
-   ========================================================================== */
-.sidebar-filtros {
-  width: 250px;
-  flex-shrink: 0;
-  background: #14213a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 20px;
-  height: fit-content;
-  position: sticky;
-  top: 110px;
-  box-sizing: border-box;
-}
-
-.filtros-titulo {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #4fc3e8;
-  letter-spacing: 1px;
-  margin-top: 0;
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 12px;
-}
-
-.filtro-grupo {
-  margin-bottom: 20px;
-}
-
-.filtro-grupo h4 {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.55);
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-
-.filtro-grupo label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-
-.filtro-grupo input {
-  accent-color: #4fc3e8;
-  cursor: pointer;
-}
-
-/* ==========================================================================
-   CONTEÚDO PRINCIPAL
-   ========================================================================== */
 .conteudo-produtos {
   flex: 1;
   min-width: 0;
   width: 100%;
 }
 
-.topo-e-categorias {
-  margin-bottom: 28px;
-}
-
-.linha-controles-topo {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.abas-produtos {
-  display: flex;
-  background: #14213a;
-  border-radius: 12px;
-  padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.aba-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
-  padding: 8px 16px;
-  font-size: 0.88rem;
-  font-weight: 700;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-}
-
-.aba-btn.ativa {
-  background: #0e7fa8;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(14, 127, 168, 0.4);
-}
-
-.badge-contador-fav {
-  background: #ff4757;
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 10px;
-  line-height: 1;
-}
-
-.dropdown-categorias {
-  position: relative;
-}
-
-.btn-dropdown-categoria {
-  background: #14213a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 0.88rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-}
-
-.btn-dropdown-categoria:hover {
-  border-color: #4fc3e8;
-  color: #4fc3e8;
-}
-
-.seta-icone {
-  font-size: 0.65rem;
-  transition: transform 0.2s ease;
-}
-
-.seta-icone.aberto {
-  transform: rotate(180deg);
-}
-
-.menu-categorias-conteudo {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 110%;
-  background: #14213a;
-  min-width: 180px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-  padding: 8px;
-  z-index: 50;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.menu-categorias-conteudo.mostrar {
-  display: flex;
-}
-
-.item-categoria {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 8px 12px;
-  text-align: left;
-  font-size: 0.85rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition:
-    background 0.2s,
-    color 0.2s;
-}
-
-.item-categoria:hover,
-.item-categoria.ativo {
-  background: rgba(79, 195, 232, 0.15);
-  color: #4fc3e8;
-  font-weight: bold;
-}
-
-/* BLOCO DO TÍTULO E AÇÕES */
-.produtos-topo {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.bloco-titulo-pagina {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.produtos-topo h2 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin: 0;
-  line-height: 1.1;
-}
-
-.produtos-subtitulo {
-  font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.acoes-direita-topo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.btn-limpar-favoritos {
-  background: rgba(255, 71, 87, 0.15);
-  border: 1px solid #ff4757;
-  color: #ff4757;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-limpar-favoritos:hover {
-  background: #ff4757;
-  color: #fff;
-}
-
-.produtos-contador {
-  font-size: 0.85rem;
-  color: #fff;
-  font-weight: 600;
-  background: #14213a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 6px 14px;
-  border-radius: 20px;
-}
-
 /* ==========================================================================
-   CARDS DE JOGOS
-   ========================================================================== */
-.grid-produtos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  width: 100%;
-}
-
-.card-produto {
-  position: relative;
-  background: #14213a;
-  border-radius: 16px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-sizing: border-box;
-  width: 100%;
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
-}
-
-.card-produto:hover {
-  transform: translateY(-6px);
-  border-color: #4fc3e8;
-  box-shadow: 0 12px 28px rgba(8, 40, 55, 0.5);
-}
-
-.card-imagem {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #0a1626;
-  position: relative;
-}
-
-.card-imagem img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card-badges {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.badge-desconto {
-  background: #0e7fa8;
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.75rem;
-  padding: 4px 8px;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(14, 127, 168, 0.6);
-}
-
-.badge-plataforma {
-  background: rgba(10, 22, 38, 0.85);
-  backdrop-filter: blur(4px);
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 3px 6px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.card-conteudo {
-  padding: 10px 2px 2px 2px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.produto-nome {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #fff;
-  margin: 0 0 4px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.produto-genero {
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.55);
-  margin-bottom: 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.produto-precos {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin-top: auto;
-  margin-bottom: 10px;
-}
-
-.preco-original {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
-  text-decoration: line-through;
-}
-
-.preco-promocional {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #4ade80;
-  text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
-}
-
-.card-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btn-carrinho {
-  flex: 1;
-  background: #0e7fa8;
-  color: #fff;
-  border: none;
-  padding: 8px 6px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: background 0.2s;
-}
-
-.btn-carrinho:hover {
-  background: #4fc3e8;
-  color: #06232f;
-}
-
-.btn-favorito {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.55);
-  padding: 4px;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.icon-heart {
-  width: 18px;
-  height: 18px;
-}
-
-.btn-favorito:hover,
-.btn-favorito.favoritado {
-  color: #ff6b6b;
-}
-
-.favoritos-vazio {
-  background: #14213a;
-  padding: 40px;
-  border-radius: 16px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.favoritos-vazio p {
-  margin-bottom: 16px;
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* --- MENSAGEM FLUTUANTE (TOAST) --- */
-.toast-notificacao {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: #00f0ff;
-  color: #0a1626;
-  padding: 14px 24px;
-  border-radius: 12px;
-  font-weight: 800;
-  font-size: 0.95rem;
-  box-shadow: 0 8px 24px rgba(0, 240, 255, 0.4);
-  z-index: 9999;
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* ==========================================================================
-   REGRAS DE RESPONSIVIDADE (MEDIA QUERIES)
-   ========================================================================== */
-
-/* Notebooks Menores e Tablets (Até 1024px) */
-@media (max-width: 1024px) {
-  .pagina-produtos {
-    flex-direction: column;
-    padding: 20px;
-    margin-top: 100px;
-    gap: 20px;
-  }
-
-  filtros-titulo {
-    cursor: pointer;
-  }
-  .filtros-corpo {
-    display: none;
-  }
-  .sidebar-filtros.aberto .filtros-corpo {
-    display: block;
-  }
-
-  .seta-filtros {
-    font-size: 0.7rem;
-    transition: transform 0.2s;
-  }
-  .sidebar-filtros.aberto .seta-filtros {
-    transform: rotate(180deg);
-  }
-
-  .grid-produtos {
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 16px;
-  }
-}
-
-/* Dispositivos Móveis e Celulares (Até 768px) */
-@media (max-width: 768px) {
-  .pagina-produtos {
-    margin-top: 75px;
-    padding: 12px;
-  }
-
-  .linha-controles-topo {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .abas-produtos {
-    width: 100%;
-  }
-
-  .aba-btn {
-    flex: 1;
-    justify-content: center;
-  }
-
-  .dropdown-categorias {
-    width: 100%;
-  }
-
-  .btn-dropdown-categoria {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .produtos-topo {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .produtos-topo h2 {
-    font-size: 1.4rem;
-  }
-
-  .acoes-direita-topo {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  /* Grid com 2 colunas proporcionais exatamente na tela mobile */
-  .grid-produtos {
-    grid-template-columns: repeat(2, calc(50% - 5px));
-    gap: 10px;
-  }
-
-  .card-produto {
-    padding: 8px;
-  }
-
-  .badge-desconto,
-  .badge-plataforma {
-    font-size: 0.65rem;
-    padding: 2px 4px;
-  }
-
-  .produto-nome {
-    font-size: 0.8rem;
-  }
-
-  .preco-original {
-    font-size: 0.68rem;
-  }
-
-  .preco-promocional {
-    font-size: 0.92rem;
-  }
-
-  .btn-carrinho {
-    padding: 6px 4px;
-    font-size: 0.68rem;
-  }
-
-  .toast-notificacao {
-    bottom: 16px;
-    right: 16px;
-    left: 16px;
-    text-align: center;
-  }
-}
-
-/* ==========================================================================
-   SIDEBAR DE FILTROS
+   2. SIDEBAR DE FILTROS
    ========================================================================== */
 .sidebar-filtros {
   width: 250px;
@@ -630,6 +51,7 @@
   color: #4fc3e8;
   letter-spacing: 1px;
   margin: 0;
+  margin-right: auto;
 }
 
 .btn-limpar-filtros {
@@ -649,9 +71,22 @@
   color: #ff4757;
 }
 
+/* Setinha: só aparece em telas menores */
+.seta-filtros {
+  display: none;
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+/* Corpo dos filtros: sempre visível no desktop */
+.filtros-corpo {
+  display: block;
+}
+
 .filtro-grupo {
   margin-bottom: 22px;
 }
+
 .filtro-grupo:last-child {
   margin-bottom: 0;
 }
@@ -725,15 +160,17 @@
 .switch-linha input:checked + .switch {
   background: #0e7fa8;
 }
+
 .switch-linha input:checked + .switch::after {
   transform: translateX(16px);
 }
+
 .switch-linha input:focus-visible + .switch {
   outline: 2px solid #4fc3e8;
   outline-offset: 2px;
 }
 
-/* --- Chips de preço --- */
+/* --- Chips (categoria e preço) --- */
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -790,6 +227,7 @@
 .plat-btn i {
   font-size: 1rem;
 }
+
 .plat-btn:hover {
   border-color: #4fc3e8;
   color: #4fc3e8;
@@ -799,4 +237,488 @@
   background: rgba(79, 195, 232, 0.18);
   border-color: #4fc3e8;
   color: #4fc3e8;
+}
+
+/* ==========================================================================
+   3. TOPO: ABAS, TÍTULO E AÇÕES
+   ========================================================================== */
+.topo-e-categorias {
+  margin-bottom: 28px;
+}
+
+.linha-controles-topo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.abas-produtos {
+  display: flex;
+  background: #14213a;
+  border-radius: 12px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.aba-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.aba-btn.ativa {
+  background: #0e7fa8;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(14, 127, 168, 0.4);
+}
+
+.badge-contador-fav {
+  background: #ff4757;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+  line-height: 1;
+}
+
+.produtos-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.bloco-titulo-pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.produtos-topo h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.produtos-subtitulo {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.acoes-direita-topo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-limpar-favoritos {
+  background: rgba(255, 71, 87, 0.15);
+  border: 1px solid #ff4757;
+  color: #ff4757;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-limpar-favoritos:hover {
+  background: #ff4757;
+  color: #fff;
+}
+
+.produtos-contador {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 600;
+  background: #14213a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   4. CARDS DE JOGOS
+   ========================================================================== */
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.card-produto {
+  position: relative;
+  background: #14213a;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.card-produto:hover {
+  transform: translateY(-6px);
+  border-color: #4fc3e8;
+  box-shadow: 0 12px 28px rgba(8, 40, 55, 0.5);
+}
+
+.card-imagem {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0a1626;
+  position: relative;
+}
+
+.card-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.badge-desconto {
+  background: #0e7fa8;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(14, 127, 168, 0.6);
+}
+
+.badge-plataforma {
+  background: rgba(10, 22, 38, 0.85);
+  backdrop-filter: blur(4px);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.card-conteudo {
+  padding: 10px 2px 2px 2px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.produto-nome {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.produto-genero {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.produto-precos {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: auto;
+  margin-bottom: 10px;
+}
+
+.preco-original {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: line-through;
+}
+
+.preco-promocional {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #4ade80;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-carrinho {
+  flex: 1;
+  min-width: 0;
+  background: #0e7fa8;
+  color: #fff;
+  border: none;
+  padding: 8px 6px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.2s;
+}
+
+.btn-carrinho:hover {
+  background: #4fc3e8;
+  color: #06232f;
+}
+
+.btn-favorito {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 4px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.icon-heart {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-favorito:hover,
+.btn-favorito.favoritado {
+  color: #ff6b6b;
+}
+
+/* ==========================================================================
+   5. ESTADOS VAZIOS E TOAST
+   ========================================================================== */
+.favoritos-vazio {
+  background: #14213a;
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.favoritos-vazio p {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.toast-notificacao {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #00f0ff;
+  color: #0a1626;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 24px rgba(0, 240, 255, 0.4);
+  z-index: 9999;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   6. RESPONSIVIDADE (sempre no final do arquivo)
+   ========================================================================== */
+
+/* --- Tablets e notebooks pequenos (até 1024px) --- */
+@media (max-width: 1024px) {
+  .pagina-produtos {
+    flex-direction: column;
+    padding: 20px;
+    margin-top: 100px;
+    gap: 20px;
+  }
+
+  /* Sidebar vira uma barra no topo, fechada por padrão */
+  .sidebar-filtros {
+    width: 100%;
+    position: static;
+    top: auto;
+  }
+
+  .filtros-cabecalho {
+    cursor: pointer;
+  }
+
+  .seta-filtros {
+    display: inline-block;
+  }
+
+  .filtros-corpo {
+    display: none;
+  }
+
+  .sidebar-filtros.aberto .filtros-corpo {
+    display: block;
+  }
+
+  .sidebar-filtros.aberto .seta-filtros {
+    transform: rotate(180deg);
+  }
+
+  /* Fechado: só a barrinha, sem linha nem espaço sobrando */
+  .sidebar-filtros:not(.aberto) .filtros-cabecalho {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .plat-botoes {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .grid-produtos {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* --- Celulares (até 768px) --- */
+@media (max-width: 768px) {
+  .pagina-produtos {
+    margin-top: 75px;
+    padding: 12px;
+  }
+
+  .plat-botoes {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .linha-controles-topo {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .abas-produtos {
+    width: 100%;
+  }
+
+  .aba-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .produtos-topo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .produtos-topo h2 {
+    font-size: 1.4rem;
+  }
+
+  .acoes-direita-topo {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .grid-produtos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .card-produto {
+    padding: 8px;
+  }
+
+  .badge-desconto,
+  .badge-plataforma {
+    font-size: 0.65rem;
+    padding: 2px 4px;
+  }
+
+  .produto-nome {
+    font-size: 0.8rem;
+  }
+
+  .preco-original {
+    font-size: 0.68rem;
+  }
+
+  .preco-promocional {
+    font-size: 0.92rem;
+  }
+
+  .btn-carrinho {
+    padding: 6px 4px;
+    font-size: 0.68rem;
+  }
+
+  .favoritos-vazio {
+    padding: 24px 16px;
+  }
+
+  .toast-notificacao {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    text-align: center;
+  }
+}
+
+/* --- Celulares bem pequenos (até 380px) --- */
+@media (max-width: 380px) {
+  .btn-carrinho i {
+    display: none;
+  }
+
+  .aba-btn {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
 }
