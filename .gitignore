@@ -46,3 +46,5 @@ Thumbs.db
 # Segredos e variáveis de ambiente locais
 .env
 .env.*.local
+/server/mp-backend/mp-backend.env
+/server/mp-backend/.env
